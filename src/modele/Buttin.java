@@ -2,6 +2,8 @@ package modele;
 
 public abstract class Buttin {
     int valeur;
+
+
 }
 class Bijou extends Buttin{
 
