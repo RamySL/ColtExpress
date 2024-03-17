@@ -1,22 +1,35 @@
 package modele;
 
-enum Direction {
-    Haut, Bas, Droite, Gauche;
-}
 public abstract class Action {
-    Personnage executeur;
 
+    protected Personnage executeur;
+
+    public Action (Personnage executeur){
+        this.executeur = executeur;
+    }
     public abstract void executer();
 }
 
-class Braquer extends Action{
-    public void executer() {}
+class Tirer extends Action {
+
+    private Personnage cible;
+
+    public Tirer (Personnage tirreur){
+        super(tirreur);
+    }
+
+    public void executer() {
+    }
 }
-class Tirer extends Action{
-    Personnage cible;
-    public void executer(){}
+
+class Braquer extends Action {
+    // braque doit savoir quel wagon, mais elle connait le joueur qui lui connait le wagon
+
+    public Braquer (Personnage braqueur){
+        super(braqueur);
+    }
+    public void executer() {
+    }
 }
-class SeDeplacer extends Action{
-    Direction direction;
-    public void executer() {}
-}
+
+

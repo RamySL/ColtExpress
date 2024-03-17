@@ -13,7 +13,7 @@ public class Train {
 
     public Train (int n, String nomBandit) {
         this.nWagons = n;
-        // init avec une seule locmotive
+        // init avec une seule locomotive
         this.composantes = new ComposanteTrain[n+1]; // n wagon + 1 loco
 
 
