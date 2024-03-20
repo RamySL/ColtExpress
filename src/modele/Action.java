@@ -14,8 +14,8 @@ class Tirer extends Action {
 
     private Personnage cible;
 
-    public Tirer (Personnage tirreur){
-        super(tirreur);
+    public Tirer (Personnage tireur){
+        super(tireur);
     }
 
     public void executer() {

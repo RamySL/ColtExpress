@@ -11,9 +11,9 @@ public class Main {
         Train train = new Train(NB_WAGONS,NOM_BANDIT_1 );
         Bandit bandit = train.getBandit();
 
-        Action deplacementaDroite = new SeDelacer(bandit, Direction.Droite);
-        Action deplacementaHaut = new SeDelacer(bandit, Direction.Haut);
-        Action deplacementBas = new SeDelacer(bandit,Direction.Bas);
+        Action deplacementaDroite = new SeDeplacer(bandit, Direction.Droite);
+        Action deplacementaHaut = new SeDeplacer(bandit, Direction.Haut);
+        Action deplacementBas = new SeDeplacer(bandit,Direction.Bas);
 
         bandit.ajouterAction(deplacementaDroite);
         bandit.ajouterAction(deplacementaHaut);

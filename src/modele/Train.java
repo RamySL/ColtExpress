@@ -86,12 +86,3 @@ class Wagon extends Interieur {
     }
 }
 
-class Locomotive extends Extremite {
-
-    Magot magot;
-
-    public Locomotive(Train train, Magot magot) {
-        super(train);
-        this.magot = magot;
-    }
-}
