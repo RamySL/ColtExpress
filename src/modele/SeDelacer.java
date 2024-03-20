@@ -35,6 +35,8 @@ public class SeDelacer extends Action {
                 break;
 
             case Gauche:
+
+
                 if (!(src.getPosition() == 0)) {
                     if (src instanceof Toit) {
                         this.executeur.setWagon(((Cabine) src.getTrain().getComposantes()[src.getPosition() - 1]).getToit());
