@@ -15,7 +15,7 @@ public class Locomotive extends Extremite {
 
     public ComposanteTrain getVoisin(Direction d) {
         if (d == Direction.Gauche) return this.voisin;
-        else return this;
+        else return null;
     }
 
 

@@ -2,7 +2,7 @@ package modele;
 
 import java.util.ArrayList;
 
-public abstract class Personnage {
+public abstract class Personnage extends Observable{
 
     ComposanteTrain emplacement;
 

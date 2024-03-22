@@ -20,6 +20,8 @@ public class Bandit extends Personnage {
             actions.get(0).executer();
             actions.remove(0);
         }
+
+        this.notifyObservers();
     }
 
     public void ajouterAction(Action action) {
