@@ -32,7 +32,7 @@ public class Train {
 
         this.first.ajouterWagon(courant);
 
-        this.bandit = new Bandit(last.getToit(), nomBandit);
+        this.bandit = new Bandit(last, nomBandit);
 
 
 
@@ -40,6 +40,8 @@ public class Train {
     public Bandit getBandit(){
         return this.bandit;
     }
+
+    public int getSize(){ return this.nWagons;}
 }
 
 class Wagon extends Interieur {
