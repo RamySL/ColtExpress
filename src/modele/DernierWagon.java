@@ -13,7 +13,7 @@ public class DernierWagon extends Extremite{
 
     public ComposanteTrain getVoisin(Direction d){
         if (d == Direction.Droite) return this.voisin;
-        else return null;
+        else return this;
     }
 
 

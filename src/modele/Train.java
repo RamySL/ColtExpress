@@ -1,9 +1,10 @@
 package modele;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
-public class Train {
+public class Train implements Iterable <ComposanteTrain>{
 
     private final int nWagons;
 
@@ -22,7 +23,7 @@ public class Train {
 
         Interieur courant = last;
 
-        for (int i = 0; i<n-2; i++){ // n-2 pcq on a deja créer last et first
+        for (int i = 0; i<n-2; i++){ // n-2 pcq on a deja créé last et first
 
             Wagon prochain = new Wagon(this,courant);
             courant.ajouterWagon(prochain);
@@ -30,7 +31,9 @@ public class Train {
             courant = prochain;
         }
 
+        courant.ajouterWagon(this.first);
         this.first.ajouterWagon(courant);
+
 
         this.bandit = new Bandit(last, nomBandit);
 
@@ -42,6 +45,37 @@ public class Train {
     }
 
     public int getSize(){ return this.nWagons;}
+
+
+    @Override
+    public Iterator<ComposanteTrain> iterator() {
+        return new IterateurTrain(this.last);
+    }
+}
+
+class IterateurTrain implements Iterator<ComposanteTrain> {
+
+    /* l'iterateur parcourt le train du dernier wagon jusqu'a la locomotive */
+    ComposanteTrain last;
+    ComposanteTrain composanteCourante;
+
+    boolean end = false; // pour determiner la fin de l'iteration
+    public IterateurTrain (ComposanteTrain last){
+        this.last = last;
+        this.composanteCourante = last;
+    }
+    @Override
+    public boolean hasNext() {
+        return !(this.composanteCourante instanceof Locomotive) || !end;
+    }
+
+    @Override
+    public ComposanteTrain next() {
+        ComposanteTrain tmp = this.composanteCourante;
+        this.composanteCourante = this.composanteCourante.getVoisin(Direction.Droite);
+        if ( tmp instanceof Locomotive) end = true;
+        return  tmp;
+    }
 }
 
 class Wagon extends Interieur {

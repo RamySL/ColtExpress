@@ -11,7 +11,12 @@ public class Main {
         Train train = new Train(NB_WAGONS,NOM_BANDIT_1 );
         Bandit bandit = train.getBandit();
 
-        Action deplacementaDroite = new SeDeplacer(bandit, Direction.Droite);
+        for( ComposanteTrain c : train){
+            System.out.println(c);
+
+        }
+
+        /*Action deplacementaDroite = new SeDeplacer(bandit, Direction.Droite);
         Action deplacementaHaut = new SeDeplacer(bandit, Direction.Haut);
         Action deplacementBas = new SeDeplacer(bandit,Direction.Bas);
 
@@ -29,6 +34,8 @@ public class Main {
         bandit.executer();
         bandit.executer();
         bandit.executer();
+
+         */
 
     }
 }
