@@ -62,33 +62,48 @@ public class Jeu extends JFrame implements Observer, ActionListener {
         for (ComposanteTrain c : this.train){
             this.paintComposante(c,pos,g);
             pos++;
+
         }
 
     }
 
     public void paintComposante(ComposanteTrain c, int pos, Graphics g){
 
-        //on dessines les wagons et leurs toit
+        Interieur cabine = (Interieur) c;
+        Toit toit = cabine.getToit();
+
+        this.paintCabine(cabine,pos,g);
+        this.paintToit(toit,pos,g);
+    }
+
+    public void paintCabine(Interieur c, int pos, Graphics g){
+        //on dessine les wagons
         // 0.1 pcq en prenant 200 pour largeur des wagons avec 4 wagons on prend 800 ce qui represente 80%
         // il reste donc 20% pour les coté on prend 0.1 (10%) pour chaque coté comme ça c'est centré
         g.drawRect((int)(0.1 * this.lageur) + pos*200, (int)(0.6*this.hauteur),200 ,(int)(0.35*this.hauteur)); // resté 40% de hauteur
+
+        // on dessine la liste des personnages
+        ArrayList<Personnage> persos = c.getPersoList();
+        for(Personnage p : persos){
+            g.drawString(p.getSurnom(),(int)(0.1 * this.lageur) + pos*200 + 30, (int)(0.6*this.hauteur) +30);
+        }
+
+        // on dessine les buttins
+        for(int i = 0; i<c.getButtins().size(); i++){
+            g.drawString(c.getButtins().get(i).toString(),(int)(0.1 * this.lageur) + pos*200 + 30, (int)(0.7*this.hauteur) + i*30);
+        }
+
+    }
+
+    public void paintToit(Toit c, int pos, Graphics g){
 
         // Toit
         g.drawRect((int)(0.1 * this.lageur) + pos*200,(int)(0.4*this.hauteur),200 ,(int)(0.2*this.hauteur)); //0.1 parceque 0.6-0.4=0.2
 
         // on dessine la liste des personnages
-        // il reste 70% de hauteur pour le train
         ArrayList<Personnage> persos = c.getPersoList();
-
-        if (c instanceof Toit) {
-            // distinction entre le dessin des joueurs sur le toit ou pas
-            for(Personnage p : persos){
-                g.drawString(p.getSurnom(),(int)(0.1 * this.lageur) + pos*200 + 30, (int)(0.2*this.hauteur) +20);
-            }
-        }else{
-            for(Personnage p : persos){
-                g.drawString(p.getSurnom(),(int)(0.1 * this.lageur) + pos*200 + 30, (int)(0.6*this.hauteur) +30);
-            }
+        for(Personnage p : persos){
+            g.drawString(p.getSurnom(),(int)(0.1 * this.lageur) + pos*200 + 30, (int)(0.4*this.hauteur) +20);
         }
 
         // on dessine les buttins
@@ -96,6 +111,9 @@ public class Jeu extends JFrame implements Observer, ActionListener {
             g.drawString(c.getButtins().get(i).toString(),(int)(0.1 * this.lageur) + pos*200 + 30, (int)(0.7*this.hauteur) + i*30);
         }
     }
+
+
+
     public void update(){
         repaint();
     }
@@ -104,10 +122,13 @@ public class Jeu extends JFrame implements Observer, ActionListener {
         Train train = new Train(4,"ramy");
         Bandit b = train.getBandit();
         Action depdroit = new SeDeplacer(b, Direction.Droite);
+        Action depbas = new SeDeplacer(b, Direction.Bas);
+        Action dephaut = new SeDeplacer(b, Direction.Haut);
+
         b.ajouterAction(depdroit);
+        b.ajouterAction(depbas);
         b.ajouterAction(depdroit);
-        b.ajouterAction(depdroit);
-        b.ajouterAction(depdroit);
+        b.ajouterAction(dephaut);
 
         new Jeu(train);
     }

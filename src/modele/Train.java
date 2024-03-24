@@ -49,7 +49,7 @@ public class Train implements Iterable <ComposanteTrain>{
 
     @Override
     public Iterator<ComposanteTrain> iterator() {
-        return new IterateurTrain(this.last);
+        return new IterateurTrain();
     }
 
     public class IterateurTrain implements Iterator<ComposanteTrain> {
@@ -59,8 +59,8 @@ public class Train implements Iterable <ComposanteTrain>{
         ComposanteTrain composanteCourante;
 
         boolean end = false; // pour determiner la fin de l'iteration
-        public IterateurTrain (ComposanteTrain last){
-            this.last = last;
+        public IterateurTrain (){
+            this.last = Train.this.last;
             this.composanteCourante = last;
         }
         @Override
