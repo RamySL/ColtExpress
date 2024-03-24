@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /* La vue implemente observer, le modele implemente observable, le mdoele contient la liste
 la liste des observer et son but et de les notifier quand il ya un changement à son niveau,
@@ -51,11 +52,27 @@ public class Jeu extends JFrame implements Observer, ActionListener {
 
         g.setColor(Color.BLACK);
         g.drawLine(0,200,1000,200);
-
-        for (int i=0; i<this.train.getSize();i++){
-            g.drawRect(20+i*200,250,200,300);
+        int pos = 0;
+        for (ComposanteTrain c : this.train){
+            this.paintComposante(c,pos,g);
+            pos++;
         }
 
+    }
+
+    public void paintComposante(ComposanteTrain c, int pos, Graphics g){
+
+        g.drawRect(20+pos*200,250,200,300);
+        // on dessine la liste des personnages
+        ArrayList<Personnage> persos = c.getPersoList();
+        for(Personnage p : persos){
+            g.drawString(p.getSurnom(),20+pos*200 + 30, 250 + 30);
+        }
+
+        // on dessine les buttins
+        for(int i = 0; i<c.getButtins().size(); i++){
+            g.drawString(c.getButtins().get(i).toString(),20+pos*200 + 30, 250 + 100 + i*30);
+        }
     }
     public void update(){
         repaint();
@@ -65,6 +82,9 @@ public class Jeu extends JFrame implements Observer, ActionListener {
         Train train = new Train(4,"ramy");
         Bandit b = train.getBandit();
         Action depdroit = new SeDeplacer(b, Direction.Droite);
+        b.ajouterAction(depdroit);
+        b.ajouterAction(depdroit);
+        b.ajouterAction(depdroit);
         b.ajouterAction(depdroit);
 
         new Jeu(train);

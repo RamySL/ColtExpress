@@ -6,6 +6,7 @@ public class Locomotive extends Extremite {
     public Locomotive(Train train, Magot magot) {
         super(train);
         this.magot = magot;
+        genererButtin(1);
     }
 
     @Override

@@ -23,4 +23,6 @@ import java.util.ArrayList;
     }
 
     public ArrayList<Personnage> getPersoList(){return this.persoList;}
+
+    public ArrayList<Buttin> getButtins(){return this.buttins;}
 }
