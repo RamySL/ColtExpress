@@ -35,7 +35,7 @@ public class Train implements Iterable <ComposanteTrain>{
         this.first.ajouterWagon(courant);
 
 
-        this.bandit = new Bandit(last, nomBandit);
+        this.bandit = new Bandit(last.getToit(), nomBandit);
 
 
 
