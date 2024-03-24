@@ -28,4 +28,8 @@ public class Bandit extends Personnage {
         this.actions.add(action);
     }
 
+    public String toString(){
+        return "Bandit : " + this.surnom + "( " + this.emplacement + " )";
+    }
+
 }

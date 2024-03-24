@@ -51,32 +51,34 @@ public class Train implements Iterable <ComposanteTrain>{
     public Iterator<ComposanteTrain> iterator() {
         return new IterateurTrain(this.last);
     }
+
+    public class IterateurTrain implements Iterator<ComposanteTrain> {
+
+        /* l'iterateur parcourt le train du dernier wagon jusqu'a la locomotive */
+        ComposanteTrain last;
+        ComposanteTrain composanteCourante;
+
+        boolean end = false; // pour determiner la fin de l'iteration
+        public IterateurTrain (ComposanteTrain last){
+            this.last = last;
+            this.composanteCourante = last;
+        }
+        @Override
+        public boolean hasNext() {
+            return !(this.composanteCourante instanceof Locomotive) || !end;
+        }
+
+        @Override
+        public ComposanteTrain next() {
+            ComposanteTrain tmp = this.composanteCourante;
+            this.composanteCourante = this.composanteCourante.getVoisin(Direction.Droite);
+            if ( tmp instanceof Locomotive) end = true;
+            return  tmp;
+        }
+    }
 }
 
-class IterateurTrain implements Iterator<ComposanteTrain> {
 
-    /* l'iterateur parcourt le train du dernier wagon jusqu'a la locomotive */
-    ComposanteTrain last;
-    ComposanteTrain composanteCourante;
-
-    boolean end = false; // pour determiner la fin de l'iteration
-    public IterateurTrain (ComposanteTrain last){
-        this.last = last;
-        this.composanteCourante = last;
-    }
-    @Override
-    public boolean hasNext() {
-        return !(this.composanteCourante instanceof Locomotive) || !end;
-    }
-
-    @Override
-    public ComposanteTrain next() {
-        ComposanteTrain tmp = this.composanteCourante;
-        this.composanteCourante = this.composanteCourante.getVoisin(Direction.Droite);
-        if ( tmp instanceof Locomotive) end = true;
-        return  tmp;
-    }
-}
 
 class Wagon extends Interieur {
     Interieur cabineGauche, CabineDroite;
@@ -100,6 +102,10 @@ class Wagon extends Interieur {
     public ComposanteTrain getVoisin(Direction d){
         if (d == Direction.Gauche) return this.cabineGauche;
         else return this.CabineDroite;
+    }
+
+    public String toString (){
+        return "Wagon--";
     }
 }
 

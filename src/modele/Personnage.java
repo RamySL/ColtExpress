@@ -11,10 +11,15 @@ public abstract class Personnage extends Observable{
 
         this.emplacement = emp;
         this.surnom = surnom;
+        // on notifie le composant qui contient le personnage
+        this.emplacement.ajouterPersonnage(this);
     }
 
     public void setWagon(ComposanteTrain newW){
+        // on l'enleve de l'ancien emplacement
+        this.emplacement.persoList.remove(this);
         this.emplacement = newW;
+        this.emplacement.persoList.add(this);
     }
 
     public ComposanteTrain getEmplacement(){

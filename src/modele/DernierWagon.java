@@ -16,5 +16,8 @@ public class DernierWagon extends Extremite{
         else return this;
     }
 
+    public String toString (){
+        return "DernierWagon--";
+    }
 
 }

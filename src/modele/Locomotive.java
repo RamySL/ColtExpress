@@ -18,5 +18,9 @@ public class Locomotive extends Extremite {
         else return this;
     }
 
+    public String toString (){
+        return "Locomotive";
+    }
+
 
 }

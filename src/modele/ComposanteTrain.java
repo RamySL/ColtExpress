@@ -5,6 +5,7 @@ import java.util.ArrayList;
  public abstract class ComposanteTrain {
     Train train;
 
+    protected ArrayList<Personnage> persoList = new ArrayList<>();
     protected ArrayList<Buttin> buttins = new ArrayList<>();
 
     public ComposanteTrain(Train train) {
@@ -17,7 +18,9 @@ import java.util.ArrayList;
 
     public abstract ComposanteTrain getVoisin(Direction d);
 
-    public String toString() {
-        return "j'existe";
+    public void ajouterPersonnage (Personnage p){
+        this.persoList.add(p);
     }
+
+    public ArrayList<Personnage> getPersoList(){return this.persoList;}
 }
