@@ -114,6 +114,7 @@ public class Jeu extends JFrame implements Observer, ActionListener {
 
     public void paintToit(Toit c, int pos, int hauteur, int lageurCabine, Graphics g){
 
+        paintCheminee(lageur, hauteur, lageurCabine,30, 60,g);
         // Toit
         //g.drawRect((int)(0.1 * this.lageur) + pos*200,(int)(0.4*this.hauteur),200 ,(int)(0.2*this.hauteur)); //0.1 parceque 0.6-0.4=0.2
 
@@ -129,7 +130,11 @@ public class Jeu extends JFrame implements Observer, ActionListener {
         }
     }
 
+    public void paintCheminee(int lageur,int hauteur, int largeurCabine, int largeurCheminee, int hauteurCheminee, Graphics g){
+        g.setColor(Color.WHITE);
+        g.drawRect((int)(0.1*lageur)+ train.getSize()*largeurCabine-largeurCheminee,hauteur-hauteurCheminee, largeurCheminee, hauteurCheminee);
 
+    }
 
     public void update(){
         repaint();
