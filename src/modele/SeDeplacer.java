@@ -27,12 +27,12 @@ public class SeDeplacer extends Action {
                     // si on etait dans les cabines
                     if (src instanceof Interieur) {
                         this.executeur.setWagon(src.getVoisin(Direction.Droite));
-                        System.out.println(this.executeur.getSurnom() + " s'est déplacer à droite");
+                        System.out.println(this.executeur.getSurnom() + " s'est déplacé à droite");
                     } else {
                         // si on etait sur le toit on recuperere d'abbord la cabine à droite puis son toit
                         // on est passé de ça : ((Cabine) src.getTrain().getComposantes()[src.getPosition() + 1]).getToit()
                         this.executeur.setWagon(src.getVoisin(Direction.Droite));
-                        System.out.println(this.executeur.getSurnom() + " s'est déplacer à droite sur le toit");
+                        System.out.println(this.executeur.getSurnom() + " s'est déplacé à droite sur le toit");
                     }
                 }
                 break;

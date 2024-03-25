@@ -12,6 +12,8 @@ public class Train implements Iterable <ComposanteTrain>{
     private Locomotive first;
     private Bandit bandit;
 
+    private Marshall marshall;
+
 
 
     public Train (int n, String nomBandit) {
@@ -36,6 +38,8 @@ public class Train implements Iterable <ComposanteTrain>{
 
 
         this.bandit = new Bandit(last.getToit(), nomBandit);
+
+        this.marshall = new Marshall(first);
 
 
 
