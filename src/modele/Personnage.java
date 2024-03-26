@@ -32,8 +32,13 @@ public abstract class Personnage extends Observable{
 
 class Marshall extends Personnage {
 
-    public Marshall(ComposanteTrain emp) {
+    private double nervosite;
+    public Marshall(ComposanteTrain emp, double nervosite) {
+
         super(emp, "Marshall");
+        this.nervosite = nervosite;
     }
+
+    public double getNervosite(){return this.nervosite;}
 }
 

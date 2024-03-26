@@ -1,17 +1,16 @@
 package modele;
 
 public class Locomotive extends Extremite {
-    Magot magot;
 
-    public Locomotive(Train train, Magot magot) {
+
+    public Locomotive(Train train) {
         super(train);
-        this.magot = magot;
         genererButtin(1);
     }
 
     @Override
     public void genererButtin(int nbButtin) {
-        this.buttins.add(magot);
+        this.buttins.add(new Magot());
     }
 
     public ComposanteTrain getVoisin(Direction d) {

@@ -20,7 +20,7 @@ public class Train implements Iterable <ComposanteTrain>{
         assert n >= 2;
 
         last = new DernierWagon(this);
-        this.first = new Locomotive(this, new Magot());
+        this.first = new Locomotive(this);
         this.nWagons = n;
 
         Interieur courant = last;
@@ -39,7 +39,7 @@ public class Train implements Iterable <ComposanteTrain>{
 
         this.bandit = new Bandit(last.getToit(), nomBandit);
 
-        this.marshall = new Marshall(first);
+        this.marshall = new Marshall(first,0.3);
 
 
 

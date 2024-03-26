@@ -76,7 +76,8 @@ public class Jeu extends JFrame implements Observer, ActionListener {
         }
 
     }
-
+    //!!!!! les roues doivent etre relative à au Y de la cabine et sa hauteur (0.4+0.35)
+    //!! la largeur de la cabine avec 20% marche pour centrer avec le 10% que pour 4 wagon
 
     public void paintComposante(ComposanteTrain c, int pos, Graphics g){
 
@@ -160,11 +161,13 @@ public class Jeu extends JFrame implements Observer, ActionListener {
         Action depdroit = new SeDeplacer(b, Direction.Droite);
         Action depbas = new SeDeplacer(b, Direction.Bas);
         Action dephaut = new SeDeplacer(b, Direction.Haut);
+        Action braquer = new Braquer(b);
 
         b.ajouterAction(depdroit);
         b.ajouterAction(depbas);
         b.ajouterAction(depdroit);
-        b.ajouterAction(dephaut);
+        b.ajouterAction(braquer);
+
 
         new Jeu(train);
     }

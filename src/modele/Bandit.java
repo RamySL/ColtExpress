@@ -32,4 +32,9 @@ public class Bandit extends Personnage {
         return "Bandit : " + this.surnom + "( " + this.emplacement + " )";
     }
 
+    public void ajouterButtin (Buttin b){this.buttins.add(b);}
+    public Buttin retirerButtin(){
+        return new Bijou();
+    }
+
 }

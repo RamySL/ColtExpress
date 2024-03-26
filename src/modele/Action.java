@@ -1,5 +1,8 @@
 package modele;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public abstract class Action {
 
     protected Personnage executeur;
@@ -18,16 +21,6 @@ class Tirer extends Action {
         super(tireur);
     }
 
-    public void executer() {
-    }
-}
-
-class Braquer extends Action {
-    // braque doit savoir quel wagon, mais elle connait le joueur qui lui connait le wagon
-
-    public Braquer (Personnage braqueur){
-        super(braqueur);
-    }
     public void executer() {
     }
 }

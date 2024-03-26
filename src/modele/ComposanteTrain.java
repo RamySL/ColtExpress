@@ -1,8 +1,9 @@
 package modele;
 
 import java.util.ArrayList;
+import java.util.Random;
 
- public abstract class ComposanteTrain {
+public abstract class ComposanteTrain {
     Train train;
 
     protected ArrayList<Personnage> persoList = new ArrayList<>();
@@ -24,5 +25,14 @@ import java.util.ArrayList;
 
     public ArrayList<Personnage> getPersoList(){return this.persoList;}
 
+
     public ArrayList<Buttin> getButtins(){return this.buttins;}
+
+     public Buttin EnleverButinAlea(){
+         Random rnd = new Random();
+         Buttin butinBraque = this.buttins.get(rnd.nextInt(0,this.buttins.size()));
+
+         this.buttins.remove(butinBraque);
+         return butinBraque;
+     }
 }
