@@ -20,11 +20,20 @@ public class Jeu extends JFrame implements Observer, ActionListener {
     Bandit b;
 
     int hauteur, lageur;
+
+    int decalageXTrain;
     public Jeu (Train t){
         this.train = t;
         this.train.getBandit().addObserver(this);
-        this.hauteur = 700;
-        this.lageur = 1000;
+
+
+
+        // on récupère les dimension de l'écran de l'ordinateur
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        // on définit les dimensions de la fenetre relativement au dimension du pc de l'utilisateur
+        this.lageur = (int) (screenSize.width *0.5);
+        this.hauteur = (int) (screenSize.height * 0.7 );
+        this.decalageXTrain = (int) (0.1 * this.lageur); // decalage sur l'axe X pour centré tjr le dessin du train
 
         this.setPreferredSize(new Dimension(this.lageur,this.hauteur));
 
@@ -68,71 +77,76 @@ public class Jeu extends JFrame implements Observer, ActionListener {
 
     }
 
+
     public void paintComposante(ComposanteTrain c, int pos, Graphics g){
 
         Interieur cabine = (Interieur) c;
         Toit toit = cabine.getToit();
         int yCabine = (int)(0.4*this.hauteur); //correspond à la hauteur où débute la cabine
-        int largeurCabine = 200;
+        int largeurCabine =(int) (0.2*this.lageur);
 
-        this.paintCabine(cabine,pos,yCabine,largeurCabine, g);
+
+
+        // pour dessine une cabine on a besoin de l'objet pour recuperer les elts qu'il possede (buttins, perso..)
+        // de sa position dans le train de  la laregeur de la cabine et des hauteur
+        this.paintCabine(cabine,pos,yCabine,largeurCabine,(int)(0.35*this.hauteur), g);
+        // largeur du toit c'est la mm que la largeur de la cabine, et il depend aussi du y de la cab c'est pour ça qu'on lui donne en param
         this.paintToit(toit,pos,yCabine, largeurCabine, g);
     }
 
-    public void paintCabine(Interieur c, int pos,int hauteur, int largeurCabine, Graphics g){
+    public void paintCabine(Interieur c, int pos,int y, int largeurCabine,int hauteurCabine, Graphics g){
         //on dessine les wagons
         // 0.1 pcq en prenant 200 pour largeur des wagons avec 4 wagons on prend 800 ce qui represente 80%
         // il reste donc 20% pour les coté on prend 0.1 (10%) pour chaque coté comme ça c'est centré
-        g.drawRect((int)(0.1 * this.lageur) + pos*largeurCabine, hauteur,largeurCabine ,(int)(0.35*this.hauteur)); // resté 40% de hauteur
 
-        paintRoueArriere(lageur, largeurCabine,40,pos,g);
-        paintRoueAvant(lageur,largeurCabine,40,pos,g);
+        g.drawRect(this.decalageXTrain + pos*largeurCabine, y,largeurCabine ,hauteurCabine); // resté 40% de hauteur
 
-
-
-        // on dessine la liste des personnages
-        ArrayList<Personnage> persos = c.getPersoList();
-        for(Personnage p : persos){
-            g.drawString(p.getSurnom(),(int)(0.1 * this.lageur) + pos*largeurCabine + 30, hauteur +30);
-        }
-
-        // on dessine les buttins
-        for(int i = 0; i<c.getButtins().size(); i++){
-            g.drawString(c.getButtins().get(i).toString(),(int)(0.1 * this.lageur) + pos*largeurCabine + 30, hauteur + (int)(0.35*this.hauteur) -3 + i*-30);
-        }
-
-    }
-
-    public void paintRoueAvant(int largeur, int largeurCabine, int diametreRoue,int pos, Graphics g){
-        g.drawOval((int)(0.1*largeur)+largeurCabine*pos+largeurCabine-diametreRoue, (int)(0.75*hauteur),diametreRoue,diametreRoue);
-    }
-
-    public void paintRoueArriere(int largeur, int largeurCabine,int diametreRoue,int pos, Graphics g){
-        g.drawOval((int)(0.1*largeur)+pos*largeurCabine,(int)(0.75*hauteur),diametreRoue, diametreRoue);
-    }
+        paintRoueArriere(this.decalageXTrain, largeurCabine,40,pos,g);
+        paintRoueAvant(this.decalageXTrain,largeurCabine,40,pos,g);
 
 
-    public void paintToit(Toit c, int pos, int hauteur, int lageurCabine, Graphics g){
-
-        paintCheminee(lageur, hauteur, lageurCabine,30, 60,g);
-        // Toit
-        //g.drawRect((int)(0.1 * this.lageur) + pos*200,(int)(0.4*this.hauteur),200 ,(int)(0.2*this.hauteur)); //0.1 parceque 0.6-0.4=0.2
 
         // on dessine la liste des personnages
         ArrayList<Personnage> persos = c.getPersoList();
         for(Personnage p : persos){
-            g.drawString(p.getSurnom(),(int)(0.1 * this.lageur) + pos*lageurCabine + 30,hauteur- 20);
+            g.drawString(p.getSurnom(),this.decalageXTrain + pos*largeurCabine + 30, y +30);
         }
 
         // on dessine les buttins
         for(int i = 0; i<c.getButtins().size(); i++){
-            g.drawString(c.getButtins().get(i).toString(),(int)(0.1 * this.lageur) + pos*lageurCabine + 30, (int)(0.7*this.hauteur) + i*30);
+            g.drawString(c.getButtins().get(i).toString(),this.decalageXTrain + pos*largeurCabine + 30, y + hauteurCabine -3 + i*-30);
+        }
+
+    }
+
+    public void paintRoueAvant(int decalageX, int largeurCabine, int diametreRoue,int pos, Graphics g){
+        g.drawOval(decalageX + largeurCabine*pos+largeurCabine - diametreRoue, (int)(0.75*hauteur),diametreRoue,diametreRoue);
+    }
+
+    public void paintRoueArriere(int decalageX, int largeurCabine,int diametreRoue,int pos, Graphics g){
+        g.drawOval(decalageX + pos*largeurCabine,(int)(0.75*hauteur),diametreRoue, diametreRoue);
+    }
+
+
+    public void paintToit(Toit c, int pos, int yCab, int lageurCabine, Graphics g){
+
+        paintCheminee(yCab, lageurCabine,30, 60,g);
+
+        // on dessine la liste des personnages
+        ArrayList<Personnage> persos = c.getPersoList();
+        for(Personnage p : persos){
+            g.drawString(p.getSurnom(),this.decalageXTrain + pos*lageurCabine + 30,yCab- 20);
+        }
+
+        // on dessine les buttins
+        for(int i = 0; i<c.getButtins().size(); i++){
+            g.drawString(c.getButtins().get(i).toString(),this.decalageXTrain + pos*lageurCabine + 30, (int)(0.7*this.hauteur) + i*30);
         }
     }
 
-    public void paintCheminee(int lageur,int hauteur, int largeurCabine, int largeurCheminee, int hauteurCheminee, Graphics g){
+    public void paintCheminee(int yCab, int largeurCabine, int largeurCheminee, int hauteurCheminee, Graphics g){
         g.setColor(Color.WHITE);
-        g.drawRect((int)(0.1*lageur)+ train.getSize()*largeurCabine-largeurCheminee,hauteur-hauteurCheminee, largeurCheminee, hauteurCheminee);
+        g.drawRect(this.decalageXTrain + train.getSize()*largeurCabine-largeurCheminee,yCab-hauteurCheminee, largeurCheminee, hauteurCheminee);
 
     }
 
