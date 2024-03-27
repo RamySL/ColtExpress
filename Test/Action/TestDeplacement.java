@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
  java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore BolideTest
  */
 
-class TestDeplacement {
+public class TestDeplacement {
     Bandit bandit;
     ComposanteTrain positionCourante;
     @Before
@@ -51,7 +51,7 @@ class TestDeplacement {
     }
     @Test
     public void deplacementGaucheInterieur(){
-        Action dep = new SeDelacer(this.bandit, Direction.Gauche);
+        Action dep = new SeDeplacer(this.bandit, Direction.Gauche);
         this.bandit.ajouterAction(dep);
         this.bandit.executer();
 
@@ -64,7 +64,7 @@ class TestDeplacement {
     @Test
     public void deplacementHaut(){
 
-        Action dep = new SeDelacer(this.bandit, Direction.Haut);
+        Action dep = new SeDeplacer(this.bandit, Direction.Haut);
         this.bandit.ajouterAction(dep);
         this.bandit.executer();
 
@@ -80,7 +80,7 @@ class TestDeplacement {
     }
     @Test
     public void deplacementBas(){
-        Action dep = new SeDelacer(this.bandit, Direction.Bas);
+        Action dep = new SeDeplacer(this.bandit, Direction.Bas);
         this.bandit.ajouterAction(dep);
         this.bandit.executer();
 
