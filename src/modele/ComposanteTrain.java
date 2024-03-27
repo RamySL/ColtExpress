@@ -25,14 +25,15 @@ public abstract class ComposanteTrain {
 
     public ArrayList<Personnage> getPersoList(){return this.persoList;}
 
+    public void ajouterButin(Buttin b) { this.buttins.add(b);}
 
     public ArrayList<Buttin> getButtins(){return this.buttins;}
 
-     public Buttin EnleverButinAlea(){
-         Random rnd = new Random();
-         Buttin butinBraque = this.buttins.get(rnd.nextInt(0,this.buttins.size()));
+    public Buttin EnleverButinAlea(){
+        Random rnd = new Random();
+        Buttin butinBraque = this.buttins.get(rnd.nextInt(0,this.buttins.size()));
 
-         this.buttins.remove(butinBraque);
-         return butinBraque;
-     }
+        this.buttins.remove(butinBraque);
+        return butinBraque;
+    }
 }

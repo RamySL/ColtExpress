@@ -1,4 +1,4 @@
-package Vue;
+package vue;
 
 
 import modele.*;
@@ -9,22 +9,25 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.function.BiConsumer;
 
 /* La vue implemente observer, le modele implemente observable, le modele contient la liste
 la liste des observer et son but et de les notifier quand il y a un changement à son niveau,
 et après l'observer reagit en changeant l'affichage
  */
-public class Jeu extends JFrame implements Observer, ActionListener {
+public class EcranJeu extends JFrame implements Observer, ActionListener {
 
     Train train;
     Bandit b;
 
     int hauteur, lageur;
-
     int decalageXTrain;
-    public Jeu (Train t){
+    public EcranJeu(Train t){
         this.train = t;
-        this.train.getBandit().addObserver(this);
+        for (Bandit b : train.getBandits()){
+            b.addObserver(this);
+        }
+        train.getMarshall().addObserver(this);
 
 
 
@@ -37,7 +40,6 @@ public class Jeu extends JFrame implements Observer, ActionListener {
 
         this.setPreferredSize(new Dimension(this.lageur,this.hauteur));
 
-        this.b = this.train.getBandit();
 
         this.getContentPane().setBackground(Color.BLACK);
 
@@ -156,26 +158,31 @@ public class Jeu extends JFrame implements Observer, ActionListener {
     }
 
     public static void main(String[] args) {
-        Train train = new Train(4,"ramy");
-        Bandit b = train.getBandit();
-        Action depdroit = new SeDeplacer(b, Direction.Droite);
-        Action depbas = new SeDeplacer(b, Direction.Bas);
-        Action dephaut = new SeDeplacer(b, Direction.Haut);
-        Action braquer = new Braquer(b);
+        Train train = new Train(4);
 
-        b.ajouterAction(depdroit);
-        b.ajouterAction(depbas);
-        b.ajouterAction(depdroit);
-        b.ajouterAction(braquer);
+        //train.ajouterBandit("ramy");
+        train.ajouterBandit("KeKe");
+        //train.ajouterBandit("10Giga");
 
 
-        new Jeu(train);
+
+        Action depdroit = new SeDeplacer(train.banditQuiJoue(), Direction.Droite);
+        Action depbas = new SeDeplacer(train.banditQuiJoue(), Direction.Bas);
+        Action dephaut = new SeDeplacer(train.banditQuiJoue(), Direction.Haut);
+        Action braquer = new Braquer(train.banditQuiJoue());
+
+        train.banditQuiJoue().ajouterButtin(new Bijou());
+        train.banditQuiJoue().ajouterAction(depbas);
+
+
+        new EcranJeu(train);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        this.train.getBandit().executer();
+        this.train.getMarshall().executer();
+        this.train.banditQuiJoue().executer();
 
     }
 }

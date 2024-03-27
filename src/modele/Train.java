@@ -10,13 +10,13 @@ public class Train implements Iterable <ComposanteTrain>{
 
     private DernierWagon last;
     private Locomotive first;
-    private Bandit bandit;
+    private ArrayList<Bandit> bandits = new ArrayList<>();
 
     private Marshall marshall;
 
 
 
-    public Train (int n, String nomBandit) {
+    public Train (int n) {
         assert n >= 2;
 
         last = new DernierWagon(this);
@@ -36,19 +36,36 @@ public class Train implements Iterable <ComposanteTrain>{
         courant.ajouterWagon(this.first);
         this.first.ajouterWagon(courant);
 
-
-        this.bandit = new Bandit(last.getToit(), nomBandit);
-
         this.marshall = new Marshall(first,0.3);
 
 
 
     }
-    public Bandit getBandit(){
-        return this.bandit;
-    }
+//    public Bandit getBandit(){
+//        return this.bandit;
+//    }
 
     public int getSize(){ return this.nWagons;}
+
+    public void ajouterBandit(String surnom){
+        // ajout dans une position aleatoire d'un bandit
+        Random rnd = new Random();
+        int pos = rnd.nextInt(0,this.nWagons); // num du toit du bandit
+        int i =0;
+        for (ComposanteTrain c : this){
+            if(i == pos){
+                this.bandits.add(new Bandit(((Interieur)c).getToit(),surnom));
+            }
+            i++;
+        }
+    }
+
+    public Bandit banditQuiJoue(){
+        return this.bandits.get(0);
+    }
+
+    public ArrayList<Bandit> getBandits(){return this.bandits;}
+    public Marshall getMarshall(){return this.marshall;}
 
 
     @Override

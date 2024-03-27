@@ -14,7 +14,6 @@ public abstract class Action {
 }
 
 class Tirer extends Action {
-
     private Personnage cible;
 
     public Tirer (Personnage tireur){

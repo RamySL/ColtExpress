@@ -1,26 +1,26 @@
-package controleur;
+//package controleur;
 
-import modele.*;
+//import modele.*;
 
-public class Main {
+//public class Main {
 
-    public static void main(String[] args) {
-        int NB_WAGONS = 7; //3 + 1
-        String NOM_BANDIT_1 = "ramy";
+    //public static void main(String[] args) {
+        //int NB_WAGONS = 7; //3 + 1
+        //String NOM_BANDIT_1 = "ramy";
 
-        Train train = new Train(NB_WAGONS,NOM_BANDIT_1 );
-        Bandit bandit = train.getBandit();
-        System.out.println(bandit.getEmplacement().getPersoList().get(0));
-        for( ComposanteTrain c : train){
-            System.out.print(c);
+        //Train train = new Train(NB_WAGONS );
+        //Bandit bandit = train.getBandit();
+        //System.out.println(bandit.getEmplacement().getPersoList().get(0));
+        //for( ComposanteTrain c : train){
+            //System.out.print(c);
 
-        }
+        //}
 
-        Action deplacementaDroite = new SeDeplacer(bandit, Direction.Droite);
-        Action deplacementaHaut = new SeDeplacer(bandit, Direction.Haut);
-        Action deplacementBas = new SeDeplacer(bandit,Direction.Bas);
+        //Action deplacementaDroite = new SeDeplacer(bandit, Direction.Droite);
+        //Action deplacementaHaut = new SeDeplacer(bandit, Direction.Haut);
+        //Action deplacementBas = new SeDeplacer(bandit,Direction.Bas);
 
-        bandit.ajouterAction(deplacementaDroite);
+        /*bandit.ajouterAction(deplacementaDroite);
         bandit.ajouterAction(deplacementaHaut);
         bandit.ajouterAction(deplacementaHaut);
         bandit.ajouterAction(deplacementaDroite);
@@ -29,9 +29,9 @@ public class Main {
         bandit.ajouterAction(deplacementaDroite);
 
 
-        bandit.executer();
+        bandit.executer();*/
 
 
 
-    }
-}
+    //}
+//}

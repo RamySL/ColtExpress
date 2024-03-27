@@ -1,6 +1,7 @@
 package modele;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Bandit extends Personnage {
 
@@ -16,12 +17,28 @@ public class Bandit extends Personnage {
 
     /* executer la premiere action sur la file d'action*/
     public void executer() {
+        // execute les action de la file des action du joueur
         if (!actions.isEmpty()) {
             actions.get(0).executer();
             actions.remove(0);
         }
 
         this.notifyObservers();
+    }
+
+    public void fuir(){
+        // le bandit fuit vers le toit quand il voit un marshall et lache un butin
+
+        // Butin perdu et rajouter à l'emplacement
+        Random rnd = new Random();
+        if(!this.buttins.isEmpty()){
+            Buttin butinPerdu = this.buttins.remove(rnd.nextInt(0,this.buttins.size()));
+            this.getEmplacement().ajouterButin(butinPerdu);
+        }
+
+        //fuite
+        Action a = new SeDeplacer(this,Direction.Haut);
+        a.executer();
     }
 
     public void ajouterAction(Action action) {

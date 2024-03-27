@@ -24,15 +24,6 @@ class Bourse extends Buttin{
 
 }
 
-class Bijou extends Buttin{
-    public Bijou(){
-        this.valeur = 500;
-    }
-    public String toString(){
-        return "Bijou";
-    }
-}
-
 class Magot extends Buttin{
     public Magot(){
         this.valeur = 1000;
