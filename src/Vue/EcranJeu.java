@@ -21,6 +21,8 @@ public class EcranJeu extends JFrame implements Observer, ActionListener {
 
 
     int hauteur, lageur;
+
+    JButton action;
     int decalageXTrain;
     public EcranJeu(Train t){
         //Il ne faut pas dessiner directement sur la fenetre (this), c'est trainPanel (Jpanel)
@@ -39,7 +41,7 @@ public class EcranJeu extends JFrame implements Observer, ActionListener {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         // on définit les dimensions de la fenetre relativement au dimension du pc de l'utilisateur
         this.lageur = (int) (screenSize.width *1);
-        this.hauteur = (int) (screenSize.height * 1 );
+        this.hauteur = (int) (screenSize.height *1 );
         this.decalageXTrain = (int) (0.1 * this.lageur); // decalage sur l'axe X pour centré tjr le dessin du train
 
         this.setPreferredSize(new Dimension(this.lageur,this.hauteur));
@@ -54,7 +56,7 @@ public class EcranJeu extends JFrame implements Observer, ActionListener {
 
         this.setLayout(null);
 
-        JButton action = new JButton("action");
+        action = new JButton("action");
 
         action.setBounds(500,50,100,100);
         action.addActionListener(this);
@@ -64,7 +66,7 @@ public class EcranJeu extends JFrame implements Observer, ActionListener {
         this.pack();
         this.add(action);
         this.add(trainPanel);
-        this.setVisible(true);
+        //this.setVisible(true);
     }
     public class TrainPanel extends JPanel {
 
@@ -112,7 +114,11 @@ public class EcranJeu extends JFrame implements Observer, ActionListener {
             // 0.1 pcq en prenant 200 pour largeur des wagons avec 4 wagons on prend 800 ce qui represente 80%
             // il reste donc 20% pour les coté on prend 0.1 (10%) pour chaque coté comme ça c'est centré
 
-            g.drawRect(EcranJeu.this.decalageXTrain + pos*largeurCabine, y,largeurCabine ,hauteurCabine); // resté 40% de hauteur
+            /*int lenSeparation = (int)(0.2*largeurCabine);
+            int xDebutSep = EcranJeu.this.decalageXTrain + largeurCabine * (pos+1) + lenSeparation*(pos);
+            g.drawLine(xDebutSep , (int) (y + 0.8*hauteurCabine) ,xDebutSep + lenSeparation, (int) (y + 0.8*hauteurCabine));*/
+
+            g.drawRect(EcranJeu.this.decalageXTrain + pos * (largeurCabine ), y,largeurCabine ,hauteurCabine); // resté 40% de hauteur
 
             paintRoueArriere(EcranJeu.this.decalageXTrain, largeurCabine,40,pos,g);
             paintRoueAvant(EcranJeu.this.decalageXTrain,largeurCabine,40,pos,g);
@@ -122,7 +128,10 @@ public class EcranJeu extends JFrame implements Observer, ActionListener {
             // on dessine la liste des personnages
             ArrayList<Personnage> persos = c.getPersoList();
             for(Personnage p : persos){
+                if (p instanceof Marshall) g.setColor(new Color(36, 36, 229));
+                else g.setColor(Color.RED);
                 g.drawString(p.getSurnom(),EcranJeu.this.decalageXTrain + pos*largeurCabine + 30, y +30);
+                g.setColor(Color.WHITE);
             }
 
             // on dessine les buttins
@@ -133,11 +142,11 @@ public class EcranJeu extends JFrame implements Observer, ActionListener {
         }
 
         public void paintRoueAvant(int decalageX, int largeurCabine, int diametreRoue,int pos, Graphics g){
-            g.drawOval(decalageX + largeurCabine*pos+largeurCabine - diametreRoue, (int)(0.75*hauteur),diametreRoue,diametreRoue);
+            g.fillOval(decalageX + largeurCabine*pos+largeurCabine - diametreRoue, (int)(0.75*hauteur),diametreRoue,diametreRoue);
         }
 
         public void paintRoueArriere(int decalageX, int largeurCabine,int diametreRoue,int pos, Graphics g){
-            g.drawOval(decalageX + pos*largeurCabine,(int)(0.75*hauteur),diametreRoue, diametreRoue);
+            g.fillOval(decalageX + pos*largeurCabine,(int)(0.75*hauteur),diametreRoue, diametreRoue);
         }
 
 
@@ -148,7 +157,9 @@ public class EcranJeu extends JFrame implements Observer, ActionListener {
             // on dessine la liste des personnages
             ArrayList<Personnage> persos = c.getPersoList();
             for(Personnage p : persos){
+                g.setColor(Color.RED);
                 g.drawString(p.getSurnom(),EcranJeu.this.decalageXTrain + pos*lageurCabine + 30,yCab- 20);
+                g.setColor(Color.WHITE);
             }
 
             // on dessine les buttins
@@ -170,32 +181,12 @@ public class EcranJeu extends JFrame implements Observer, ActionListener {
     }
 
 
-    public static void main(String[] args) {
-        Train train = new Train(4);
-
-        //train.ajouterBandit("ramy");
-        train.ajouterBandit("KeKe");
-        //train.ajouterBandit("10Giga");
-
-
-
-        Action depdroit = new SeDeplacer(train.banditQuiJoue(), Direction.Droite);
-        Action depbas = new SeDeplacer(train.banditQuiJoue(), Direction.Bas);
-        Action dephaut = new SeDeplacer(train.banditQuiJoue(), Direction.Haut);
-        Action braquer = new Braquer(train.banditQuiJoue());
-
-        train.banditQuiJoue().ajouterButtin(new Bijou());
-        train.banditQuiJoue().ajouterAction(depbas);
-
-
-        new EcranJeu(train);
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
-
-        this.train.getMarshall().executer();
-        this.train.banditQuiJoue().executer();
+        if(e.getSource() == this.action) {
+            this.train.getMarshall().executer();
+            this.train.banditQuiJoue().executer();
+        }
 
     }
 }

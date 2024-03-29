@@ -54,4 +54,12 @@ public class Bandit extends Personnage {
         return new Bijou();
     }
 
+    public int score(){
+        int res = 0;
+        for (Buttin b : this.buttins){
+            res += b.getValeur();
+        }
+        return res;
+    }
+
 }

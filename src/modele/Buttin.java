@@ -6,6 +6,8 @@ import java.util.Random;
 public abstract class Buttin {
     protected int valeur;
 
+    public int getValeur(){return this.valeur;}
+
 }
 
 
