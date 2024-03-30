@@ -15,14 +15,15 @@ import java.util.function.BiConsumer;
 la liste des observer et son but et de les notifier quand il y a un changement à son niveau,
 et après l'observer reagit en changeant l'affichage
  */
-public class EcranJeu extends JFrame implements Observer, ActionListener {
+public class EcranJeu extends JFrame implements Observer {
 
     Train train;
 
 
     int hauteur, lageur;
-
-    JButton action;
+    // !!! il faut une solution pour lier les composants avec leur listener (le cntrl)
+    public JButton action, gaucheDep,droiteDep,hautDep,basDep; // Dep = deplcament
+    public JLabel phase;
     int decalageXTrain;
     public EcranJeu(Train t){
         //Il ne faut pas dessiner directement sur la fenetre (this), c'est trainPanel (Jpanel)
@@ -40,8 +41,8 @@ public class EcranJeu extends JFrame implements Observer, ActionListener {
         // on récupère les dimension de l'écran de l'ordinateur
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         // on définit les dimensions de la fenetre relativement au dimension du pc de l'utilisateur
-        this.lageur = (int) (screenSize.width *1);
-        this.hauteur = (int) (screenSize.height *1 );
+        this.lageur = (int) (screenSize.width*0.5 );
+        this.hauteur = (int) (screenSize.height*0.5 );
         this.decalageXTrain = (int) (0.1 * this.lageur); // decalage sur l'axe X pour centré tjr le dessin du train
 
         this.setPreferredSize(new Dimension(this.lageur,this.hauteur));
@@ -56,15 +57,32 @@ public class EcranJeu extends JFrame implements Observer, ActionListener {
 
         this.setLayout(null);
 
-        action = new JButton("action");
+        action = new JButton("act");
+        gaucheDep = new JButton("<");
+        droiteDep = new JButton(">");
+        hautDep = new JButton("^");
+        basDep = new JButton("|");
 
-        action.setBounds(500,50,100,100);
-        action.addActionListener(this);
+        action.setBounds(0,0,80,30);
+        gaucheDep.setBounds(100, 50, 50,30);
+        droiteDep.setBounds(170, 50, 50,30);
+        basDep.setBounds(130, 100, 50,30);
+        hautDep.setBounds(130, 0, 50,30);
+
+        this.phase = new JLabel("Phase de planification");
+        this.phase.setForeground(Color.white);
+        this.phase.setBounds(200,0,150,20);
+        this.add(this.phase);
+
         trainPanel.setBounds(0,0,this.lageur,this.hauteur);//il prend tte la fenetre le panel
 
 
         this.pack();
         this.add(action);
+        this.add(gaucheDep);
+        this.add(droiteDep);
+        this.add(basDep);
+        this.add(hautDep);
         this.add(trainPanel);
         //this.setVisible(true);
     }
@@ -180,13 +198,16 @@ public class EcranJeu extends JFrame implements Observer, ActionListener {
         repaint();
     }
 
+    public void liaisonBottonsListener(ActionListener cntrl){
+        // on dit au bouttons que c'est le controleur qui est en charge d'couter les evnt
+        this.action.addActionListener(cntrl);
+        this.basDep.addActionListener(cntrl);
+        this.gaucheDep.addActionListener(cntrl);
+        this.droiteDep.addActionListener(cntrl);
+        this.hautDep.addActionListener(cntrl);
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == this.action) {
-            this.train.getMarshall().executer();
-            this.train.banditQuiJoue().executer();
-        }
 
     }
+
+
 }

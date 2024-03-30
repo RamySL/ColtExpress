@@ -62,4 +62,8 @@ public class Bandit extends Personnage {
         return res;
     }
 
+    public int lenAction(){
+        // va etre utilisé par le ctrl pour determiner si le tour de plan est terminé pour ce bandit
+        return this.actions.size();}
+
 }
