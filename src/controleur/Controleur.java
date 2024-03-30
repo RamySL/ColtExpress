@@ -5,6 +5,9 @@ import modele.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static java.lang.Thread.sleep;
+// Il ya une erreur de modification de liste pendant qu'on itere dessus quand le marshall attrappe le bandit
+
 /**
  * Le but du modèle étant de contenir la logique de l'application (tout ce qui est structure de données ...)
  * Le but de la vue étant de donner une représentation graphique du modèle et defournir des moyens d'interaction pour l'utilisateur (boutton ..)
@@ -19,6 +22,9 @@ public class Controleur implements ActionListener {
     int nbAction;
 
     boolean actionPhase=false,planPhase=true;
+    Bandit joueurCourant;
+
+    int tourne; // pour determiner que le boutton action à été appuer et qu'il faut passer au prochain ensemble d'action à executée
 
     public Controleur(Train train, EcranJeu e, int n){
         this.train = train;
@@ -35,17 +41,43 @@ public class Controleur implements ActionListener {
         // pour l'instant pas de condition d'arret
         while (true) {
             //planification
-            while (this.train.banditQuiJoue().lenAction() < this.nbAction  ){
-                this.ecranJeu.phase.setText("Phase de planification");
+            for (Bandit b : this.train.getBandits()){
+                this.joueurCourant = b; // pour que les boutton vide ce bandit specifiquement
+                this.ecranJeu.phase.setText("Phase de planification : c'est le tour à " + this.joueurCourant.getSurnom());
+
                 planPhase = true;
                 actionPhase = false;
-            }
-            // action
-            while (this.train.banditQuiJoue().lenAction() > 0 ) {
 
+                while (b.lenAction() < this.nbAction){
+                    // pour l'instant il ya rien à mettre dans cette boucle mais elle necessaire pour attendre que joueur est planifié ces action
+                    // on ne peut pas la mettre vide sinon je crois elle est ignoré par le compilateur
+                    System.out.print("");
+                }
+
+            }
+
+            // action
+            this.tourne = 1;
+            // le nombre totale d'iteration pour toutes les action des bandit = nbBandit * nbAction
+            while (this.tourne <= this.nbAction){
                 this.ecranJeu.phase.setText("Phase de d'action");
+
                 planPhase = false;
                 actionPhase = true;
+                // on varie le joueur avec une periodicité de 3 (plutot le nombre de jr en generale)
+                // la formule (n-1)mod(nombre de joueur) (le -1 c'est pour le décalage puisque les indice commence à 0)
+
+                //this.joueurCourant = this.train.getBandits().get((n-1) / this.train.getBandits().size());
+
+
+//                while (b.lenAction() > 0 ) {
+//                    // on doit attendre ici jusqu'a ce qu'il joue
+//                    System.out.println("c'est " + b.getSurnom() + " qui execute ");
+//                }
+
+
+
+
             }
         }
     }
@@ -53,32 +85,42 @@ public class Controleur implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Bandit b = train.banditQuiJoue();
+
 
         if(e.getSource() == ecranJeu.action && actionPhase) {
             this.train.getMarshall().executer();
-            b.executer();
+
+            for(Bandit b : this.train.getBandits()){
+                b.executer();
+            }
+
+            this.tourne++;
         }else {
             if (planPhase) {
                 Action a;
                 if (e.getSource() == ecranJeu.droiteDep) {
-                    a = new SeDeplacer(b, Direction.Droite);
-                    b.ajouterAction(a);
+                    a = new SeDeplacer(this.joueurCourant, Direction.Droite);
+                    this.joueurCourant.ajouterAction(a);
                 }
 
                 if (e.getSource() == ecranJeu.gaucheDep) {
-                    a = new SeDeplacer(b, Direction.Gauche);
-                    b.ajouterAction(a);
+                    a = new SeDeplacer(this.joueurCourant, Direction.Gauche);
+                    this.joueurCourant.ajouterAction(a);
                 }
 
                 if (e.getSource() == ecranJeu.hautDep) {
-                    a = new SeDeplacer(b, Direction.Haut);
-                    b.ajouterAction(a);
+                    a = new SeDeplacer(this.joueurCourant, Direction.Haut);
+                    this.joueurCourant.ajouterAction(a);
                 }
 
                 if (e.getSource() == ecranJeu.basDep) {
-                    a = new SeDeplacer(b, Direction.Bas);
-                    b.ajouterAction(a);
+                    a = new SeDeplacer(this.joueurCourant, Direction.Bas);
+                    this.joueurCourant.ajouterAction(a);
+                }
+
+                if (e.getSource() == ecranJeu.braquage){
+                    a = new Braquer(this.joueurCourant);
+                    this.joueurCourant.ajouterAction(a);
                 }
             }
         }
@@ -89,9 +131,12 @@ public class Controleur implements ActionListener {
     public static void main(String[] args) {
         Train train = new Train(4);
         train.ajouterBandit("ouané");
+        train.ajouterBandit("ramy");
+        train.ajouterBandit("kelia");
+
         train.banditQuiJoue().ajouterButtin(new Bijou());
         EcranJeu e = new EcranJeu(train);
-        Controleur controleur = new Controleur(train,e,4);
+        Controleur controleur = new Controleur(train,e,2);
 
         //train.ajouterBandit("ramy");
         controleur.lancerJeu();

@@ -30,10 +30,13 @@ public abstract class ComposanteTrain {
     public ArrayList<Buttin> getButtins(){return this.buttins;}
 
     public Buttin EnleverButinAlea(){
+        if (!this.buttins.isEmpty()){
         Random rnd = new Random();
         Buttin butinBraque = this.buttins.get(rnd.nextInt(0,this.buttins.size()));
 
         this.buttins.remove(butinBraque);
-        return butinBraque;
+        return butinBraque;}
+
+        return null;
     }
 }

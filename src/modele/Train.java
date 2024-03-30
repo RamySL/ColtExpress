@@ -11,10 +11,7 @@ public class Train implements Iterable <ComposanteTrain>{
     private DernierWagon last;
     private Locomotive first;
     private ArrayList<Bandit> bandits = new ArrayList<>();
-
     private Marshall marshall;
-
-
 
     public Train (int n) {
         assert n >= 2;
@@ -36,7 +33,8 @@ public class Train implements Iterable <ComposanteTrain>{
         courant.ajouterWagon(this.first);
         this.first.ajouterWagon(courant);
 
-        this.marshall = new Marshall(first,1);
+        this.marshall = new Marshall(first,0.0);// !!! il ya une petite erreur quand le marshall attrape le bandit
+                                                        // on annulle le marshall comme ça on débugue les actions
 
 
 

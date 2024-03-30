@@ -22,7 +22,7 @@ public class EcranJeu extends JFrame implements Observer {
 
     int hauteur, lageur;
     // !!! il faut une solution pour lier les composants avec leur listener (le cntrl)
-    public JButton action, gaucheDep,droiteDep,hautDep,basDep; // Dep = deplcament
+    public JButton action, gaucheDep,droiteDep,hautDep,basDep, braquage; // Dep = deplcament
     public JLabel phase;
     int decalageXTrain;
     public EcranJeu(Train t){
@@ -41,8 +41,10 @@ public class EcranJeu extends JFrame implements Observer {
         // on récupère les dimension de l'écran de l'ordinateur
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         // on définit les dimensions de la fenetre relativement au dimension du pc de l'utilisateur
-        this.lageur = (int) (screenSize.width*0.5 );
-        this.hauteur = (int) (screenSize.height*0.5 );
+//        this.lageur = (int) (screenSize.width*0.5 );
+//        this.hauteur = (int) (screenSize.height*0.5 );
+        this.lageur = 1000;
+        this.hauteur = 800;
         this.decalageXTrain = (int) (0.1 * this.lageur); // decalage sur l'axe X pour centré tjr le dessin du train
 
         this.setPreferredSize(new Dimension(this.lageur,this.hauteur));
@@ -62,16 +64,18 @@ public class EcranJeu extends JFrame implements Observer {
         droiteDep = new JButton(">");
         hautDep = new JButton("^");
         basDep = new JButton("|");
+        braquage = new JButton("Braquer");
 
         action.setBounds(0,0,80,30);
         gaucheDep.setBounds(100, 50, 50,30);
         droiteDep.setBounds(170, 50, 50,30);
         basDep.setBounds(130, 100, 50,30);
         hautDep.setBounds(130, 0, 50,30);
+        braquage.setBounds(230,50,150,30);
 
         this.phase = new JLabel("Phase de planification");
         this.phase.setForeground(Color.white);
-        this.phase.setBounds(200,0,150,20);
+        this.phase.setBounds(200,0,300,20);
         this.add(this.phase);
 
         trainPanel.setBounds(0,0,this.lageur,this.hauteur);//il prend tte la fenetre le panel
@@ -83,6 +87,7 @@ public class EcranJeu extends JFrame implements Observer {
         this.add(droiteDep);
         this.add(basDep);
         this.add(hautDep);
+        this.add(braquage);
         this.add(trainPanel);
         //this.setVisible(true);
     }
@@ -205,6 +210,7 @@ public class EcranJeu extends JFrame implements Observer {
         this.gaucheDep.addActionListener(cntrl);
         this.droiteDep.addActionListener(cntrl);
         this.hautDep.addActionListener(cntrl);
+        this.braquage.addActionListener(cntrl);
 
 
     }
