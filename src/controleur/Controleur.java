@@ -4,9 +4,10 @@ import modele.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import static java.lang.Thread.sleep;
-// Il ya une erreur de modification de liste pendant qu'on itere dessus quand le marshall attrappe le bandit
+
 
 /**
  * Le but du modèle étant de contenir la logique de l'application (tout ce qui est structure de données ...)
@@ -41,7 +42,7 @@ public class Controleur implements ActionListener {
         // pour l'instant pas de condition d'arret
         while (true) {
             //planification
-            for (Bandit b : this.train.getBandits()){
+            for (Bandit b : new ArrayList<>(this.train.getBandits()) ){ // on créer une nouvelle liste pour éviter la concurrenterror
                 this.joueurCourant = b; // pour que les boutton vide ce bandit specifiquement
                 this.ecranJeu.phase.setText("Phase de planification : c'est le tour à " + this.joueurCourant.getSurnom());
 
@@ -134,7 +135,6 @@ public class Controleur implements ActionListener {
         train.ajouterBandit("ramy");
         train.ajouterBandit("kelia");
 
-        train.banditQuiJoue().ajouterButtin(new Bijou());
         EcranJeu e = new EcranJeu(train);
         Controleur controleur = new Controleur(train,e,2);
 
