@@ -23,6 +23,8 @@ public class EcranJeu extends JFrame implements Observer {
     int hauteur, lageur;
     // !!! il faut une solution pour lier les composants avec leur listener (le cntrl)
     public JButton action, gaucheDep,droiteDep,hautDep,basDep, braquage; // Dep = deplcament
+
+    public JButton tirGauche, tirDroit,tirHaut,tirBas;
     public JLabel phase;
     int decalageXTrain;
     public EcranJeu(Train t){
@@ -66,12 +68,26 @@ public class EcranJeu extends JFrame implements Observer {
         basDep = new JButton("|");
         braquage = new JButton("Braquer");
 
+        tirGauche = new JButton("tir <");
+        tirDroit = new JButton("tir >");
+        tirBas = new JButton("tir |");
+        tirHaut = new JButton("tir ^");
+
         action.setBounds(0,0,80,30);
+
         gaucheDep.setBounds(100, 50, 50,30);
         droiteDep.setBounds(170, 50, 50,30);
         basDep.setBounds(130, 100, 50,30);
         hautDep.setBounds(130, 0, 50,30);
         braquage.setBounds(230,50,150,30);
+
+        tirHaut.setBounds(500,0,100,30);
+        tirBas.setBounds(500,100,100,30);
+        tirDroit.setBounds(600,50,100,30);
+        tirGauche.setBounds(450,50,100,30);
+
+
+
 
         this.phase = new JLabel("Phase de planification");
         this.phase.setForeground(Color.white);
@@ -89,6 +105,11 @@ public class EcranJeu extends JFrame implements Observer {
         this.add(hautDep);
         this.add(braquage);
         this.add(trainPanel);
+
+        this.add(tirHaut);
+        this.add(tirBas);
+        this.add(tirDroit);
+        this.add(tirGauche);
         //this.setVisible(true);
     }
     public class TrainPanel extends JPanel {
@@ -211,6 +232,10 @@ public class EcranJeu extends JFrame implements Observer {
         this.droiteDep.addActionListener(cntrl);
         this.hautDep.addActionListener(cntrl);
         this.braquage.addActionListener(cntrl);
+        this.tirHaut.addActionListener(cntrl);
+        this.tirBas.addActionListener(cntrl);
+        this.tirDroit.addActionListener(cntrl);
+        this.tirGauche.addActionListener(cntrl);
 
 
     }

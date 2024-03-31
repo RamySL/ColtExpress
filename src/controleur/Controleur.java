@@ -38,18 +38,20 @@ public class Controleur implements ActionListener {
     // boucle du jeu
     public void lancerJeu() {
         this.ecranJeu.setVisible(true);
-
+        int nbBandit = this.train.getBandits().size();
         // pour l'instant pas de condition d'arret
         while (true) {
             //planification
-            for (Bandit b : new ArrayList<>(this.train.getBandits()) ){ // on créer une nouvelle liste pour éviter la concurrenterror
-                this.joueurCourant = b; // pour que les boutton vide ce bandit specifiquement
+
+            // on utilise pas une boucle for each pour eviter la cocurrentmodifError avec la methode fuire de bandit
+            for (int i = 0; i <nbBandit; i++){
+                this.joueurCourant = this.train.getBandits().get(i); // pour que les boutton vide ce bandit specifiquement
                 this.ecranJeu.phase.setText("Phase de planification : c'est le tour à " + this.joueurCourant.getSurnom());
 
                 planPhase = true;
                 actionPhase = false;
 
-                while (b.lenAction() < this.nbAction){
+                while (this.joueurCourant.lenAction() < this.nbAction){
                     // pour l'instant il ya rien à mettre dans cette boucle mais elle necessaire pour attendre que joueur est planifié ces action
                     // on ne peut pas la mettre vide sinon je crois elle est ignoré par le compilateur
                     System.out.print("");
@@ -123,6 +125,32 @@ public class Controleur implements ActionListener {
                     a = new Braquer(this.joueurCourant);
                     this.joueurCourant.ajouterAction(a);
                 }
+
+                if (e.getSource() == ecranJeu.tirHaut){
+                    //a = new Tirer()
+                    //this.joueurCourant.ajouterAction(a);
+                    System.out.println("tir haut appuye");
+                }
+
+                if (e.getSource() == ecranJeu.tirBas){
+                    //a = new Tirer()
+                    //this.joueurCourant.ajouterAction(a);
+                    System.out.println("tir bas appuye");
+                }
+
+                if (e.getSource() == ecranJeu.tirDroit){
+                    //a = new Tirer()
+                    //this.joueurCourant.ajouterAction(a);
+                    System.out.println("tir droit appuye");
+                }
+
+                if (e.getSource() == ecranJeu.tirGauche){
+                    //a = new Tirer()
+                    //this.joueurCourant.ajouterAction(a);
+                    System.out.println("tir gauche appuye");
+                }
+
+
             }
         }
 
