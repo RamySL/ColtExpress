@@ -25,9 +25,29 @@ public abstract class ComposanteTrain {
 
     public ArrayList<Personnage> getPersoList(){return this.persoList;}
 
+
+    public ArrayList<Bandit>getBanditList(Bandit courant){ // return la liste de bandit sans le bandit courant
+        ArrayList<Bandit>banditList = new ArrayList<>();
+        for(Personnage b : this.persoList){
+                if (b instanceof Bandit) {
+                    if (b.hashCode() != courant.hashCode()) {
+                    banditList.add((Bandit)b);
+                }
+            }
+        }
+        return banditList;
+    }
+
     public void ajouterButin(Buttin b) { this.buttins.add(b);}
 
     public ArrayList<Buttin> getButtins(){return this.buttins;}
+
+    public Bandit getBanditAlea(Bandit courant) {
+        //!!!la liste des bandit doit etre verifiée c'est a dire pas vide
+        Random rnd = new Random();
+        Bandit b= this.getBanditList(courant).get(rnd.nextInt(0, getBanditList(courant).size()));
+        return b;
+    }
 
     public Buttin EnleverButinAlea(){
         if (!this.buttins.isEmpty()){

@@ -9,7 +9,7 @@ public class Marshall extends Personnage {
 
     public Marshall(ComposanteTrain emp, double nervosite) {
 
-        super(emp, "Marshall");
+        super(emp, "Marshall", 1);
         this.nervosite = nervosite;
 
     }

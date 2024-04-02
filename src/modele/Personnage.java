@@ -7,13 +7,18 @@ public abstract class Personnage extends Observable{
     ComposanteTrain emplacement;
 
     String surnom;
-    public Personnage (ComposanteTrain emp, String surnom){
+
+    private int nbBalles;
+    public Personnage (ComposanteTrain emp, String surnom, int nbBalles){
 
         this.emplacement = emp;
         this.surnom = surnom;
+        this.nbBalles = nbBalles;
         // on notifie le composant qui contient le personnage
         this.emplacement.ajouterPersonnage(this);
     }
+
+
 
     public void setWagon(ComposanteTrain newW){
         // on l'enleve de l'ancien emplacement
@@ -27,6 +32,11 @@ public abstract class Personnage extends Observable{
     }
 
     public String getSurnom(){return this.surnom;}
+
+    public int getNbBalles(){return this.nbBalles;}
+
+
 }
+
 
 
