@@ -43,7 +43,7 @@ public class Marshall extends Personnage {
         }
 
         ArrayList<Personnage> lstBandit = this.getEmplacement().getPersoList();
-        for (Personnage p : lstBandit){
+        for (Personnage p : lstBandit){ // ICI ERREUR
             if (p instanceof Bandit){
                 //((Bandit)p).fuir();
             }

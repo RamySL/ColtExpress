@@ -164,7 +164,7 @@ public class Controleur implements ActionListener {
         train.ajouterBandit("kelia");
 
         EcranJeu e = new EcranJeu(train);
-        Controleur controleur = new Controleur(train,e,2);
+        Controleur controleur = new Controleur(train,e,3);
 
         //train.ajouterBandit("ramy");
         controleur.lancerJeu();
