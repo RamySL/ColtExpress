@@ -33,7 +33,7 @@ public class Train implements Iterable <ComposanteTrain>{
         courant.ajouterWagon(this.first);
         this.first.ajouterWagon(courant);
 
-        this.marshall = new Marshall(first,0.7);
+        this.marshall = new Marshall(first,0.3);
 
 
 

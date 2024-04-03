@@ -202,13 +202,13 @@ public class EcranJeu extends JFrame implements Observer {
             ArrayList<Personnage> persos = c.getPersoList();
             for(Personnage p : persos){
                 g.setColor(Color.RED);
-                g.drawString(p.getSurnom(),EcranJeu.this.decalageXTrain + pos*lageurCabine + 30,yCab- 20);
+                g.drawString(p.getSurnom(),EcranJeu.this.decalageXTrain + pos*lageurCabine + 30,yCab- 10);
                 g.setColor(Color.WHITE);
             }
 
             // on dessine les buttins
             for(int i = 0; i<c.getButtins().size(); i++){
-                g.drawString(c.getButtins().get(i).toString(),EcranJeu.this.decalageXTrain + pos*lageurCabine + 30, (int)(0.7*EcranJeu.this.hauteur) + i*30);
+                g.drawString(c.getButtins().get(i).toString(),EcranJeu.this.decalageXTrain + pos*lageurCabine + 30, yCab- 20);// y = (int)(0.7*EcranJeu.this.hauteur) + i*30
             }
         }
 

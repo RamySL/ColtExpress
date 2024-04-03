@@ -43,9 +43,10 @@ public class Marshall extends Personnage {
         }
 
         ArrayList<Personnage> lstBandit = this.getEmplacement().getPersoList();
-        for (Personnage p : lstBandit){ // ICI ERREUR
+        for (int i = 0; i<lstBandit.size(); i++){ // on utilise pas une boucle for each pour eviter la cocurrentmodifError avec la methode fuire de bandit
+            Personnage p = lstBandit.get(i);
             if (p instanceof Bandit){
-                //((Bandit)p).fuir();
+                ((Bandit)p).fuir();
             }
         }
 

@@ -67,19 +67,6 @@ public class Controleur implements ActionListener {
 
                 planPhase = false;
                 actionPhase = true;
-                // on varie le joueur avec une periodicité de 3 (plutot le nombre de jr en generale)
-                // la formule (n-1)mod(nombre de joueur) (le -1 c'est pour le décalage puisque les indice commence à 0)
-
-                //this.joueurCourant = this.train.getBandits().get((n-1) / this.train.getBandits().size());
-
-
-//                while (b.lenAction() > 0 ) {
-//                    // on doit attendre ici jusqu'a ce qu'il joue
-//                    System.out.println("c'est " + b.getSurnom() + " qui execute ");
-//                }
-
-
-
 
             }
         }
@@ -127,27 +114,24 @@ public class Controleur implements ActionListener {
                 }
 
                 if (e.getSource() == ecranJeu.tirHaut){
-                    //a = new Tirer()
-                    //this.joueurCourant.ajouterAction(a);
-                    System.out.println("tir haut appuye");
+                    a = new Tirer(this.joueurCourant,Direction.Haut);
+                    this.joueurCourant.ajouterAction(a);
+
                 }
 
                 if (e.getSource() == ecranJeu.tirBas){
-                    //a = new Tirer()
-                    //this.joueurCourant.ajouterAction(a);
-                    System.out.println("tir bas appuye");
+                    a = new Tirer(this.joueurCourant,Direction.Bas);
+                    this.joueurCourant.ajouterAction(a);
                 }
 
                 if (e.getSource() == ecranJeu.tirDroit){
-                    //a = new Tirer()
-                    //this.joueurCourant.ajouterAction(a);
-                    System.out.println("tir droit appuye");
+                    a = new Tirer(this.joueurCourant,Direction.Droite);
+                    this.joueurCourant.ajouterAction(a);
                 }
 
                 if (e.getSource() == ecranJeu.tirGauche){
-                    //a = new Tirer()
-                    //this.joueurCourant.ajouterAction(a);
-                    System.out.println("tir gauche appuye");
+                    a = new Tirer(this.joueurCourant,Direction.Gauche);
+                    this.joueurCourant.ajouterAction(a);
                 }
 
 
@@ -166,22 +150,8 @@ public class Controleur implements ActionListener {
         EcranJeu e = new EcranJeu(train);
         Controleur controleur = new Controleur(train,e,3);
 
-        //train.ajouterBandit("ramy");
+
         controleur.lancerJeu();
-        //train.ajouterBandit("10Giga");
-
-
-
-//        Action depdroit = new SeDeplacer(train.banditQuiJoue(), Direction.Droite);
-//        Action depbas = new SeDeplacer(train.banditQuiJoue(), Direction.Bas);
-//        Action dephaut = new SeDeplacer(train.banditQuiJoue(), Direction.Haut);
-//        Action braquer = new Braquer(train.banditQuiJoue());
-
-
-
-
-
-
 
 
     }
