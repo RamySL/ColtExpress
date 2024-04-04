@@ -58,6 +58,22 @@ public class EcranLancement extends JPanel implements ActionListener {
         northContainer.setBackground(new Color(0x0FFFFFF, true)); // transparent
         northContainer.add(saclayLabel, BorderLayout.WEST);
 
+
+        JLabel appyerCommencer = new JLabel("Appuyer sur entré pour commencer");
+        appyerCommencer.setForeground(Color.BLACK);
+        appyerCommencer.setFont(new Font("MV Boli", Font.BOLD, 20));
+        // Pour le clignotement
+        Timer timer = new Timer(800, new ActionListener() {
+            boolean visible = true;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                appyerCommencer.setVisible(visible);
+                visible = !visible;
+            }
+        });
+        timer.start();
+
+        this.add(appyerCommencer, BorderLayout.EAST);
         this.add(southContainer, BorderLayout.SOUTH);
         this.add(northContainer, BorderLayout.NORTH);
 
