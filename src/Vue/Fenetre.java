@@ -19,7 +19,8 @@ public class Fenetre extends JFrame {
 
         this.setTitle("ColtExpress");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(800, 700);
+        this.setSize(1200, 700);
+        this.setLocationRelativeTo(null);
 
         // Créer le conteneur pour les cartes
         this.cardLayout = new CardLayout();
