@@ -8,7 +8,7 @@ public abstract class Personnage extends Observable{
 
     String surnom;
 
-    private int nbBalles;
+    protected int nbBalles;
     public Personnage (ComposanteTrain emp, String surnom, int nbBalles){
 
         this.emplacement = emp;

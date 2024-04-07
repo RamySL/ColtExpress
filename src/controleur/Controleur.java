@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import static java.lang.Thread.sleep;
 
-
 /**
  * Le but du modèle étant de contenir la logique de l'application (tout ce qui est structure de données ...)
  * Le but de la vue étant de donner une représentation graphique du modèle et defournir des moyens d'interaction pour l'utilisateur (boutton ..)
@@ -83,7 +82,7 @@ public class Controleur implements ActionListener {
             for(Bandit b : this.train.getBandits()){
                 b.executer();
             }
-
+            System.out.println(); // pour un affichage plus claire à la console
             this.tourne++;
         }else {
             if (planPhase) {

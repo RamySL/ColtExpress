@@ -8,7 +8,7 @@ public class Bandit extends Personnage {
     ArrayList<Buttin> buttins = new ArrayList<>();
     ArrayList<Action> actions = new ArrayList<>();
 
-    int nbBalles;
+
 
     public Bandit(ComposanteTrain emp, String surnom) {
         super(emp, surnom, 6);
