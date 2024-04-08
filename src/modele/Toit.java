@@ -18,5 +18,9 @@ public class Toit extends ComposanteTrain{
 
     }
 
+    public String  toString(){
+        return "Toit";
+    }
+
 
 }

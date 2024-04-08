@@ -5,8 +5,8 @@ import java.util.Random;
 
 public class Bandit extends Personnage {
 
-    ArrayList<Buttin> buttins = new ArrayList<>();
-    ArrayList<Action> actions = new ArrayList<>();
+    private ArrayList<Buttin> buttins = new ArrayList<>();
+    private ArrayList<Action> actions = new ArrayList<>();
 
 
 
@@ -81,5 +81,6 @@ public class Bandit extends Personnage {
     }
 
     public ArrayList<Buttin>getButtins(){ return this.buttins;}
+    public ArrayList<Action> getActions (){return this.actions;}
 
 }

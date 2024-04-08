@@ -11,6 +11,7 @@ public class Braquer extends Action {
     public void executer() {
         ComposanteTrain banditPos = this.executeur.getEmplacement();
         Buttin buttinBraque = banditPos.EnleverButinAlea();
+
         if(buttinBraque != null){
             ((Bandit) this.executeur).ajouterButtin(buttinBraque); // executeur n'est pas un bandit
 

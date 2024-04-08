@@ -6,8 +6,10 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class EcranLancement extends JPanel implements ActionListener {
+public class EcranLancement extends JPanel  {
     private Fenetre fenetre;
     private Image imageFond;
 
@@ -57,9 +59,20 @@ public class EcranLancement extends JPanel implements ActionListener {
 
         northContainer.setBackground(new Color(0x0FFFFFF, true)); // transparent
         northContainer.add(saclayLabel, BorderLayout.WEST);
+        this.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+            @Override
+            public void keyPressed(KeyEvent e) {EcranLancement.this.fenetre.changerFenetre(EcranLancement.this.fenetre.getAccueilId());}
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
 
 
-        JLabel appyerCommencer = new JLabel("Appuyer sur entré pour commencer");
+        JButton appyerCommencer = new JButton("Appuyer sur une touche pour commencer");
+        appyerCommencer.setBackground(new Color(0x0FFFFFF, true));
+        appyerCommencer.setBorder(null);
+        appyerCommencer.setFocusable(true);
         appyerCommencer.setForeground(Color.BLACK);
         appyerCommencer.setFont(new Font("MV Boli", Font.BOLD, 20));
         // Pour le clignotement
@@ -73,6 +86,7 @@ public class EcranLancement extends JPanel implements ActionListener {
         });
         timer.start();
 
+        this.setFocusable(true);
         this.add(appyerCommencer, BorderLayout.EAST);
         this.add(southContainer, BorderLayout.SOUTH);
         this.add(northContainer, BorderLayout.NORTH);
@@ -83,15 +97,10 @@ public class EcranLancement extends JPanel implements ActionListener {
 
 
 
-        @Override
-        public void paintComponent(Graphics g) {
+    @Override
+    public void paintComponent(Graphics g) {
             super.paintComponents(g);
             g.drawImage(this.imageFond,0,-20,this.fenetre.getWidth(),this.fenetre.getHeight(),this);
         }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        System.out.println("test");
-        this.fenetre.changerFenetre(this.fenetre.getAccueilId());
-    }
 }

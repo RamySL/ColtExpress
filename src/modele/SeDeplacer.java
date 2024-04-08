@@ -16,7 +16,9 @@ public class SeDeplacer extends Action {
         switch (this.direction) {
             case Droite:
                 // on regarde que si on est ni dans la locmotive ni sur son toit
-                if (src instanceof Locomotive || (src instanceof Toit) && ((Toit) src).getCabine() instanceof Locomotive){ //&& ((Toit) src).getCabine() instanceof Locomotive){
+                if (src instanceof Locomotive ||
+                        (src instanceof Toit) &&
+                                ((Toit) src).getCabine() instanceof Locomotive){
                     if (!(src instanceof Toit))
                         System.out.println(this.executeur.getSurnom() + " Vous êtes dans la locomotive, pas de déplacement à droite");
                     else
@@ -30,7 +32,6 @@ public class SeDeplacer extends Action {
                         System.out.println(this.executeur.getSurnom() + " s'est déplacé à droite");
                     } else {
                         // si on etait sur le toit on recuperere d'abbord la cabine à droite puis son toit
-                        // on est passé de ça : ((Cabine) src.getTrain().getComposantes()[src.getPosition() + 1]).getToit()
                         this.executeur.setWagon(src.getVoisin(Direction.Droite));
                         System.out.println(this.executeur.getSurnom() + " s'est déplacé à droite sur le toit");
                     }
@@ -38,13 +39,16 @@ public class SeDeplacer extends Action {
                 break;
 
             case Gauche:
-                if (src instanceof DernierWagon || (src instanceof Toit) && ((Toit) src).getCabine() instanceof DernierWagon) {
+                if (src instanceof DernierWagon ||
+                        (src instanceof Toit) &&
+                                ((Toit) src).getCabine() instanceof DernierWagon) {
+
                     if (!(src instanceof Toit))
                         System.out.println(this.executeur.getSurnom() + " Vous êtes dans le dernier wagon, pas de déplacement à gauche");
                     else
                         System.out.println(this.executeur.getSurnom() + " Vous êtes sur le toit du dernier wagon, pas de déplacement à gauche");
                 } else {
-                    if (src instanceof DernierWagon) {
+                    if (src instanceof Toit) {
                         this.executeur.setWagon(src.getVoisin(Direction.Gauche));
                         System.out.println(this.executeur.getSurnom() + " s'est déplacé à gauche sur le toit");
                     } else {

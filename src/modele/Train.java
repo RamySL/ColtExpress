@@ -57,10 +57,6 @@ public class Train implements Iterable <ComposanteTrain>{
         }
     }
 
-    public Bandit banditQuiJoue(){
-        return this.bandits.get(0);
-    }
-
     public ArrayList<Bandit> getBandits(){return this.bandits;}
     public Marshall getMarshall(){return this.marshall;}
 

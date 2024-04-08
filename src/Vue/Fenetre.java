@@ -33,7 +33,7 @@ public class Fenetre extends JFrame {
         cards.add(new EcranLancement(this), this.lancementId);
 
         // On dit qu'on veut que ça soit EcranLancement qui s'affiche en premier
-        cardLayout.show(cards, this.lancementId);
+        cardLayout.show(cards, this.accueilId);
 
         this.setVisible(true);
 
