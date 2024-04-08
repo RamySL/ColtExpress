@@ -119,7 +119,9 @@ class Wagon extends Interieur {
 
     public ComposanteTrain getVoisin(Direction d){
         if (d == Direction.Gauche) return this.cabineGauche;
-        else return this.CabineDroite;
+        else if (d == Direction.Droite) return this.CabineDroite;
+        else return this;
+
     }
 
     public String toString (){

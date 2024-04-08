@@ -26,11 +26,11 @@ public abstract class ComposanteTrain {
     public ArrayList<Personnage> getPersoList(){return this.persoList;}
 
 
-    public ArrayList<Bandit>getBanditList(Bandit courant){ // return la liste de bandit sans le bandit courant
+    public ArrayList<Bandit>getBanditList(Personnage courant){ // return la liste de bandit sans le bandit courant
         ArrayList<Bandit>banditList = new ArrayList<>();
         for(Personnage b : this.persoList){
-                if (b instanceof Bandit) {
-                    if (b.hashCode() != courant.hashCode()) {
+            if (b instanceof Bandit) {
+                if (b.hashCode() != courant.hashCode()) {
                     banditList.add((Bandit)b);
                 }
             }
@@ -42,7 +42,7 @@ public abstract class ComposanteTrain {
 
     public ArrayList<Buttin> getButtins(){return this.buttins;}
 
-    public Bandit getBanditAlea(Bandit courant) {
+    public Bandit getBanditAlea(Personnage courant) {
         //!!!la liste des bandit doit etre verifiée c'est a dire pas vide
         Random rnd = new Random();
         Bandit b= this.getBanditList(courant).get(rnd.nextInt(0, getBanditList(courant).size()));
@@ -51,11 +51,11 @@ public abstract class ComposanteTrain {
 
     public Buttin EnleverButinAlea(){
         if (!this.buttins.isEmpty()){
-        Random rnd = new Random();
-        Buttin butinBraque = this.buttins.get(rnd.nextInt(0,this.buttins.size()));
+            Random rnd = new Random();
+            Buttin butinBraque = this.buttins.get(rnd.nextInt(0,this.buttins.size()));
 
-        this.buttins.remove(butinBraque);
-        return butinBraque;}
+            this.buttins.remove(butinBraque);
+            return butinBraque;}
 
         return null;
     }

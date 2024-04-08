@@ -14,13 +14,7 @@ public class Toit extends ComposanteTrain{
     public ComposanteTrain getVoisin(Direction d){
 
         ComposanteTrain voisin = this.cabine.getVoisin(d); // on recupere la CABINE voisine
-
-        if (voisin != null){
-            // on est sur que c'est un objet Interieur
-            return ((Interieur)voisin).getToit();
-        }else {
-            return null;
-        }
+        return ((Interieur)voisin).getToit(); // retourne le toit de la cabine voisine
 
     }
 
