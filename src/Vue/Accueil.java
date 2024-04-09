@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Accueil extends JPanel implements ActionListener {
+public class Accueil extends JPanel {
     private Fenetre fenetre;
     private Image imageFond;
 
@@ -51,10 +51,6 @@ public class Accueil extends JPanel implements ActionListener {
 
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        this.fenetre.changerFenetre(this.fenetre.getJeuId());
-    }
 
     public class OptionsJeu extends JPanel{
 
@@ -95,6 +91,7 @@ public class Accueil extends JPanel implements ActionListener {
             southPanel.setBackground(new Color(0,0,0, 0));
 
             this.lancerJeu = new JButton("Lancer");
+            this.lancerJeu.addActionListener(e -> Accueil.this.fenetre.changerFenetre(Accueil.this.fenetre.getJeuId()));
             dernierEtage.add(this.lancerJeu);
             dernierEtage.setBackground(new Color(0,0,0, 0));
 

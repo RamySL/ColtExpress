@@ -39,18 +39,15 @@ public class Jeu extends JPanel implements Observer {
         // on définit les dimensions de la fenetre relativement au dimension du pc de l'utilisateur
 //        this.lageur = (int) (screenSize.width*0.5 );
 //        this.hauteur = (int) (screenSize.height*0.5 );
-        this.lageur = 1000;
-        this.hauteur = 800;
+        this.lageur = 1200;
+        this.hauteur = 700;
         this.decalageXTrain = (int) (0.1 * this.lageur); // decalage sur l'axe X pour centré tjr le dessin du train
 
         this.setPreferredSize(new Dimension(this.lageur,this.hauteur));
 
 
-        //this.getContentPane().setBackground(Color.BLACK);
-
         ImageIcon icon = new ImageIcon("src/vue/header.jpg");
 
-        //this.setIconImage(icon.getImage());
 
         this.setLayout(null);
 

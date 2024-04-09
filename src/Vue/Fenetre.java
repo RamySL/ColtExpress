@@ -46,7 +46,7 @@ public class Fenetre extends JFrame {
 
 
         // On dit qu'on veut que ça soit EcranLancement qui s'affiche en premier
-        cardLayout.show(cards, this.jeuId);
+        cardLayout.show(cards, this.lancementId);
 
 
     }
