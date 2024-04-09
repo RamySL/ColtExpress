@@ -3,6 +3,7 @@ package Vue;
 import modele.*;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -73,8 +74,8 @@ public class Jeu extends JPanel implements Observer {
 
         tirHaut.setBounds(500,0,100,30);
         tirBas.setBounds(500,100,100,30);
-        tirDroit.setBounds(600,50,100,30);
-        tirGauche.setBounds(450,50,100,30);
+        tirDroit.setBounds(580,50,100,30);
+        tirGauche.setBounds(430,50,100,30);
 
 
 
@@ -94,13 +95,14 @@ public class Jeu extends JPanel implements Observer {
         this.add(basDep);
         this.add(hautDep);
         this.add(braquage);
-        this.add(trainPanel);
+
 
         this.add(tirHaut);
         this.add(tirBas);
         this.add(tirDroit);
         this.add(tirGauche);
-        //this.setVisible(true);
+
+        this.add(trainPanel);
     }
     public class TrainPanel extends JPanel {
 
