@@ -48,55 +48,67 @@ public class Accueil extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         super.paintComponents(g);
         g.drawImage(this.imageFond,0,-20,this.fenetre.getWidth(),this.fenetre.getHeight(),this);
+
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         this.fenetre.changerFenetre(this.fenetre.getJeuId());
     }
-}
 
-class OptionsJeu extends JPanel{
+    public class OptionsJeu extends JPanel{
 
-    public OptionsJeu(){
-        this.setBackground(new Color(0,0,0, 200));
-        //this.setBorder(new LineBorder(Color.GREEN,2));
-        // on va faire un menu vertical
-        this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+        private JButton lancerJeu;
 
-        JLabel titreMenu = new JLabel("Choisissez les options du jeu");
-        JPanel premierEtage = new JPanel(); // premiere etage du menu
-        JPanel westPanel = new JPanel();
-        JPanel northPanel = new JPanel();
-        JPanel southPanel = new JPanel();
+        public OptionsJeu(){
+            this.setBackground(new Color(0,0,0, 200));
+            //this.setBorder(new LineBorder(Color.GREEN,2));
+            // on va faire un menu vertical
+            this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 
-        titreMenu.setForeground(Color.WHITE);
-        titreMenu.setFont(new Font("MV Boli", Font.BOLD, 20));
-        titreMenu.setAlignmentX(Component.CENTER_ALIGNMENT); // pour centrer
-        titreMenu.setBackground(new Color(0,0,0, 221));
-        titreMenu.setOpaque(true); // pour que la couleur de fond soit visible
+            JLabel titreMenu = new JLabel("Choisissez les options du jeu");
+            JPanel premierEtage = new JPanel(); // premiere etage du menu
+            JPanel westPanel = new JPanel();
+            JPanel northPanel = new JPanel();
+            JPanel southPanel = new JPanel();
+            JPanel dernierEtage = new JPanel();
 
-        premierEtage.setPreferredSize(new Dimension(10,1));
-        premierEtage.setBackground(new Color(0x0000000, true));
-        premierEtage.setBorder(new LineBorder(Color.BLACK,1));
-        JLabel nWagon = new JLabel("Nombres de wagon");
-        nWagon.setForeground(Color.WHITE);
-        nWagon.setFont(new Font("MV Boli", Font.BOLD, 10));
-        premierEtage.add(nWagon);
+            titreMenu.setForeground(Color.WHITE);
+            titreMenu.setFont(new Font("MV Boli", Font.BOLD, 20));
+            titreMenu.setAlignmentX(Component.CENTER_ALIGNMENT); // pour centrer
+            titreMenu.setBackground(new Color(0,0,0, 221));
+            titreMenu.setOpaque(true); // pour que la couleur de fond soit visible
 
-        westPanel.setPreferredSize(new Dimension(200,50));
-        westPanel.setBackground(new Color(0,0,0, 0));
-        northPanel.setPreferredSize(new Dimension(100,70));
-        northPanel.setBackground(new Color(0,0,0, 0));
-        southPanel.setPreferredSize(new Dimension(100,70));
-        southPanel.setBackground(new Color(0,0,0, 0));
+            premierEtage.setPreferredSize(new Dimension(10,1));
+            premierEtage.setBackground(new Color(0x0000000, true));
+            premierEtage.setBorder(new LineBorder(Color.BLACK,1));
+            JLabel nWagon = new JLabel("Nombres de wagon");
+            nWagon.setForeground(Color.WHITE);
+            nWagon.setFont(new Font("MV Boli", Font.BOLD, 10));
+            premierEtage.add(nWagon);
 
-        this.add(titreMenu);
-        this.add(premierEtage);
-        this.add(westPanel);
-        this.add(northPanel);
-        this.add(southPanel);
+            westPanel.setPreferredSize(new Dimension(200,50));
+            westPanel.setBackground(new Color(0,0,0, 0));
+            northPanel.setPreferredSize(new Dimension(100,70));
+            northPanel.setBackground(new Color(0,0,0, 0));
+            southPanel.setPreferredSize(new Dimension(100,70));
+            southPanel.setBackground(new Color(0,0,0, 0));
 
-        this.setPreferredSize(new Dimension(100,100));
+            this.lancerJeu = new JButton("Lancer");
+            dernierEtage.add(this.lancerJeu);
+            dernierEtage.setBackground(new Color(0,0,0, 0));
+
+
+            this.add(titreMenu);
+            this.add(premierEtage);
+            this.add(westPanel);
+            this.add(northPanel);
+            this.add(southPanel);
+            this.add(dernierEtage);
+
+            this.setPreferredSize(new Dimension(100,100));
+        }
     }
+
 }
+

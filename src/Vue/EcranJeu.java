@@ -18,8 +18,6 @@ et après l'observer reagit en changeant l'affichage
 public class EcranJeu extends JFrame implements Observer {
 
     Train train;
-
-
     int hauteur, lageur;
     // !!! il faut une solution pour lier les composants avec leur listener (le cntrl)
     public JButton action, gaucheDep,droiteDep,hautDep,basDep, braquage; // Dep = deplcament

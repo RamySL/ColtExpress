@@ -1,24 +1,15 @@
 package controleur;
-import Vue.EcranJeu;
+
+import Vue.*;
 import modele.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
-import static java.lang.Thread.sleep;
-
-/**
- * Le but du modèle étant de contenir la logique de l'application (tout ce qui est structure de données ...)
- * Le but de la vue étant de donner une représentation graphique du modèle et defournir des moyens d'interaction pour l'utilisateur (boutton ..)
- * Le controleur vient pour récuperer les evenement generer par les composants d'interaction de la vue et decider comment modifier le modele
- * Donc le controleur est un listener pour les action
- */
 public class Controleur implements ActionListener {
-
     Train train;
-    EcranJeu ecranJeu;
-
+    Jeu jeu;
+    Fenetre fenetre;
     int nbAction;
 
     boolean actionPhase=false,planPhase=true;
@@ -26,17 +17,21 @@ public class Controleur implements ActionListener {
 
     int tourne; // pour determiner que le boutton action à été appuer et qu'il faut passer au prochain ensemble d'action à executée
 
-    public Controleur(Train train, EcranJeu e, int n){
+    public Controleur(Train train, Fenetre fenetre, int n){
         this.train = train;
-        this.ecranJeu = e;
+        this.fenetre = fenetre;
+        this.jeu = this.fenetre.getJeuPanel();
         this.nbAction = n;
 
-        this.ecranJeu.liaisonBottonsListener(this);
+            ////////////
+
+
+        this.jeu.liaisonBottonsListener(this);
 
     }
     // boucle du jeu
     public void lancerJeu() {
-        this.ecranJeu.setVisible(true);
+        this.fenetre.setVisible(true);
         int nbBandit = this.train.getBandits().size();
         // pour l'instant pas de condition d'arret
         while (true) {
@@ -45,7 +40,7 @@ public class Controleur implements ActionListener {
             // on utilise pas une boucle for each pour eviter la cocurrentmodifError avec la methode fuire de bandit
             for (int i = 0; i <nbBandit; i++){
                 this.joueurCourant = this.train.getBandits().get(i); // pour que les boutton vide ce bandit specifiquement
-                this.ecranJeu.phase.setText("Phase de planification : c'est le tour à " + this.joueurCourant.getSurnom());
+                this.jeu.phase.setText("Phase de planification : c'est le tour à " + this.joueurCourant.getSurnom());
 
                 planPhase = true;
                 actionPhase = false;
@@ -62,7 +57,7 @@ public class Controleur implements ActionListener {
             this.tourne = 1;
             // le nombre totale d'iteration pour toutes les action des bandit = nbBandit * nbAction
             while (this.tourne <= this.nbAction){
-                this.ecranJeu.phase.setText("Phase de d'action");
+                this.jeu.phase.setText("Phase de d'action");
 
                 planPhase = false;
                 actionPhase = true;
@@ -76,7 +71,7 @@ public class Controleur implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
 
-        if(e.getSource() == ecranJeu.action && actionPhase) {
+        if(e.getSource() == jeu.action && actionPhase) {
             this.train.getMarshall().executer();
 
             for(Bandit b : this.train.getBandits()){
@@ -87,48 +82,48 @@ public class Controleur implements ActionListener {
         }else {
             if (planPhase) {
                 Action a;
-                if (e.getSource() == ecranJeu.droiteDep) {
+                if (e.getSource() == jeu.droiteDep) {
                     a = new SeDeplacer(this.joueurCourant, Direction.Droite);
                     this.joueurCourant.ajouterAction(a);
                 }
 
-                if (e.getSource() == ecranJeu.gaucheDep) {
+                if (e.getSource() == jeu.gaucheDep) {
                     a = new SeDeplacer(this.joueurCourant, Direction.Gauche);
                     this.joueurCourant.ajouterAction(a);
                 }
 
-                if (e.getSource() == ecranJeu.hautDep) {
+                if (e.getSource() == jeu.hautDep) {
                     a = new SeDeplacer(this.joueurCourant, Direction.Haut);
                     this.joueurCourant.ajouterAction(a);
                 }
 
-                if (e.getSource() == ecranJeu.basDep) {
+                if (e.getSource() == jeu.basDep) {
                     a = new SeDeplacer(this.joueurCourant, Direction.Bas);
                     this.joueurCourant.ajouterAction(a);
                 }
 
-                if (e.getSource() == ecranJeu.braquage){
+                if (e.getSource() == jeu.braquage){
                     a = new Braquer(this.joueurCourant);
                     this.joueurCourant.ajouterAction(a);
                 }
 
-                if (e.getSource() == ecranJeu.tirHaut){
+                if (e.getSource() == jeu.tirHaut){
                     a = new Tirer(this.joueurCourant,Direction.Haut);
                     this.joueurCourant.ajouterAction(a);
 
                 }
 
-                if (e.getSource() == ecranJeu.tirBas){
+                if (e.getSource() == jeu.tirBas){
                     a = new Tirer(this.joueurCourant,Direction.Bas);
                     this.joueurCourant.ajouterAction(a);
                 }
 
-                if (e.getSource() == ecranJeu.tirDroit){
+                if (e.getSource() == jeu.tirDroit){
                     a = new Tirer(this.joueurCourant,Direction.Droite);
                     this.joueurCourant.ajouterAction(a);
                 }
 
-                if (e.getSource() == ecranJeu.tirGauche){
+                if (e.getSource() == jeu.tirGauche){
                     a = new Tirer(this.joueurCourant,Direction.Gauche);
                     this.joueurCourant.ajouterAction(a);
                 }
@@ -141,19 +136,17 @@ public class Controleur implements ActionListener {
     }
 
     public static void main(String[] args) {
+
         Train train = new Train(4);
         train.ajouterBandit("ouané");
         train.ajouterBandit("ramy");
         train.ajouterBandit("kelia");
 
-        EcranJeu e = new EcranJeu(train);
-        Controleur controleur = new Controleur(train,e,3);
-
+        Fenetre fen = new Fenetre(train);
+        Controleur controleur = new Controleur(train,fen,3);
 
         controleur.lancerJeu();
 
 
     }
-
-
 }
