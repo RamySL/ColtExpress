@@ -2,6 +2,7 @@ package controleur;
 
 import VuePlus.*;
 import Vue.Jeu;
+import VuePlus.Bouttons.BouttonsJeu;
 import modele.*;
 
 import java.awt.event.ActionEvent;
@@ -21,6 +22,7 @@ public class ControleurPlus implements ActionListener {
     public ControleurPlus(Train train, FenetrePlus fenetre, int n){
         this.train = train;
         this.fenetre = fenetre;
+        this.fenetre.lierAvecControleur(this);
         this.jeu = this.fenetre.getJeuPanel();
         this.nbAction = n;
         //this.nJoueurs = this.train.getBandits().size(); // le nombre de jr doit etre donnée en pramatere d'une classe
@@ -33,7 +35,7 @@ public class ControleurPlus implements ActionListener {
         this.fenetre.setVisible(true);
 
 
-        /*int nbBandit = this.train.getBandits().size();
+        int nbBandit = this.train.getBandits().size();
         // pour l'instant pas de condition d'arret
         while (true) {
             //planification
@@ -41,7 +43,7 @@ public class ControleurPlus implements ActionListener {
             // on utilise pas une boucle for each pour eviter la cocurrentmodifError avec la methode fuire de bandit
             for (int i = 0; i <nbBandit; i++){
                 this.joueurCourant = this.train.getBandits().get(i); // pour que les boutton vide ce bandit specifiquement
-                this.jeu.phase.setText("Phase de planification : c'est le tour à " + this.joueurCourant.getSurnom());
+                //this.jeu.phase.setText("Phase de planification : c'est le tour à " + this.joueurCourant.getSurnom());
 
                 planPhase = true;
                 actionPhase = false;
@@ -58,7 +60,7 @@ public class ControleurPlus implements ActionListener {
             this.tourne = 0;
             // le nombre totale d'iteration pour toutes les action des bandit = nbBandit * nbAction
             this.joueurCourant = this.train.getBandits().get(0);
-            this.jeu.phase.setText("Phase de d'action " + this.joueurCourant.getSurnom());
+            //this.jeu.phase.setText("Phase de d'action " + this.joueurCourant.getSurnom());
 
             while (this.tourne < this.nbAction * this.nJoueurs ){ // optimise
 
@@ -68,14 +70,14 @@ public class ControleurPlus implements ActionListener {
                 actionPhase = true;
 
             }
-        }*/
+        }
     }
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        /*if(e.getSource() == jeu.action && actionPhase) {
+        if((e.getSource() instanceof BouttonsJeu.BouttonAction)&& actionPhase) {
             this.train.getMarshall().executer();
 
             // le principe c'est qu'on veut executer la premiere action du premier bandit ensuite passer
@@ -86,64 +88,29 @@ public class ControleurPlus implements ActionListener {
             this.joueurCourant.executer();
             // on affiche le prchain qui va executer
 
-                Bandit bProchain = this.train.getBandits().get((this.tourne + 1) % this.nJoueurs);
-                this.jeu.phase.setText("Phase de d'action " + bProchain.getSurnom());
+            Bandit bProchain = this.train.getBandits().get((this.tourne + 1) % this.nJoueurs);
+            //this.jeu.phase.setText("Phase de d'action " + bProchain.getSurnom());
 
             //System.out.println(); // pour un affichage plus claire à la console
             this.tourne++;
 
-        }else {
-            if (planPhase) {
-                Action a;
-                if (e.getSource() == jeu.droiteDep) {
-                    a = new SeDeplacer(this.joueurCourant, Direction.Droite);
-                    this.joueurCourant.ajouterAction(a);
-                }
-
-                if (e.getSource() == jeu.gaucheDep) {
-                    a = new SeDeplacer(this.joueurCourant, Direction.Gauche);
-                    this.joueurCourant.ajouterAction(a);
-                }
-
-                if (e.getSource() == jeu.hautDep) {
-                    a = new SeDeplacer(this.joueurCourant, Direction.Haut);
-                    this.joueurCourant.ajouterAction(a);
-                }
-
-                if (e.getSource() == jeu.basDep) {
-                    a = new SeDeplacer(this.joueurCourant, Direction.Bas);
-                    this.joueurCourant.ajouterAction(a);
-                }
-
-                if (e.getSource() == jeu.braquage){
-                    a = new Braquer(this.joueurCourant);
-                    this.joueurCourant.ajouterAction(a);
-                }
-
-                if (e.getSource() == jeu.tirHaut){
-                    a = new Tirer(this.joueurCourant,Direction.Haut);
-                    this.joueurCourant.ajouterAction(a);
-
-                }
-
-                if (e.getSource() == jeu.tirBas){
-                    a = new Tirer(this.joueurCourant,Direction.Bas);
-                    this.joueurCourant.ajouterAction(a);
-                }
-
-                if (e.getSource() == jeu.tirDroit){
-                    a = new Tirer(this.joueurCourant,Direction.Droite);
-                    this.joueurCourant.ajouterAction(a);
-                }
-
-                if (e.getSource() == jeu.tirGauche){
-                    a = new Tirer(this.joueurCourant,Direction.Gauche);
-                    this.joueurCourant.ajouterAction(a);
-                }
-
-
+        }if (planPhase) {
+            Action a;
+            if (e.getSource() instanceof BouttonsJeu.BouttonDeplacement) {
+                a = new SeDeplacer(this.joueurCourant, ((BouttonsJeu.BouttonDeplacement) e.getSource()).getDirection());
+                this.joueurCourant.ajouterAction(a);
             }
-        }*/
+
+            if (e.getSource() instanceof BouttonsJeu.BouttonBraquage){
+                a = new Braquer(this.joueurCourant);
+                this.joueurCourant.ajouterAction(a);
+            }
+
+            if (e.getSource() instanceof BouttonsJeu.BouttonTir){
+                a = new Tirer(this.joueurCourant, ((BouttonsJeu.BouttonTir) e.getSource()).getDirection());
+                this.joueurCourant.ajouterAction(a);
+            }
+        }
 
 
     }

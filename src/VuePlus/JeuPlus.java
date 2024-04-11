@@ -2,6 +2,8 @@ package VuePlus;
 
 import Vue.Fenetre;
 import Vue.Jeu;
+import VuePlus.Bouttons.BouttonsJeu;
+import controleur.ControleurPlus;
 import modele.*;
 
 import javax.swing.*;
@@ -10,16 +12,17 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+
 public class JeuPlus extends JPanel implements Observer {
-    private Fenetre fenetre;
+    private FenetrePlus fenetre;
     Train train;
 
     private JPanel trainPanel;
     public JeuPlus(Train t, FenetrePlus fenetre) {
         this.train = t;
-
+        this.fenetre = fenetre;
         this.setLayout(new BorderLayout());
-        CommandePanel c = new CommandePanel();
+        CommandePanel c = new CommandePanel(this.fenetre.getControleur());
         c.setBorder(new LineBorder(Color.WHITE,3));
         this.add(c, BorderLayout.NORTH);
 
@@ -80,9 +83,12 @@ public class JeuPlus extends JPanel implements Observer {
  */
 class CommandePanel extends JPanel {
 
-    public JButton action, braquage; // Dep = deplcament
+    private BouttonsJeu.BouttonAction action;
+    private BouttonsJeu.BouttonBraquage braquage;
+    ControleurPlus controleur;
 
-    public CommandePanel(){
+    public CommandePanel(ControleurPlus controleur){
+        this.controleur = controleur;
         this.setBackground(Color.BLACK);
         //this.setBorder(new LineBorder(Color.GREEN,2));
 
@@ -91,8 +97,8 @@ class CommandePanel extends JPanel {
         TirPanel t = new TirPanel();
         EtatPanel e = new EtatPanel();
 
-        this.action = new JButton("Action");
-        this.braquage = new JButton("Braquer");
+        this.action = new BouttonsJeu.BouttonAction(this.controleur,"Action");
+        this.braquage = new BouttonsJeu.BouttonBraquage(this.controleur,"Braquer");
 
         this.add(d);
         this.add(this.braquage);
@@ -104,7 +110,7 @@ class CommandePanel extends JPanel {
     }
 
     class DeplacementPanel extends JPanel{
-        private JButton gaucheDep,droiteDep,hautDep,basDep;
+        private BouttonsJeu.BouttonDeplacement gaucheDep,droiteDep,hautDep,basDep;
         public DeplacementPanel(){
             this.setLayout(new BorderLayout());
 
@@ -112,10 +118,10 @@ class CommandePanel extends JPanel {
             tirLabel.setPreferredSize(new Dimension(40,30));
             tirLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-            gaucheDep = new JButton("<");
-            droiteDep = new JButton(">");
-            hautDep = new JButton("^");
-            basDep = new JButton("v");
+            gaucheDep = new BouttonsJeu.BouttonDeplacement(CommandePanel.this.controleur,Direction.Gauche,"<");
+            droiteDep = new BouttonsJeu.BouttonDeplacement(CommandePanel.this.controleur,Direction.Gauche,">");
+            hautDep =new BouttonsJeu.BouttonDeplacement(CommandePanel.this.controleur,Direction.Gauche,"^");
+            basDep = new BouttonsJeu.BouttonDeplacement(CommandePanel.this.controleur,Direction.Gauche,"v");
 
             this.add(tirLabel, BorderLayout.CENTER);
             this.add(gaucheDep, BorderLayout.WEST);
@@ -128,17 +134,17 @@ class CommandePanel extends JPanel {
 
     class TirPanel extends JPanel{
 
-        private JButton tirGauche, tirDroit,tirHaut,tirBas;
+        private BouttonsJeu.BouttonTir tirGauche, tirDroit,tirHaut,tirBas;
         public TirPanel(){
             this.setLayout(new BorderLayout());
 
             JLabel tirLabel = new JLabel("Tir");
             tirLabel.setPreferredSize(new Dimension(40,30));
             tirLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            tirGauche = new JButton("<");
-            tirDroit = new JButton(">");
-            tirBas = new JButton("v");
-            tirHaut = new JButton("^");
+            tirGauche = new BouttonsJeu.BouttonTir(CommandePanel.this.controleur,Direction.Gauche,"<");
+            tirDroit = new BouttonsJeu.BouttonTir(CommandePanel.this.controleur,Direction.Droite,">");
+            tirBas = new BouttonsJeu.BouttonTir(CommandePanel.this.controleur,Direction.Bas,"v");
+            tirHaut = new BouttonsJeu.BouttonTir(CommandePanel.this.controleur,Direction.Haut,"^");
 
             this.add(tirLabel, BorderLayout.CENTER);
             this.add(tirGauche, BorderLayout.WEST);

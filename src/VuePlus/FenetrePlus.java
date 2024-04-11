@@ -2,6 +2,7 @@ package VuePlus;
 
 import Vue.Accueil;
 import Vue.Jeu;
+import controleur.ControleurPlus;
 import modele.Train;
 
 import javax.swing.*;
@@ -9,6 +10,7 @@ import java.awt.*;
 
 public class FenetrePlus extends JFrame {
     // on va utiliser cardLayout por avoir l'effet de naviguer entre plusieurs fenetre differentes
+    private ControleurPlus controleur;
     private CardLayout cardLayout;
     private JPanel ecranLancement, accueil;
     private JeuPlus jeu;
@@ -54,6 +56,10 @@ public class FenetrePlus extends JFrame {
 
     }
 
+    public void lierAvecControleur(ControleurPlus controleur){
+        this.controleur = controleur;
+    }
+
     public void changerFenetre(String nomFenetre) {
         // methode utilise par les differente fenetre pour changer de vue
         cardLayout.show(cards, nomFenetre);
@@ -66,6 +72,8 @@ public class FenetrePlus extends JFrame {
     public JeuPlus getJeuPanel (){return this.jeu;}
     public JPanel getecranLancementPanel (){return this.ecranLancement;}
     public JPanel getAcueilPanel (){return this.accueil;}
+
+    public ControleurPlus getControleur (){return this.controleur;}
 
 //    public static void main(String[] args) {
 //        new Fenetre();
