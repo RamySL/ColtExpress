@@ -10,7 +10,7 @@ public class Controleur implements ActionListener {
     Train train;
     Jeu jeu;
     Fenetre fenetre;
-    int nbAction;
+    int nbAction, nJoueurs;
 
     boolean actionPhase=false,planPhase=true;
     Bandit joueurCourant;
@@ -22,9 +22,7 @@ public class Controleur implements ActionListener {
         this.fenetre = fenetre;
         this.jeu = this.fenetre.getJeuPanel();
         this.nbAction = n;
-
-            ////////////
-
+        this.nJoueurs = this.train.getBandits().size(); // le nombre de jr doit etre donnée en pramatere d'une classe
 
         this.jeu.liaisonBottonsListener(this);
 
@@ -32,6 +30,8 @@ public class Controleur implements ActionListener {
     // boucle du jeu
     public void lancerJeu() {
         this.fenetre.setVisible(true);
+
+
         int nbBandit = this.train.getBandits().size();
         // pour l'instant pas de condition d'arret
         while (true) {
@@ -54,11 +54,15 @@ public class Controleur implements ActionListener {
             }
 
             // action
-            this.tourne = 1;
+            this.tourne = 0;
             // le nombre totale d'iteration pour toutes les action des bandit = nbBandit * nbAction
-            while (this.tourne <= this.nbAction){
-                this.jeu.phase.setText("Phase de d'action");
+            this.joueurCourant = this.train.getBandits().get(0);
+            this.jeu.phase.setText("Phase de d'action " + this.joueurCourant.getSurnom());
 
+            while (this.tourne < this.nbAction * this.nJoueurs ){ // optimise
+
+
+                System.out.print("");
                 planPhase = false;
                 actionPhase = true;
 
@@ -70,15 +74,23 @@ public class Controleur implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-
         if(e.getSource() == jeu.action && actionPhase) {
             this.train.getMarshall().executer();
 
-            for(Bandit b : this.train.getBandits()){
-                b.executer();
-            }
-            System.out.println(); // pour un affichage plus claire à la console
+            // le principe c'est qu'on veut executer la premiere action du premier bandit ensuite passer
+            // à l apremiere action du deuxieme bandit et après quand on arrive au dernier bandit on doit reotuner
+            // au premeir et ainsi de suite, il ya une periodicité en le nombre de bandit, qui naturellement traduite par
+            // l'opération de modulo
+            this.joueurCourant = this.train.getBandits().get(this.tourne % this.nJoueurs);
+            this.joueurCourant.executer();
+            // on affiche le prchain qui va executer
+
+                Bandit bProchain = this.train.getBandits().get((this.tourne + 1) % this.nJoueurs);
+                this.jeu.phase.setText("Phase de d'action " + bProchain.getSurnom());
+
+            //System.out.println(); // pour un affichage plus claire à la console
             this.tourne++;
+
         }else {
             if (planPhase) {
                 Action a;
@@ -143,7 +155,7 @@ public class Controleur implements ActionListener {
         train.ajouterBandit("kelia");
 
         Fenetre fen = new Fenetre(train);
-        Controleur controleur = new Controleur(train,fen,3);
+        Controleur controleur = new Controleur(train,fen,3); // n : nActions
 
         controleur.lancerJeu();
 

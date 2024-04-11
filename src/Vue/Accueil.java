@@ -64,7 +64,7 @@ public class Accueil extends JPanel {
 
             JLabel titreMenu = new JLabel("Choisissez les options du jeu");
             JPanel premierEtage = new JPanel(); // premiere etage du menu
-            JPanel westPanel = new JPanel();
+            JPanel deuxiemeEtage = new JPanel();
             JPanel northPanel = new JPanel();
             JPanel southPanel = new JPanel();
             JPanel dernierEtage = new JPanel();
@@ -78,13 +78,20 @@ public class Accueil extends JPanel {
             premierEtage.setPreferredSize(new Dimension(10,1));
             premierEtage.setBackground(new Color(0x0000000, true));
             premierEtage.setBorder(new LineBorder(Color.BLACK,1));
-            JLabel nWagon = new JLabel("Nombres de wagon");
-            nWagon.setForeground(Color.WHITE);
-            nWagon.setFont(new Font("MV Boli", Font.BOLD, 10));
-            premierEtage.add(nWagon);
+            JLabel nbJoeur = new JLabel("Nombres de jouers");//
+            nbJoeur.setForeground(Color.WHITE);
+            nbJoeur.setFont(new Font("MV Boli", Font.BOLD, 15));
+            JTextField saisieNbJoueur = new JTextField("3");//
+            saisieNbJoueur.setPreferredSize(new Dimension(40,20));
+            JButton validerNbJoueur = new JButton("Entrez leur noms");
+            premierEtage.add(nbJoeur);
+            premierEtage.add(saisieNbJoueur);
+            premierEtage.add(validerNbJoueur);
 
-            westPanel.setPreferredSize(new Dimension(200,50));
-            westPanel.setBackground(new Color(0,0,0, 0));
+
+            deuxiemeEtage.setPreferredSize(new Dimension(200,50));
+            deuxiemeEtage.setBackground(new Color(0,0,0, 0));
+
             northPanel.setPreferredSize(new Dimension(100,70));
             northPanel.setBackground(new Color(0,0,0, 0));
             southPanel.setPreferredSize(new Dimension(100,70));
@@ -98,7 +105,7 @@ public class Accueil extends JPanel {
 
             this.add(titreMenu);
             this.add(premierEtage);
-            this.add(westPanel);
+            this.add(deuxiemeEtage);
             this.add(northPanel);
             this.add(southPanel);
             this.add(dernierEtage);

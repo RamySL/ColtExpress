@@ -21,6 +21,7 @@ public class Jeu extends JPanel implements Observer {
 
     public JButton tirGauche, tirDroit,tirHaut,tirBas;
     public JLabel phase;
+    public JPanel actionsFeed;
     int decalageXTrain;
     public Jeu(Train t, Fenetre fenetre){
         //Il ne faut pas dessiner directement sur la fenetre (this), c'est trainPanel (Jpanel)
@@ -56,12 +57,12 @@ public class Jeu extends JPanel implements Observer {
         gaucheDep = new JButton("<");
         droiteDep = new JButton(">");
         hautDep = new JButton("^");
-        basDep = new JButton("|");
+        basDep = new JButton("v");
         braquage = new JButton("Braquer");
 
         tirGauche = new JButton("tir <");
         tirDroit = new JButton("tir >");
-        tirBas = new JButton("tir |");
+        tirBas = new JButton("tir v");
         tirHaut = new JButton("tir ^");
 
         action.setBounds(0,0,80,30);
@@ -77,16 +78,18 @@ public class Jeu extends JPanel implements Observer {
         tirDroit.setBounds(580,50,100,30);
         tirGauche.setBounds(430,50,100,30);
 
-
-
-
         this.phase = new JLabel("Phase de planification");
-        this.phase.setForeground(Color.white);
-        this.phase.setBounds(200,0,300,20);
-        this.add(this.phase);
+        this.phase.setForeground(Color.BLACK);
 
-        trainPanel.setBounds(0,0,this.lageur,this.hauteur);//il prend tte la fenetre le panel
 
+
+        this.actionsFeed = new JPanel();
+        this.actionsFeed.add(this.phase);
+        // si il ya beacoup de joueur pour pouvoir les regarder tous
+        JScrollPane scrollInfosJoueur = new JScrollPane(actionsFeed);
+        // on veut scroll horizontalement que quand on beacoup d'infos et que l'espace ne suffit pas (c'est pour ça AS_NEEDED)
+        scrollInfosJoueur.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollInfosJoueur.setBounds(700,5,480,200);
 
 
         this.add(action);
@@ -96,12 +99,15 @@ public class Jeu extends JPanel implements Observer {
         this.add(hautDep);
         this.add(braquage);
 
+        this.add(scrollInfosJoueur);
+
 
         this.add(tirHaut);
         this.add(tirBas);
         this.add(tirDroit);
         this.add(tirGauche);
 
+        trainPanel.setBounds(0,0,this.lageur,this.hauteur);//il prend tte la fenetre le panel
         this.add(trainPanel);
     }
     public class TrainPanel extends JPanel {
