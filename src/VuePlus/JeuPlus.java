@@ -20,24 +20,22 @@ public class JeuPlus extends JPanel implements Observer {
 
         this.setLayout(new BorderLayout());
         CommandePanel c = new CommandePanel();
-
+        c.setBorder(new LineBorder(Color.WHITE,3));
         this.add(c, BorderLayout.NORTH);
 
-//        JPanel testTrain = new JPanel();
-//        testTrain.setBackground(Color.BLACK);
-//        this.add(testTrain,BorderLayout.CENTER);
 
         JPanel panelCentrale = new JPanel(new BorderLayout()); // pour pouvoir se placer à l'interieur d'un Jpanel c'est mieu
         panelCentrale.setBackground(Color.BLACK);
         panelCentrale.setBorder(new LineBorder(Color.WHITE,3));
 
         JPanel northPanelTrain = new JPanel(); // pour centrer le dessin du train
-        northPanelTrain.setBackground(Color.RED);
-        northPanelTrain.setPreferredSize(new Dimension(0,100));
+        northPanelTrain.setBackground(Color.BLACK);
+        northPanelTrain.setPreferredSize(new Dimension(0,30));
         panelCentrale.add(northPanelTrain, BorderLayout.NORTH);
 
         this.trainPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        this.trainPanel.setBorder(new LineBorder(Color.BLUE,2));
+        //this.trainPanel.setBorder(new LineBorder(Color.BLUE,2));
+        this.trainPanel.setBackground(Color.BLACK);
         this.dessineTrain(); // on dessine les wagon dans le panel du train
         panelCentrale.add(this.trainPanel, BorderLayout.CENTER);
 
@@ -86,7 +84,7 @@ class CommandePanel extends JPanel {
 
     public CommandePanel(){
         this.setBackground(Color.BLACK);
-        this.setBorder(new LineBorder(Color.GREEN,2));
+        //this.setBorder(new LineBorder(Color.GREEN,2));
 
         this.setLayout(new FlowLayout(FlowLayout.LEFT,50,0));
         DeplacementPanel  d = new DeplacementPanel();
@@ -173,29 +171,114 @@ class WagonPanel extends JPanel{
     public WagonPanel(Interieur cabine){
 
         this.cabine = cabine;
-        this.setPreferredSize(new Dimension(250,300));
-        this.setBorder(new LineBorder(Color.BLACK));
 
-        /*ArrayList<Personnage> persos = cabine.getPersoList();
-        for(Personnage p : persos){
-            if (p instanceof Marshall) g.setColor(new Color(36, 36, 229));
-            else g.setColor(Color.RED);
-            g.drawString(p.getSurnom(), Jeu.this.decalageXTrain + pos*largeurCabine + 30, y +30);
-            g.setColor(Color.WHITE);
+        this.setLayout(new BorderLayout());
+
+        JPanel cabinePanel = new JPanel(new BorderLayout());
+        cabinePanel.setBackground(Color.BLACK);
+        cabinePanel.setBorder(new LineBorder(Color.WHITE));
+
+        JPanel toitPanel = new toitPanel(this.cabine.getToit());
+        //toitPanel.setBackground(Color.BLUE);
+        //toitPanel.setPreferredSize(new Dimension(0,100));
+
+
+        ButtinPanel buttinsPanel = new ButtinPanel(this.cabine.getButtins());
+        PersoPanel persoPanel = new PersoPanel(this.cabine.getPersoList());
+        buttinsPanel.setBackground(Color.BLACK);
+        persoPanel.setBackground(Color.BLACK);
+
+        this.setPreferredSize(new Dimension(280,350));
+
+        cabinePanel.add(buttinsPanel, BorderLayout.SOUTH);
+        cabinePanel.add(persoPanel, BorderLayout.EAST);
+
+        this.add(toitPanel, BorderLayout.NORTH);
+        this.add(cabinePanel,BorderLayout.CENTER);
+
+    }
+
+    class ButtinPanel extends JPanel{
+        ArrayList<Buttin> buttins;
+        public ButtinPanel(ArrayList<Buttin> buttins){
+            this.buttins = buttins;
+
+            this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+
+            for (Buttin b : buttins){
+                JLabel buttinLabel = new JLabel(b.toString());
+                buttinLabel.setForeground(Color.WHITE);
+                this.add(buttinLabel);
+            }
+
         }
 
-        // on dessine les buttins
-        for(int i = 0; i<c.getButtins().size(); i++){
-            g.drawString(c.getButtins().get(i).toString(),Jeu.this.decalageXTrain + pos*largeurCabine + 30, y + hauteurCabine -3 + i*-30);
-        }*/
+    }
+
+    class PersoPanel extends JPanel{
+        ArrayList<Personnage> persos;
+        public PersoPanel(ArrayList<Personnage> persos){
+            this.persos = persos;
+
+            this.setLayout(new FlowLayout(FlowLayout.LEFT,5,0)); // à cause du 0 dans verticale le marshall est en haut
+
+            for (Personnage p : persos){
+                JLabel persoLabel = new JLabel(p.getSurnom());
+//                persoLabel.setBackground(Color.BLACK);
+                persoLabel.setForeground(Color.WHITE);
+
+                this.add(persoLabel);
+            }
+            this.setBackground(Color.BLACK);
+
+
+        }
 
     }
 
-    class ButtinPanel{
+    class toitPanel extends JPanel{
+        Toit toit;
 
+        public toitPanel(Toit toit){
+            this.setBackground(Color.BLACK);
+            this.toit = toit;
+            this.setLayout(new BorderLayout());
+
+            JPanel conteneur = new JPanel(); // on a besoin d'un panel parceque si on veut mettre plusieur elemnt dans South il s'ecrase
+            conteneur.setBackground(Color.black);
+
+            ButtinPanel buttinsPanel = new ButtinPanel(this.toit.getButtins());
+            PersoPanel persoPanel = new PersoPanel(this.toit.getPersoList());
+            this.setPreferredSize(new Dimension(0,70));
+            //this.setBorder(new LineBorder(Color.RED,5));
+            conteneur.add(buttinsPanel);
+            conteneur.add(persoPanel);
+            this.add(conteneur, BorderLayout.SOUTH);
+
+
+//            if (! (WagonPanel.this.cabine instanceof Locomotive) ){
+//
+//                this.setPreferredSize(new Dimension(0,70));
+//                //this.setBorder(new LineBorder(Color.RED,5));
+//                conteneur.add(buttinsPanel);
+//                conteneur.add(persoPanel);
+//            }else {
+//
+//                JPanel chemine = new JPanel();
+//                chemine.setPreferredSize(new Dimension(30,70));
+//                chemine.setBorder(new LineBorder(Color.BLACK, 1));
+//
+//                conteneur.add(buttinsPanel);
+//                conteneur.add(persoPanel);
+//                conteneur.add(chemine);
+//
+//            }
+
+
+
+
+        }
     }
 
-    class BanditPanel{
 
-    }
 }
