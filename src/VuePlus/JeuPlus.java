@@ -17,17 +17,27 @@ public class JeuPlus extends JPanel implements Observer {
     private FenetrePlus fenetre;
     Train train;
 
+    CommandePanel cmdPanel;
+    JPanel panelCentrale;
+
     private JPanel trainPanel;
     public JeuPlus(Train t, FenetrePlus fenetre) {
         this.train = t;
         this.fenetre = fenetre;
+
+        for (Bandit b : train.getBandits()){
+            b.addObserver(this);
+        }
+        train.getMarshall().addObserver(this);
+
         this.setLayout(new BorderLayout());
-        CommandePanel c = new CommandePanel(this.fenetre.getControleur());
-        c.setBorder(new LineBorder(Color.WHITE,3));
-        this.add(c, BorderLayout.NORTH);
+        cmdPanel = new CommandePanel();
+
+        cmdPanel.setBorder(new LineBorder(Color.WHITE,3));
+        this.add(cmdPanel, BorderLayout.NORTH);
 
 
-        JPanel panelCentrale = new JPanel(new BorderLayout()); // pour pouvoir se placer à l'interieur d'un Jpanel c'est mieu
+        this.panelCentrale = new JPanel(new BorderLayout()); // pour pouvoir se placer à l'interieur d'un Jpanel c'est mieu
         panelCentrale.setBackground(Color.BLACK);
         panelCentrale.setBorder(new LineBorder(Color.WHITE,3));
 
@@ -46,10 +56,16 @@ public class JeuPlus extends JPanel implements Observer {
 
     }
 
+    public void liaisonCommandesControleur(ControleurPlus controleur){
+        this.cmdPanel.liaisonBouttonsControleur(controleur);
+    }
     public void dessineTrain(){
+        this.trainPanel.removeAll();
         for (ComposanteTrain c : this.train){
             this.trainPanel.add(new WagonPanel((Interieur) c));
         }
+        repaint();
+        revalidate();
 
     }
 
@@ -58,22 +74,6 @@ public class JeuPlus extends JPanel implements Observer {
     public void update(){
         this.dessineTrain();
     }
-
-    /*public void liaisonBottonsListener(ActionListener cntrl){
-        // on dit au bouttons que c'est le controleur qui est en charge d'couter les evnt
-        this.action.addActionListener(cntrl);
-        this.basDep.addActionListener(cntrl);
-        this.gaucheDep.addActionListener(cntrl);
-        this.droiteDep.addActionListener(cntrl);
-        this.hautDep.addActionListener(cntrl);
-        this.braquage.addActionListener(cntrl);
-        this.tirHaut.addActionListener(cntrl);
-        this.tirBas.addActionListener(cntrl);
-        this.tirDroit.addActionListener(cntrl);
-        this.tirGauche.addActionListener(cntrl);
-
-
-    }*/
 
 
 }
@@ -85,10 +85,10 @@ class CommandePanel extends JPanel {
 
     private BouttonsJeu.BouttonAction action;
     private BouttonsJeu.BouttonBraquage braquage;
-    ControleurPlus controleur;
+    ArrayList<BouttonsJeu> bouttonsCommande = new ArrayList<>();
 
-    public CommandePanel(ControleurPlus controleur){
-        this.controleur = controleur;
+    public CommandePanel(){
+
         this.setBackground(Color.BLACK);
         //this.setBorder(new LineBorder(Color.GREEN,2));
 
@@ -97,8 +97,11 @@ class CommandePanel extends JPanel {
         TirPanel t = new TirPanel();
         EtatPanel e = new EtatPanel();
 
-        this.action = new BouttonsJeu.BouttonAction(this.controleur,"Action");
-        this.braquage = new BouttonsJeu.BouttonBraquage(this.controleur,"Braquer");
+        this.action = new BouttonsJeu.BouttonAction("Action");
+        this.braquage = new BouttonsJeu.BouttonBraquage("Braquer");
+        this.bouttonsCommande.add(this.action);
+        this.bouttonsCommande.add(this.braquage);
+
 
         this.add(d);
         this.add(this.braquage);
@@ -107,6 +110,12 @@ class CommandePanel extends JPanel {
 
         this.add(e);
 
+    }
+
+    public void liaisonBouttonsControleur(ControleurPlus controleur){
+        for(BouttonsJeu b : this.bouttonsCommande){
+            b.addActionListener(controleur);
+        }
     }
 
     class DeplacementPanel extends JPanel{
@@ -118,10 +127,14 @@ class CommandePanel extends JPanel {
             tirLabel.setPreferredSize(new Dimension(40,30));
             tirLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-            gaucheDep = new BouttonsJeu.BouttonDeplacement(CommandePanel.this.controleur,Direction.Gauche,"<");
-            droiteDep = new BouttonsJeu.BouttonDeplacement(CommandePanel.this.controleur,Direction.Gauche,">");
-            hautDep =new BouttonsJeu.BouttonDeplacement(CommandePanel.this.controleur,Direction.Gauche,"^");
-            basDep = new BouttonsJeu.BouttonDeplacement(CommandePanel.this.controleur,Direction.Gauche,"v");
+            gaucheDep = new BouttonsJeu.BouttonDeplacement(Direction.Gauche,"<");
+            droiteDep = new BouttonsJeu.BouttonDeplacement(Direction.Droite,">");
+            hautDep =new BouttonsJeu.BouttonDeplacement(Direction.Haut,"^");
+            basDep = new BouttonsJeu.BouttonDeplacement(Direction.Bas,"v");
+            CommandePanel.this.bouttonsCommande.add(gaucheDep);
+            CommandePanel.this.bouttonsCommande.add(droiteDep);
+            CommandePanel.this.bouttonsCommande.add(basDep);
+            CommandePanel.this.bouttonsCommande.add(hautDep);
 
             this.add(tirLabel, BorderLayout.CENTER);
             this.add(gaucheDep, BorderLayout.WEST);
@@ -141,10 +154,14 @@ class CommandePanel extends JPanel {
             JLabel tirLabel = new JLabel("Tir");
             tirLabel.setPreferredSize(new Dimension(40,30));
             tirLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            tirGauche = new BouttonsJeu.BouttonTir(CommandePanel.this.controleur,Direction.Gauche,"<");
-            tirDroit = new BouttonsJeu.BouttonTir(CommandePanel.this.controleur,Direction.Droite,">");
-            tirBas = new BouttonsJeu.BouttonTir(CommandePanel.this.controleur,Direction.Bas,"v");
-            tirHaut = new BouttonsJeu.BouttonTir(CommandePanel.this.controleur,Direction.Haut,"^");
+            tirGauche = new BouttonsJeu.BouttonTir(Direction.Gauche,"<");
+            tirDroit = new BouttonsJeu.BouttonTir(Direction.Droite,">");
+            tirBas = new BouttonsJeu.BouttonTir(Direction.Bas,"v");
+            tirHaut = new BouttonsJeu.BouttonTir(Direction.Haut,"^");
+            CommandePanel.this.bouttonsCommande.add(tirGauche);
+            CommandePanel.this.bouttonsCommande.add(tirDroit);
+            CommandePanel.this.bouttonsCommande.add(tirBas);
+            CommandePanel.this.bouttonsCommande.add(tirHaut);
 
             this.add(tirLabel, BorderLayout.CENTER);
             this.add(tirGauche, BorderLayout.WEST);
@@ -183,10 +200,10 @@ class WagonPanel extends JPanel{
         JPanel cabinePanel = new JPanel(new BorderLayout());
         cabinePanel.setBackground(Color.BLACK);
         cabinePanel.setBorder(new LineBorder(Color.WHITE));
+        JPanel solCabine = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        solCabine.setBackground(Color.BLACK);
 
         JPanel toitPanel = new toitPanel(this.cabine.getToit());
-        //toitPanel.setBackground(Color.BLUE);
-        //toitPanel.setPreferredSize(new Dimension(0,100));
 
 
         ButtinPanel buttinsPanel = new ButtinPanel(this.cabine.getButtins());
@@ -194,12 +211,14 @@ class WagonPanel extends JPanel{
         buttinsPanel.setBackground(Color.BLACK);
         persoPanel.setBackground(Color.BLACK);
 
+        solCabine.add(buttinsPanel);
+        solCabine.add(persoPanel);
+
         this.setPreferredSize(new Dimension(280,350));
 
-        cabinePanel.add(buttinsPanel, BorderLayout.SOUTH);
-        cabinePanel.add(persoPanel, BorderLayout.EAST);
+        cabinePanel.add(solCabine, BorderLayout.SOUTH);
 
-        this.add(toitPanel, BorderLayout.NORTH);
+        this.add(toitPanel,BorderLayout.NORTH);
         this.add(cabinePanel,BorderLayout.CENTER);
 
     }
@@ -246,12 +265,16 @@ class WagonPanel extends JPanel{
         Toit toit;
 
         public toitPanel(Toit toit){
+
             this.setBackground(Color.BLACK);
             this.toit = toit;
             this.setLayout(new BorderLayout());
 
+
             JPanel conteneur = new JPanel(); // on a besoin d'un panel parceque si on veut mettre plusieur elemnt dans South il s'ecrase
             conteneur.setBackground(Color.black);
+
+
 
             ButtinPanel buttinsPanel = new ButtinPanel(this.toit.getButtins());
             PersoPanel persoPanel = new PersoPanel(this.toit.getPersoList());
@@ -259,7 +282,20 @@ class WagonPanel extends JPanel{
             //this.setBorder(new LineBorder(Color.RED,5));
             conteneur.add(buttinsPanel);
             conteneur.add(persoPanel);
-            this.add(conteneur, BorderLayout.SOUTH);
+            // Au cas ou on tombe dans une situation ou le nombre de badit et trop grand pour etre affiché on fait une barre de scroll
+            JScrollPane scrollConteneur = new JScrollPane(conteneur);
+            // on veut qu'une barre horizontale
+            scrollConteneur.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+            // La barre s'affiche qua quand ça déborde
+            scrollConteneur.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            scrollConteneur.getHorizontalScrollBar().setPreferredSize(new Dimension(2,10));
+
+            scrollConteneur.setBorder(null);
+
+            scrollConteneur.getViewport().setViewPosition(new Point(0,5));
+            scrollConteneur.getHorizontalScrollBar().setBackground(Color.BLACK);
+
+            this.add(scrollConteneur, BorderLayout.SOUTH);
 
 
 //            if (! (WagonPanel.this.cabine instanceof Locomotive) ){

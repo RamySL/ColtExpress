@@ -56,9 +56,6 @@ public class FenetrePlus extends JFrame {
 
     }
 
-    public void lierAvecControleur(ControleurPlus controleur){
-        this.controleur = controleur;
-    }
 
     public void changerFenetre(String nomFenetre) {
         // methode utilise par les differente fenetre pour changer de vue

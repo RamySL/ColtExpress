@@ -22,12 +22,11 @@ public class ControleurPlus implements ActionListener {
     public ControleurPlus(Train train, FenetrePlus fenetre, int n){
         this.train = train;
         this.fenetre = fenetre;
-        this.fenetre.lierAvecControleur(this);
         this.jeu = this.fenetre.getJeuPanel();
         this.nbAction = n;
-        //this.nJoueurs = this.train.getBandits().size(); // le nombre de jr doit etre donnée en pramatere d'une classe
+        this.nJoueurs = this.train.getBandits().size(); // le nombre de jr doit etre donnée en pramatere d'une classe
 
-        //this.jeu.liaisonBottonsListener(this);
+        this.jeu.liaisonCommandesControleur(this);
 
     }
     // boucle du jeu
@@ -44,6 +43,7 @@ public class ControleurPlus implements ActionListener {
             for (int i = 0; i <nbBandit; i++){
                 this.joueurCourant = this.train.getBandits().get(i); // pour que les boutton vide ce bandit specifiquement
                 //this.jeu.phase.setText("Phase de planification : c'est le tour à " + this.joueurCourant.getSurnom());
+                //System.out.println("tour de " + this.joueurCourant.getSurnom());
 
                 planPhase = true;
                 actionPhase = false;
@@ -61,10 +61,7 @@ public class ControleurPlus implements ActionListener {
             // le nombre totale d'iteration pour toutes les action des bandit = nbBandit * nbAction
             this.joueurCourant = this.train.getBandits().get(0);
             //this.jeu.phase.setText("Phase de d'action " + this.joueurCourant.getSurnom());
-
             while (this.tourne < this.nbAction * this.nJoueurs ){ // optimise
-
-
                 System.out.print("");
                 planPhase = false;
                 actionPhase = true;
@@ -77,7 +74,8 @@ public class ControleurPlus implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if((e.getSource() instanceof BouttonsJeu.BouttonAction)&& actionPhase) {
+        if( (e.getSource() instanceof BouttonsJeu.BouttonAction) && actionPhase) {
+
             this.train.getMarshall().executer();
 
             // le principe c'est qu'on veut executer la premiere action du premier bandit ensuite passer
@@ -121,6 +119,43 @@ public class ControleurPlus implements ActionListener {
         train.ajouterBandit("ouané");
         train.ajouterBandit("ramy");
         train.ajouterBandit("kelia");
+        train.ajouterBandit("oualid");
+        train.ajouterBandit("souley");
+        train.ajouterBandit("izma");
+        train.ajouterBandit("djamel");
+        train.ajouterBandit("lina");
+        train.ajouterBandit("karim");
+        train.ajouterBandit("sofia");
+        train.ajouterBandit("chakib");
+        train.ajouterBandit("aymane");
+        train.ajouterBandit("StrictNec");
+        train.ajouterBandit("ouané");
+        train.ajouterBandit("ramy");
+        train.ajouterBandit("kelia");
+        train.ajouterBandit("oualid");
+        train.ajouterBandit("souley");
+        train.ajouterBandit("izma");
+        train.ajouterBandit("djamel");
+        train.ajouterBandit("lina");
+        train.ajouterBandit("karim");
+        train.ajouterBandit("sofia");
+        train.ajouterBandit("chakib");
+        train.ajouterBandit("aymane");
+        train.ajouterBandit("StrictNec");
+        train.ajouterBandit("ouané");
+        train.ajouterBandit("ramy");
+        train.ajouterBandit("kelia");
+        train.ajouterBandit("oualid");
+        train.ajouterBandit("souley");
+        train.ajouterBandit("izma");
+        train.ajouterBandit("djamel");
+        train.ajouterBandit("lina");
+        train.ajouterBandit("karim");
+        train.ajouterBandit("sofia");
+        train.ajouterBandit("chakib");
+        train.ajouterBandit("aymane");
+        train.ajouterBandit("StrictNec");
+
 
         FenetrePlus fen = new FenetrePlus(train);
         ControleurPlus controleur = new ControleurPlus(train,fen,3); // n : nActions
