@@ -1,6 +1,8 @@
 package VuePlus;
 
 import Vue.Fenetre;
+import controleur.ControleurMain;
+import controleur.ControleurPlus;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -51,13 +53,20 @@ public class AccueilPlus extends JPanel {
 
     }
 
+    public OptionsJeu getOptionsJeu(){return  this.optionsJeu;}
+
+    public void liaisonAvecControleur(ControleurMain controleur){
+        this.optionsJeu.lancerJeu.addActionListener(controleur);
+    }
+
     /**
      * On doit permettre de saisir : nb action à planifier, NB_BALLES peut etre NERVOSITE_MARSHALL,
      */
 
-    public class OptionsJeu extends JPanel{
+    public static class OptionsJeu extends JPanel{
 
-        private JButton lancerJeu;
+        public JButton lancerJeu;
+        public JTextField saisieNbJoueur,saisieNbWagon;
 
         public OptionsJeu(){
 
@@ -86,7 +95,7 @@ public class AccueilPlus extends JPanel {
             JLabel nbJoeur = new JLabel("Nombres de jouers");//
             nbJoeur.setForeground(Color.WHITE);
             nbJoeur.setFont(new Font("MV Boli", Font.BOLD, 15));
-            JTextField saisieNbJoueur = new JTextField("3");//
+            saisieNbJoueur = new JTextField("3");//
             saisieNbJoueur.setPreferredSize(new Dimension(40,20));
             JButton validerNbJoueur = new JButton("Entrez leur noms");
             premierEtage.add(nbJoeur);
@@ -99,7 +108,7 @@ public class AccueilPlus extends JPanel {
             JLabel nbWagonLabel = new JLabel("Nombres de Wagons");
             nbWagonLabel.setForeground(Color.WHITE);
             nbWagonLabel.setFont(new Font("MV Boli", Font.BOLD, 15));
-            JTextField saisieNbWagon = new JTextField("4");//
+            saisieNbWagon = new JTextField("4");//
             saisieNbWagon.setPreferredSize(new Dimension(40,20));
             deuxiemeEtage.add(nbWagonLabel);
             deuxiemeEtage.add(saisieNbWagon);
@@ -113,7 +122,7 @@ public class AccueilPlus extends JPanel {
             quatriemeEtage.setBorder(new LineBorder(Color.BLACK,1));
 
             this.lancerJeu = new JButton("Lancer");
-            this.lancerJeu.addActionListener(e -> AccueilPlus.this.fenetre.changerFenetre(AccueilPlus.this.fenetre.getJeuId()));
+            //this.lancerJeu.addActionListener(e -> AccueilPlus.this.fenetre.changerFenetre(AccueilPlus.this.fenetre.getJeuId()));
             dernierEtage.add(this.lancerJeu);
             dernierEtage.setBackground(new Color(0,0,0, 0));
             dernierEtage.setBorder(new LineBorder(Color.BLACK,1));
@@ -128,6 +137,15 @@ public class AccueilPlus extends JPanel {
 
             this.setPreferredSize(new Dimension(100,100));
         }
+
+        public Integer getNbWagon (){
+            return Integer.parseInt(this.saisieNbWagon.getText());
+        }
+        public Integer getnbJouer(){
+            return Integer.parseInt(this.saisieNbJoueur.getText());
+        }
+
+
     }
 
 }

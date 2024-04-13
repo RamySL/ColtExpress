@@ -4,7 +4,9 @@ import VuePlus.*;
 import Vue.Jeu;
 import VuePlus.Bouttons.BouttonsJeu;
 import modele.*;
+import modele.Action;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -29,18 +31,20 @@ public class ControleurPlus implements ActionListener {
         this.jeu.liaisonCommandesControleur(this);
 
     }
-    // boucle du jeu
+    // boucle du jeu !!! PROBELEME AVEC LA GESTIONS DES THREADS
     public void lancerJeu() {
-        this.fenetre.setVisible(true);
-
 
         int nbBandit = this.train.getBandits().size();
+        // Exemple d'utilisation de SwingUtilities.invokeLater() pour mettre à jour l'interface utilisateur
+
+
         // pour l'instant pas de condition d'arret
         while (true) {
             //planification
 
             // on utilise pas une boucle for each pour eviter la cocurrentmodifError avec la methode fuire de bandit
             for (int i = 0; i <nbBandit; i++){
+
                 this.joueurCourant = this.train.getBandits().get(i); // pour que les boutton vide ce bandit specifiquement
                 //this.jeu.phase.setText("Phase de planification : c'est le tour à " + this.joueurCourant.getSurnom());
                 //System.out.println("tour de " + this.joueurCourant.getSurnom());
@@ -113,55 +117,19 @@ public class ControleurPlus implements ActionListener {
 
     }
 
-    public static void main(String[] args) {
-
-        Train train = new Train(4);
-        train.ajouterBandit("ouané");
-        train.ajouterBandit("ramy");
-        train.ajouterBandit("kelia");
-//        train.ajouterBandit("oualid");
-//        train.ajouterBandit("souley");
-//        train.ajouterBandit("izma");
-//        train.ajouterBandit("djamel");
-//        train.ajouterBandit("lina");
-//        train.ajouterBandit("karim");
-//        train.ajouterBandit("sofia");
-//        train.ajouterBandit("chakib");
-//        train.ajouterBandit("aymane");
-//        train.ajouterBandit("StrictNec");
+//    public static void main(String[] args) {
+//
+//        Train train = new Train(4);
 //        train.ajouterBandit("ouané");
 //        train.ajouterBandit("ramy");
 //        train.ajouterBandit("kelia");
-//        train.ajouterBandit("oualid");
-//        train.ajouterBandit("souley");
-//        train.ajouterBandit("izma");
-//        train.ajouterBandit("djamel");
-//        train.ajouterBandit("lina");
-//        train.ajouterBandit("karim");
-//        train.ajouterBandit("sofia");
-//        train.ajouterBandit("chakib");
-//        train.ajouterBandit("aymane");
-//        train.ajouterBandit("StrictNec");
-//        train.ajouterBandit("ouané");
-//        train.ajouterBandit("ramy");
-//        train.ajouterBandit("kelia");
-//        train.ajouterBandit("oualid");
-//        train.ajouterBandit("souley");
-//        train.ajouterBandit("izma");
-//        train.ajouterBandit("djamel");
-//        train.ajouterBandit("lina");
-//        train.ajouterBandit("karim");
-//        train.ajouterBandit("sofia");
-//        train.ajouterBandit("chakib");
-//        train.ajouterBandit("aymane");
-//        train.ajouterBandit("StrictNec");
-
-
-        FenetrePlus fen = new FenetrePlus(train);
-        ControleurPlus controleur = new ControleurPlus(train,fen,3); // n : nActions
-
-        controleur.lancerJeu();
-
-
-    }
+//
+//
+//        FenetrePlus fen = new FenetrePlus();
+//        ControleurPlus controleur = new ControleurPlus(train,fen,3); // n : nActions
+//
+//        controleur.lancerJeu();
+//
+//
+//    }
 }

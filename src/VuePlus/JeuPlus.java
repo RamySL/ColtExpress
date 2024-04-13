@@ -12,6 +12,9 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/**
+ * Il faut que jeuPlus soit une fenetre independantte pour eviter les probleme de gestion de threads
+ */
 
 public class JeuPlus extends JPanel implements Observer {
     private FenetrePlus fenetre;

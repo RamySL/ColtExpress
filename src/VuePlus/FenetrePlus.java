@@ -10,24 +10,24 @@ import java.awt.*;
 
 public class FenetrePlus extends JFrame {
     // on va utiliser cardLayout por avoir l'effet de naviguer entre plusieurs fenetre differentes
-    private ControleurPlus controleur;
+
     private CardLayout cardLayout;
-    private JPanel ecranLancement, accueil;
+    private JPanel ecranLancement;
+    private AccueilPlus accueil;
     private JeuPlus jeu;
 
     //Il va contenir la liste des affichage (Acuueil, Jeu ..)
     private JPanel cards;
 
-    private Train train; // c'est le controleur qui initialise cet attribut
 
     // On definit les ID pour les fenetres
     private String jeuId, lancementId, accueilId;
-    public FenetrePlus(Train train){
-        this.train = train;
+    public FenetrePlus(){
+
 
         this.ecranLancement = new EcranLancementPlus(this);
         this.accueil = new AccueilPlus( this);
-        this.jeu = new JeuPlus(this.train, this);
+
 
         this.jeuId = "jeu";
         this.lancementId = "lancement";
@@ -47,12 +47,22 @@ public class FenetrePlus extends JFrame {
         // On ajoute nos différentes fenetre
         cards.add(this.ecranLancement, this.lancementId);
         cards.add(this.accueil, this.accueilId);
-        cards.add(this.jeu, this.jeuId);
 
 
         // On dit qu'on veut que ça soit EcranLancement qui s'affiche en premier
-        cardLayout.show(cards, this.jeuId);
+        cardLayout.show(cards, this.lancementId);
 
+
+    }
+
+    /**
+     * va etre executer quand on appui sur lancer après avoir saisie les prametre du jeu
+     * ajoute le modele initlisé au card et l'affiche
+     * @param jeu
+     */
+    public void ajouterFenetreJeu(JeuPlus jeu){
+        this.jeu = jeu;
+        this.cards.add(jeu, this.jeuId);
 
     }
 
@@ -65,16 +75,12 @@ public class FenetrePlus extends JFrame {
     public String getJeuId() {return this.jeuId;}
     public String getLancementId(){return this.lancementId;}
     public String getAccueilId(){return this.accueilId;}
+    public AccueilPlus getAccueil (){return this.accueil;}
 
     public JeuPlus getJeuPanel (){return this.jeu;}
     public JPanel getecranLancementPanel (){return this.ecranLancement;}
     public JPanel getAcueilPanel (){return this.accueil;}
 
-    public ControleurPlus getControleur (){return this.controleur;}
-
-//    public static void main(String[] args) {
-//        new Fenetre();
-//    }
 }
 
 
