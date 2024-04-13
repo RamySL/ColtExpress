@@ -66,7 +66,7 @@ public class AccueilPlus extends JPanel {
     public static class OptionsJeu extends JPanel{
 
         public JButton lancerJeu;
-        public JTextField saisieNbJoueur,saisieNbWagon;
+        public JTextField saisieNbJoueur,saisieNbWagon, saisieNbActions;
 
         public OptionsJeu(){
 
@@ -116,10 +116,24 @@ public class AccueilPlus extends JPanel {
             troisiemeEtage.setPreferredSize(new Dimension(100,70));
             troisiemeEtage.setBackground(new Color(0,0,0, 0));
             troisiemeEtage.setBorder(new LineBorder(Color.BLACK,1));
+            JLabel nbActionsLabel = new JLabel("Nombres d'actions");
+            nbActionsLabel.setForeground(Color.WHITE);
+            nbActionsLabel.setFont(new Font("MV Boli", Font.BOLD, 15));
+            saisieNbActions = new JTextField("4");//
+            saisieNbActions.setPreferredSize(new Dimension(40,20));
+            troisiemeEtage.add(nbActionsLabel);
+            troisiemeEtage.add(saisieNbActions);
             //Quatrieme Etage
             quatriemeEtage.setPreferredSize(new Dimension(100,70));
             quatriemeEtage.setBackground(new Color(0,0,0, 0));
             quatriemeEtage.setBorder(new LineBorder(Color.BLACK,1));
+            JLabel nervositeMarshallLabel = new JLabel("Determinez la nervosité du  marshall");
+            nervositeMarshallLabel.setForeground(Color.WHITE);
+            nervositeMarshallLabel.setFont(new Font("MV Boli", Font.BOLD, 15));
+
+            quatriemeEtage.add(nervositeMarshallLabel);
+
+            //Quatrieme Etage
 
             this.lancerJeu = new JButton("Lancer");
             //this.lancerJeu.addActionListener(e -> AccueilPlus.this.fenetre.changerFenetre(AccueilPlus.this.fenetre.getJeuId()));
@@ -143,6 +157,10 @@ public class AccueilPlus extends JPanel {
         }
         public Integer getnbJouer(){
             return Integer.parseInt(this.saisieNbJoueur.getText());
+        }
+
+        public Integer getNbActions(){
+            return Integer.parseInt(this.saisieNbActions.getText());
         }
 
 

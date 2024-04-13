@@ -48,12 +48,17 @@ public class JeuPlus extends JPanel implements Observer {
         northPanelTrain.setBackground(Color.BLACK);
         northPanelTrain.setPreferredSize(new Dimension(0,30));
         panelCentrale.add(northPanelTrain, BorderLayout.NORTH);
+        // si le nombre de wagons ne peut etre affiché en entier on scroll horizontalement
 
         this.trainPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
         //this.trainPanel.setBorder(new LineBorder(Color.BLUE,2));
         this.trainPanel.setBackground(Color.BLACK);
         this.dessineTrain(); // on dessine les wagon dans le panel du train
-        panelCentrale.add(this.trainPanel, BorderLayout.CENTER);
+        JScrollPane trainScrollPanel = new JScrollPane(this.trainPanel);
+        trainScrollPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        trainScrollPanel.setBorder(null);
+        panelCentrale.add(trainScrollPanel, BorderLayout.CENTER);
 
         this.add(panelCentrale,BorderLayout.CENTER );
 

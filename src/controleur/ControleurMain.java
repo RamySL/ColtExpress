@@ -43,7 +43,7 @@ public class ControleurMain implements ActionListener {
             JeuPlus jeu = new JeuPlus(train, this.fenetre);
             this.fenetre.ajouterFenetreJeu(jeu);
             this.fenetre.changerFenetre(this.fenetre.getJeuId());
-            ControleurPlus controleurPlus = new ControleurPlus(train,this.fenetre,3);
+            ControleurPlus controleurPlus = new ControleurPlus(train,this.fenetre,this.accueil.getOptionsJeu().getNbActions());
 
             BoucleJeu boucleJeu = new BoucleJeu(controleurPlus);
             boucleJeu.execute();
@@ -57,7 +57,6 @@ public class ControleurMain implements ActionListener {
 
         private ControleurPlus controleur;
 
-        // Constructeur
         public BoucleJeu(ControleurPlus controleur) {
             this.controleur = controleur;
         }
