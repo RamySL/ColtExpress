@@ -22,7 +22,7 @@ public class Controleur implements ActionListener {
         this.fenetre = fenetre;
         this.jeu = this.fenetre.getJeuPanel();
         this.nbAction = n;
-        this.nJoueurs = this.train.getBandits().size(); // le nombre de jr doit etre donnée en pramatere d'une classe
+        this.nJoueurs = this.train.getBandits().size(); // le nombre de jr doit etre donnée en paramatere d'une classe
 
         this.jeu.liaisonBottonsListener(this);
 

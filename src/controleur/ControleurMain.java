@@ -3,11 +3,15 @@ package controleur;
 import VuePlus.AccueilPlus;
 import VuePlus.FenetrePlus;
 import VuePlus.JeuPlus;
+import modele.Personnage;
 import modele.Train;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Le controleur qui va gerer les événenement qui proviennent de l'initialisation du jeu avec la fenetre d'accueil
@@ -17,6 +21,9 @@ public class ControleurMain implements ActionListener {
 
     private AccueilPlus accueil;
     private FenetrePlus fenetre;
+    // accumulation de classes internes
+    private ArrayList<AccueilPlus.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJouers = new ArrayList<>(); // contiendra le surnom et icone
+
 
     public ControleurMain(FenetrePlus fenetre){
         this.fenetre = fenetre;
@@ -31,16 +38,24 @@ public class ControleurMain implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        /// !!!! à changer il travail avec public
         if (e.getSource() == this.accueil.getOptionsJeu().lancerJeu){
             // On recupere ce qui a été saisie avec getTexte et on intialise le jeu
+            // !! RECUERE LE NOMBRE DE BALLES
+
+            Map<Personnage, ImageIcon> mapPersonnageIcone = new HashMap<>();
 
             Train train = new Train(this.accueil.getOptionsJeu().getNbWagon());
             // boucle pour ajouter les bandit
-            int nbJoueur =  this.accueil.getOptionsJeu().getnbJouer();
-            for (int i = 1; i<=nbJoueur; i++ ){
-                train.ajouterBandit("Bandit"+i);
+            // invariant qui garde ça correcte c'est que le premier elt  de this.creationsJouers va etre le premier Personnage dans la liste du train
+            for (AccueilPlus.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infos : this.creationsJouers){
+                // quand le bandit est ajouté au train il faut garder un lien avec le chemin de son icone
+                // qu'il faudra passer à la vue
+                train.ajouterBandit(infos.getSurnom());
+                mapPersonnageIcone.put(train.getBandits().getLast(),infos.getIcone());
             }
-            JeuPlus jeu = new JeuPlus(train, this.fenetre);
+            JeuPlus jeu = new JeuPlus(train, this.fenetre, mapPersonnageIcone);
+
             this.fenetre.ajouterFenetreJeu(jeu);
             this.fenetre.changerFenetre(this.fenetre.getJeuId());
             ControleurPlus controleurPlus = new ControleurPlus(train,this.fenetre,this.accueil.getOptionsJeu().getNbActions());
@@ -49,6 +64,14 @@ public class ControleurMain implements ActionListener {
             boucleJeu.execute();
 
 
+        }
+
+
+        if (e.getSource() == this.accueil.getOptionsJeu().getSlectionPersoPanel().bouttonCreationBandit) {
+            ImageIcon iconePerso = this.accueil.getOptionsJeu().getSlectionPersoPanel().getPersoSlectionneIcone();
+            String surnom = this.accueil.getOptionsJeu().getSlectionPersoPanel().getBanditSurnom();
+
+            this.creationsJouers.add(new AccueilPlus.OptionsJeu.SelectionPersonnages.JoueurInfoCreation(iconePerso,surnom));  // on recup le perso choisie sur la liste et le nomb saisie
         }
 
     }

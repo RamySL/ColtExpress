@@ -7,6 +7,7 @@ import controleur.ControleurPlus;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class AccueilPlus extends JPanel {
     private FenetrePlus fenetre;
@@ -18,7 +19,7 @@ public class AccueilPlus extends JPanel {
         this.setLayout(new BorderLayout());
         this.fenetre = fenetre;
 
-        this.imageFond = new ImageIcon("src/assets/images/colt_express-banner.jpg").getImage();
+        this.imageFond = new ImageIcon("src/assets/images/colt_accueil.png").getImage();
 
         // C'est pour centerer le menu d'option
         JPanel eastPanel = new JPanel();
@@ -57,16 +58,19 @@ public class AccueilPlus extends JPanel {
 
     public void liaisonAvecControleur(ControleurMain controleur){
         this.optionsJeu.lancerJeu.addActionListener(controleur);
+        this.optionsJeu.getSlectionPersoPanel().bouttonCreationBandit.addActionListener(controleur);
     }
 
     /**
      * On doit permettre de saisir : nb action à planifier, NB_BALLES peut etre NERVOSITE_MARSHALL,
      */
 
-    public static class OptionsJeu extends JPanel{
+    public  class OptionsJeu extends JPanel{
 
         public JButton lancerJeu;
-        public JTextField saisieNbJoueur,saisieNbWagon, saisieNbActions;
+        public JTextField saisieNbJoueur,saisieNbWagon, saisieNbActions, saisieNbBalles;
+
+        private SelectionPersonnages slectPersoPanel;
 
         public OptionsJeu(){
 
@@ -80,6 +84,7 @@ public class AccueilPlus extends JPanel {
             JPanel deuxiemeEtage = new JPanel();
             JPanel troisiemeEtage = new JPanel();
             JPanel quatriemeEtage = new JPanel();
+            JPanel cinquiemeEtage = new JPanel();
             JPanel dernierEtage = new JPanel();
 
             //Titre du menu
@@ -89,51 +94,57 @@ public class AccueilPlus extends JPanel {
             titreMenu.setBackground(new Color(0,0,0, 221));
             titreMenu.setOpaque(true); // pour que la couleur de fond soit visible
             // Premiere Etage
-            premierEtage.setPreferredSize(new Dimension(10,1));
+
             premierEtage.setBackground(new Color(0x0000000, true));
             premierEtage.setBorder(new LineBorder(Color.BLACK,1));
-            JLabel nbJoeur = new JLabel("Nombres de jouers");//
-            nbJoeur.setForeground(Color.WHITE);
-            nbJoeur.setFont(new Font("MV Boli", Font.BOLD, 15));
-            saisieNbJoueur = new JTextField("3");//
-            saisieNbJoueur.setPreferredSize(new Dimension(40,20));
-            JButton validerNbJoueur = new JButton("Entrez leur noms");
-            premierEtage.add(nbJoeur);
-            premierEtage.add(saisieNbJoueur);
-            premierEtage.add(validerNbJoueur);
+            slectPersoPanel = new SelectionPersonnages();
+            premierEtage.add(slectPersoPanel);
             //Deuxieme Etage
             deuxiemeEtage.setPreferredSize(new Dimension(200,50));
             deuxiemeEtage.setBackground(new Color(0,0,0, 0));
             deuxiemeEtage.setBorder(new LineBorder(Color.BLACK,1));
+            JLabel nbBallesLabel = new JLabel("Nombres de balles pour les Bandits");
+            nbBallesLabel.setForeground(Color.WHITE);
+            nbBallesLabel.setFont(new Font("MV Boli", Font.BOLD, 15));
+            saisieNbBalles= new JTextField("4");//
+            saisieNbBalles.setPreferredSize(new Dimension(40,20));
+            deuxiemeEtage.add(nbBallesLabel);
+            deuxiemeEtage.add(saisieNbBalles);
+            //Troiseme Etage
+            troisiemeEtage.setPreferredSize(new Dimension(100,70));
+            troisiemeEtage.setBackground(new Color(0,0,0, 0));
+            troisiemeEtage.setBorder(new LineBorder(Color.BLACK,1));
             JLabel nbWagonLabel = new JLabel("Nombres de Wagons");
             nbWagonLabel.setForeground(Color.WHITE);
             nbWagonLabel.setFont(new Font("MV Boli", Font.BOLD, 15));
             saisieNbWagon = new JTextField("4");//
             saisieNbWagon.setPreferredSize(new Dimension(40,20));
-            deuxiemeEtage.add(nbWagonLabel);
-            deuxiemeEtage.add(saisieNbWagon);
-            //Troiseme Etage
-            troisiemeEtage.setPreferredSize(new Dimension(100,70));
-            troisiemeEtage.setBackground(new Color(0,0,0, 0));
-            troisiemeEtage.setBorder(new LineBorder(Color.BLACK,1));
+            troisiemeEtage.add(nbWagonLabel);
+            troisiemeEtage.add(saisieNbWagon);
+
+            //Quatrieme Etage
+            quatriemeEtage.setPreferredSize(new Dimension(100,70));
+            quatriemeEtage.setBackground(new Color(0,0,0, 0));
+            quatriemeEtage.setBorder(new LineBorder(Color.BLACK,1));
             JLabel nbActionsLabel = new JLabel("Nombres d'actions");
             nbActionsLabel.setForeground(Color.WHITE);
             nbActionsLabel.setFont(new Font("MV Boli", Font.BOLD, 15));
             saisieNbActions = new JTextField("4");//
             saisieNbActions.setPreferredSize(new Dimension(40,20));
-            troisiemeEtage.add(nbActionsLabel);
-            troisiemeEtage.add(saisieNbActions);
-            //Quatrieme Etage
-            quatriemeEtage.setPreferredSize(new Dimension(100,70));
-            quatriemeEtage.setBackground(new Color(0,0,0, 0));
-            quatriemeEtage.setBorder(new LineBorder(Color.BLACK,1));
+            quatriemeEtage.add(nbActionsLabel);
+            quatriemeEtage.add(saisieNbActions);
+
+            // Cinqieme etage
+            cinquiemeEtage.setPreferredSize(new Dimension(100,70));
+            cinquiemeEtage.setBackground(new Color(0,0,0, 0));
+            cinquiemeEtage.setBorder(new LineBorder(Color.BLACK,1));
             JLabel nervositeMarshallLabel = new JLabel("Determinez la nervosité du  marshall");
             nervositeMarshallLabel.setForeground(Color.WHITE);
             nervositeMarshallLabel.setFont(new Font("MV Boli", Font.BOLD, 15));
+            cinquiemeEtage.add(nervositeMarshallLabel);
 
-            quatriemeEtage.add(nervositeMarshallLabel);
 
-            //Quatrieme Etage
+
 
             this.lancerJeu = new JButton("Lancer");
             //this.lancerJeu.addActionListener(e -> AccueilPlus.this.fenetre.changerFenetre(AccueilPlus.this.fenetre.getJeuId()));
@@ -147,6 +158,7 @@ public class AccueilPlus extends JPanel {
             this.add(deuxiemeEtage);
             this.add(troisiemeEtage);
             this.add(quatriemeEtage);
+            this.add(cinquiemeEtage);
             this.add(dernierEtage);
 
             this.setPreferredSize(new Dimension(100,100));
@@ -155,16 +167,88 @@ public class AccueilPlus extends JPanel {
         public Integer getNbWagon (){
             return Integer.parseInt(this.saisieNbWagon.getText());
         }
-        public Integer getnbJouer(){
-            return Integer.parseInt(this.saisieNbJoueur.getText());
-        }
+
 
         public Integer getNbActions(){
             return Integer.parseInt(this.saisieNbActions.getText());
         }
 
+        public SelectionPersonnages getSlectionPersoPanel () { return this.slectPersoPanel;}
+
+
+        /**
+         * ici mettre une methode qui recupere la liste des bandit (nom et lien) quand on appui sur lancer jeu
+         */
+
+        public class SelectionPersonnages extends JPanel{
+
+            private ImageIcon [] persoListIcones;
+            public JButton bouttonCreationBandit;
+            private JList<ImageIcon> jListPerso;
+
+            private JTextField saisieNomJoueur;
+
+            public SelectionPersonnages(){
+                this.setLayout(new BorderLayout());
+
+                JLabel descLabel = new JLabel("Créer le nombre de bandit que vous voulez");
+
+                this.initPersoListeIcones("src/assets/images/");
+
+                jListPerso = new JList<>(persoListIcones);
+
+                // pour que ça s'affiche horizontalement
+                jListPerso.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+                jListPerso.setVisibleRowCount(1); // affichage d'une seule ligne
+
+                JPanel sudPanel = new JPanel();
+                this.bouttonCreationBandit = new JButton("Créer Bandit");
+                saisieNomJoueur = new JTextField("Nommez bandit");
+
+                sudPanel.add(saisieNomJoueur);
+                sudPanel.add(this.bouttonCreationBandit);
+
+                this.add(descLabel, BorderLayout.NORTH);
+                this.add(jListPerso, BorderLayout.CENTER);
+                this.add(sudPanel, BorderLayout.SOUTH);
+
+            }
+
+            public void initPersoListeIcones (String chemin){
+                this.persoListIcones = new ImageIcon[5];
+                for (int i =1; i<=5;i++){
+                    ImageIcon persoIcone = new ImageIcon((chemin + "bandit" + i + ".png"));
+                    this.persoListIcones[i-1] = persoIcone;
+                }
+
+            }
+
+            public ImageIcon getPersoSlectionneIcone (){
+                return  this.jListPerso.getSelectedValue();
+            }
+
+            public String getBanditSurnom() { return this.saisieNomJoueur.getText();}
+
+            /**
+             * structure pour stocker les infos necessaire pour créer la vue du personnage et mm son surnom pour le créer dans le modele
+             */
+            public static class JoueurInfoCreation{
+                private ImageIcon icone;
+                private String surnom;
+                public JoueurInfoCreation (ImageIcon icone, String surnom){
+                    this.icone = icone;
+                    this.surnom = surnom;
+                }
+
+                public ImageIcon getIcone () {return this.icone;}
+                public String getSurnom () {return this.surnom;}
+            }
+        }
+
+
 
     }
+
 
 }
 
