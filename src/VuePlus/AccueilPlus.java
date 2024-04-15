@@ -68,9 +68,10 @@ public class AccueilPlus extends JPanel {
     public  class OptionsJeu extends JPanel{
 
         public JButton lancerJeu;
-        public JTextField saisieNbJoueur,saisieNbWagon, saisieNbActions, saisieNbBalles;
+        private JTextField saisieNbWagon, saisieNbActions, saisieNbBalles, saisieNbManches;
 
         private SelectionPersonnages slectPersoPanel;
+        private SlectionNervositeMarshall selectNervositePanel;
 
         public OptionsJeu(){
 
@@ -85,6 +86,7 @@ public class AccueilPlus extends JPanel {
             JPanel troisiemeEtage = new JPanel();
             JPanel quatriemeEtage = new JPanel();
             JPanel cinquiemeEtage = new JPanel();
+            JPanel sixiemeEtage = new JPanel();
             JPanel dernierEtage = new JPanel();
 
             //Titre du menu
@@ -106,7 +108,7 @@ public class AccueilPlus extends JPanel {
             JLabel nbBallesLabel = new JLabel("Nombres de balles pour les Bandits");
             nbBallesLabel.setForeground(Color.WHITE);
             nbBallesLabel.setFont(new Font("MV Boli", Font.BOLD, 15));
-            saisieNbBalles= new JTextField("4");//
+            saisieNbBalles= new JTextField("6");//
             saisieNbBalles.setPreferredSize(new Dimension(40,20));
             deuxiemeEtage.add(nbBallesLabel);
             deuxiemeEtage.add(saisieNbBalles);
@@ -134,15 +136,24 @@ public class AccueilPlus extends JPanel {
             quatriemeEtage.add(nbActionsLabel);
             quatriemeEtage.add(saisieNbActions);
 
-            // Cinqieme etage
+            //Cinqieme etage
             cinquiemeEtage.setPreferredSize(new Dimension(100,70));
             cinquiemeEtage.setBackground(new Color(0,0,0, 0));
             cinquiemeEtage.setBorder(new LineBorder(Color.BLACK,1));
-            JLabel nervositeMarshallLabel = new JLabel("Determinez la nervosité du  marshall");
-            nervositeMarshallLabel.setForeground(Color.WHITE);
-            nervositeMarshallLabel.setFont(new Font("MV Boli", Font.BOLD, 15));
-            cinquiemeEtage.add(nervositeMarshallLabel);
+            JLabel nbManchesLabel = new JLabel("Nombre de manches");
+            nbManchesLabel.setForeground(Color.WHITE);
+            nbManchesLabel.setFont(new Font("MV Boli", Font.BOLD, 15));
+            saisieNbManches = new JTextField("5");//
+            saisieNbManches.setPreferredSize(new Dimension(40,20));
+            cinquiemeEtage.add(nbManchesLabel);
+            cinquiemeEtage.add(saisieNbManches);
 
+            // Cinqieme etage
+            sixiemeEtage.setPreferredSize(new Dimension(100,70));
+            sixiemeEtage.setBackground(new Color(0,0,0, 0));
+            sixiemeEtage.setBorder(new LineBorder(Color.BLACK,1));
+             this.selectNervositePanel = new SlectionNervositeMarshall();
+            sixiemeEtage.add(selectNervositePanel);
 
 
 
@@ -159,6 +170,8 @@ public class AccueilPlus extends JPanel {
             this.add(troisiemeEtage);
             this.add(quatriemeEtage);
             this.add(cinquiemeEtage);
+            this.add(sixiemeEtage);
+
             this.add(dernierEtage);
 
             this.setPreferredSize(new Dimension(100,100));
@@ -173,7 +186,16 @@ public class AccueilPlus extends JPanel {
             return Integer.parseInt(this.saisieNbActions.getText());
         }
 
+        public Integer getNbBalles(){
+            return Integer.parseInt(this.saisieNbBalles.getText());
+        }
+
+        public Integer getNbManches (){ return Integer.parseInt(this.saisieNbManches.getText()); }
+
+
+
         public SelectionPersonnages getSlectionPersoPanel () { return this.slectPersoPanel;}
+        public Double getNervosite(){return this.selectNervositePanel.getNervosteMarshall();}
 
 
         /**
@@ -203,7 +225,7 @@ public class AccueilPlus extends JPanel {
 
                 JPanel sudPanel = new JPanel();
                 this.bouttonCreationBandit = new JButton("Créer Bandit");
-                saisieNomJoueur = new JTextField("Nommez bandit");
+                saisieNomJoueur = new JTextField("Surnom");
 
                 sudPanel.add(saisieNomJoueur);
                 sudPanel.add(this.bouttonCreationBandit);
@@ -215,8 +237,8 @@ public class AccueilPlus extends JPanel {
             }
 
             public void initPersoListeIcones (String chemin){
-                this.persoListIcones = new ImageIcon[5];
-                for (int i =1; i<=5;i++){
+                this.persoListIcones = new ImageIcon[9];
+                for (int i =1; i<=9;i++){
                     ImageIcon persoIcone = new ImageIcon((chemin + "bandit" + i + ".png"));
                     this.persoListIcones[i-1] = persoIcone;
                 }
@@ -249,6 +271,42 @@ public class AccueilPlus extends JPanel {
 
     }
 
+    public class SlectionNervositeMarshall extends JPanel{
+        private JList<String> jListNervositeNiveaux;
+
+        public SlectionNervositeMarshall(){
+
+            this.setLayout(new BorderLayout());
+            JLabel descLabel = new JLabel("Slectionnez la nervoté du marshall");
+
+            String[] nervositeNiveaux = {"Calme","Enervé","Furieux"};
+            jListNervositeNiveaux = new JList<>(nervositeNiveaux);
+
+            // pour que ça s'affiche horizontalement
+            jListNervositeNiveaux.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+            jListNervositeNiveaux.setVisibleRowCount(1); // affichage d'une seule ligne
+
+            this.add(descLabel, BorderLayout.NORTH);
+            this.add(this.jListNervositeNiveaux, BorderLayout.CENTER);
+
+        }
+
+        public Double getNervosteMarshall(){
+            String selection = this.jListNervositeNiveaux.getSelectedValue();
+
+            if (selection == "Calme"){
+                return 0.3;
+            }else{
+                if (selection == "Enervé") {
+                    return 0.6;
+                }else{
+                    return 9.0;
+                }
+            }
+
+        }
+
+    }
 
 }
 

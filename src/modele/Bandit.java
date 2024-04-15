@@ -10,8 +10,8 @@ public class Bandit extends Personnage {
 
 
 
-    public Bandit(ComposanteTrain emp, String surnom) {
-        super(emp, surnom, 6);
+    public Bandit(ComposanteTrain emp, String surnom, int nbBalles) {
+        super(emp, surnom, nbBalles);
         this.surnom = surnom;
     }
 

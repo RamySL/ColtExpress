@@ -224,6 +224,10 @@ public class JeuPlus extends JPanel implements Observer {
             buttinsPanel.setBackground(Color.BLACK);
             persoPanel.setBackground(Color.BLACK);
 
+//            JScrollPane buttinScroll = new JScrollPane(buttinsPanel);
+//            buttinScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+//            buttinScroll.setBorder(null);
+
             solCabine.add(buttinsPanel);
             solCabine.add(persoPanel);
 
@@ -240,11 +244,12 @@ public class JeuPlus extends JPanel implements Observer {
             ArrayList<Buttin> buttins;
             public ButtinPanel(ArrayList<Buttin> buttins){
                 this.buttins = buttins;
-
+                //this.setPreferredSize(new Dimension(50,100));
                 this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 
                 for (Buttin b : buttins){
-                    JLabel buttinLabel = new JLabel(b.toString());
+
+                    JLabel buttinLabel = new JLabel( new ImageIcon("src/assets/images/" + b + ".png"));
                     buttinLabel.setForeground(Color.WHITE);
                     this.add(buttinLabel);
                 }
@@ -267,11 +272,37 @@ public class JeuPlus extends JPanel implements Observer {
                 this.setLayout(new FlowLayout(FlowLayout.LEFT,5,0)); // à cause du 0 dans verticale le marshall est en haut
 
                 for (Personnage p : persos){
+                    if (!(p instanceof Marshall)) {
+                        JPanel persoPanel = new JPanel(new BorderLayout());
+                        persoPanel.setBackground(new Color(0x00000FF, true));
 
-//
-                    JLabel persoLabel = new JLabel(JeuPlus.this.mapPersonnageIcone.get(p));
+                        JLabel persoIcone = new JLabel(JeuPlus.this.mapPersonnageIcone.get(p));
+                        JLabel persoLabel = new JLabel(p.getSurnom());
+                        //persoLabel.setPreferredSize(new Dimension(0,10));
+                        persoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                        persoLabel.setForeground(Color.WHITE);
+                        persoLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
 
-                    this.add(persoLabel);
+                        persoPanel.add(persoIcone, BorderLayout.CENTER);
+                        persoPanel.add(persoLabel, BorderLayout.NORTH);
+
+                        this.add(persoPanel);
+                    }else {
+                        JPanel persoPanel = new JPanel(new BorderLayout());
+                        persoPanel.setBackground(new Color(0x00000FF, true));
+
+                        JLabel persoIcone = new JLabel(new ImageIcon("src/assets/images/sherif.png"));
+                        JLabel persoLabel = new JLabel(p.getSurnom());
+
+                        persoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                        persoLabel.setForeground(Color.WHITE);
+                        persoLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
+
+                        persoPanel.add(persoIcone, BorderLayout.CENTER);
+                        persoPanel.add(persoLabel, BorderLayout.NORTH);
+
+                        this.add(persoPanel);
+                    }
                 }
                 this.setBackground(Color.BLACK);
 
@@ -297,7 +328,7 @@ public class JeuPlus extends JPanel implements Observer {
 
                 ButtinPanel buttinsPanel = new ButtinPanel(this.toit.getButtins());
                 PersoPanel persoPanel = new PersoPanel(this.toit.getPersoList());
-                this.setPreferredSize(new Dimension(0,70));
+                this.setPreferredSize(new Dimension(0,90));
                 //this.setBorder(new LineBorder(Color.RED,5));
                 conteneur.add(buttinsPanel);
                 conteneur.add(persoPanel);

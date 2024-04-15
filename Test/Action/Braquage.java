@@ -25,7 +25,7 @@ public class Braquage {
     public void initialisation(){
 
         Train train = new Train(4);
-        train.ajouterBandit("ramy");
+        train.ajouterBandit("ramy",2);
         this.bandit = train.getBandits().get(0); // verfier que bandit contient vraiment le bandit ajoute avant
 
         this.buttinsBanditAvantBraquage = this.bandit.getButtins();

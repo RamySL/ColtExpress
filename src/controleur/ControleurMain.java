@@ -44,14 +44,17 @@ public class ControleurMain implements ActionListener {
             // !! RECUERE LE NOMBRE DE BALLES
 
             Map<Personnage, ImageIcon> mapPersonnageIcone = new HashMap<>();
+            int nbBallesBandits = this.accueil.getOptionsJeu().getNbBalles();
+            Double nervositeMarshall = this.accueil.getOptionsJeu().getNervosite();
 
             Train train = new Train(this.accueil.getOptionsJeu().getNbWagon());
+            train.ajouterMarshall(nervositeMarshall);
             // boucle pour ajouter les bandit
             // invariant qui garde ça correcte c'est que le premier elt  de this.creationsJouers va etre le premier Personnage dans la liste du train
             for (AccueilPlus.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infos : this.creationsJouers){
                 // quand le bandit est ajouté au train il faut garder un lien avec le chemin de son icone
                 // qu'il faudra passer à la vue
-                train.ajouterBandit(infos.getSurnom());
+                train.ajouterBandit(infos.getSurnom(),nbBallesBandits);
                 mapPersonnageIcone.put(train.getBandits().getLast(),infos.getIcone());
             }
             JeuPlus jeu = new JeuPlus(train, this.fenetre, mapPersonnageIcone);
@@ -87,14 +90,15 @@ public class ControleurMain implements ActionListener {
         @Override
         // la boucle de notre jeu qui va tourner sur un thread different que l'EDT qui est responsable pour l'actualisation de l'affchage
         protected Void doInBackground() {
-            controleur.lancerJeu();
+            controleur.lancerJeu(ControleurMain.this.accueil.getOptionsJeu().getNbManches());
             return null;
         }
 
         // c'est une méthode qui va etre appelé quand le travail en fond (doInBackGround) sera terminé
         @Override
         protected void done() {
-
+            // il faut reinitialiser le modele quand une partie se termine pour relancer une nouvelle
+            this.controleur.fenetre.changerFenetre(this.controleur.fenetre.getAccueilId());
         }
     }
 

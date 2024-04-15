@@ -32,14 +32,15 @@ public class ControleurPlus implements ActionListener {
 
     }
     // boucle du jeu !!! PROBELEME AVEC LA GESTIONS DES THREADS
-    public void lancerJeu() {
+    public void lancerJeu(int nbManches) {
 
         int nbBandit = this.train.getBandits().size();
         // Exemple d'utilisation de SwingUtilities.invokeLater() pour mettre à jour l'interface utilisateur
 
 
         // pour l'instant pas de condition d'arret
-        while (true) {
+        int manche = 0;
+        while (manche < nbManches) {
             //planification
 
             // on utilise pas une boucle for each pour eviter la cocurrentmodifError avec la methode fuire de bandit
@@ -71,6 +72,7 @@ public class ControleurPlus implements ActionListener {
                 actionPhase = true;
 
             }
+            manche++;
         }
     }
 

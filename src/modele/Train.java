@@ -33,7 +33,7 @@ public class Train implements Iterable <ComposanteTrain>{
         courant.ajouterWagon(this.first);
         this.first.ajouterWagon(courant);
 
-        this.marshall = new Marshall(first,0.0);
+        //this.marshall = new Marshall(first,0.0);
 
 
 
@@ -44,17 +44,21 @@ public class Train implements Iterable <ComposanteTrain>{
 
     public int getSize(){ return this.nWagons;}
 
-    public void ajouterBandit(String surnom){
+    public void ajouterBandit(String surnom, int nbBallles){
         // ajout dans une position aleatoire d'un bandit
         Random rnd = new Random();
         int pos = rnd.nextInt(0,this.nWagons); // num du toit du bandit
         int i =0;
         for (ComposanteTrain c : this){
             if(i == pos){
-                this.bandits.add(new Bandit(((Interieur)c).getToit(),surnom));
+                this.bandits.add(new Bandit(((Interieur)c).getToit(),surnom,nbBallles));
             }
             i++;
         }
+    }
+
+    public void ajouterMarshall(Double nervosite){
+        this.marshall = new Marshall(this.first, nervosite);
     }
 
     public ArrayList<Bandit> getBandits(){return this.bandits;}
