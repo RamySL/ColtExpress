@@ -1,6 +1,5 @@
-package VuePlus.Bouttons;
+package Vue.Bouttons;
 
-import controleur.ControleurPlus;
 import modele.Direction;
 
 import javax.swing.*;

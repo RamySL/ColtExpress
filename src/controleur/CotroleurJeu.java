@@ -1,19 +1,17 @@
 package controleur;
 
-import VuePlus.*;
-import Vue.Jeu;
-import VuePlus.Bouttons.BouttonsJeu;
+import Vue.*;
+import Vue.Bouttons.BouttonsJeu;
 import modele.*;
 import modele.Action;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ControleurPlus implements ActionListener {
+public class CotroleurJeu implements ActionListener {
     Train train;
-    JeuPlus jeu;
-    FenetrePlus fenetre;
+    Jeu jeu;
+    Fenetre fenetre;
     int nbAction, nJoueurs;
 
     boolean actionPhase=false,planPhase=true;
@@ -21,7 +19,7 @@ public class ControleurPlus implements ActionListener {
 
     int tourne; // pour determiner que le boutton action à été appuer et qu'il faut passer au prochain ensemble d'action à executée
 
-    public ControleurPlus(Train train, FenetrePlus fenetre, int n){
+    public CotroleurJeu(Train train, Fenetre fenetre, int n){
         this.train = train;
         this.fenetre = fenetre;
         this.jeu = this.fenetre.getJeuPanel();
@@ -42,7 +40,7 @@ public class ControleurPlus implements ActionListener {
         int manche = 0;
         while (manche < nbManches) {
             //planification
-
+             this.jeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase de palinification");
             // on utilise pas une boucle for each pour eviter la cocurrentmodifError avec la methode fuire de bandit
             for (int i = 0; i <nbBandit; i++){
 
@@ -60,7 +58,7 @@ public class ControleurPlus implements ActionListener {
                 }
 
             }
-
+            this.jeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase d'action");
             // action
             this.tourne = 0;
             // le nombre totale d'iteration pour toutes les action des bandit = nbBandit * nbAction

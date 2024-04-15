@@ -1,8 +1,6 @@
 package Vue;
 
-import javax.security.sasl.SaslClient;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -63,7 +61,8 @@ public class EcranLancement extends JPanel  {
             @Override
             public void keyTyped(KeyEvent e) {}
             @Override
-            public void keyPressed(KeyEvent e) {EcranLancement.this.fenetre.changerFenetre(EcranLancement.this.fenetre.getAccueilId());}
+            public void keyPressed(KeyEvent e) {
+                EcranLancement.this.fenetre.changerFenetre(EcranLancement.this.fenetre.getAccueilId());}
             @Override
             public void keyReleased(KeyEvent e) {}
         });
@@ -99,8 +98,8 @@ public class EcranLancement extends JPanel  {
 
     @Override
     public void paintComponent(Graphics g) {
-            super.paintComponents(g);
-            g.drawImage(this.imageFond,0,-20,this.fenetre.getWidth(),this.fenetre.getHeight(),this);
-        }
+        super.paintComponents(g);
+        g.drawImage(this.imageFond,0,-20,this.fenetre.getWidth(),this.fenetre.getHeight(),this);
+    }
 
 }
