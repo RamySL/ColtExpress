@@ -8,16 +8,23 @@ public class Braquer extends Action {
         super(braqueur);
     }
 
-    public void executer() {
+    public String executer() {
         ComposanteTrain banditPos = this.executeur.getEmplacement();
         Buttin buttinBraque = banditPos.EnleverButinAlea();
-
+        String feed;
         if(buttinBraque != null){
             ((Bandit) this.executeur).ajouterButtin(buttinBraque); // executeur n'est pas un bandit
-
-            System.out.println(this.executeur.getSurnom() + " Vient de braquer un passager et a récupéré : " + buttinBraque);
+            feed = this.executeur.getSurnom() + " Vient de braquer un passager et a récupéré : " + buttinBraque;
+        }else{
+            feed = this.executeur.getSurnom() + "a rien braqué ";
         }
 
+        return feed;
 
+
+    }
+
+    public String toString(){
+        return " Braquage ";
     }
 }

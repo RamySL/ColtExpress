@@ -15,15 +15,17 @@ public class Bandit extends Personnage {
         this.surnom = surnom;
     }
 
-    /* executer la premiere action sur la file d'action*/
-    public void executer() {
+    /* executer la premiere action sur la file d'action et renvoi un feedback */
+    public String executer() {
         // execute les action de la file des action du joueur
+        String feed = "";
         if (!actions.isEmpty()) {
-            actions.get(0).executer();
+            feed = actions.get(0).executer();
             actions.remove(0);
         }
 
         this.notifyObservers();
+        return feed;
     }
 
     public void fuir() {

@@ -14,11 +14,11 @@ public class Marshall extends Personnage {
 
     }
 
-    public void executer(){
+    public String executer(){
         // execute une action avec une proba de p
         // on modelise ce fait par le faite de tirer n un aleatoire entre [1-10]
         // et que si n appartient à [1-p*10]
-
+        String feed = "";
         Random rnd = new Random();
         int n = rnd.nextInt(1,10);
 
@@ -39,7 +39,7 @@ public class Marshall extends Personnage {
                     }
                 }
             }
-            a.executer();
+            feed = a.executer();
         }
 
         ArrayList<Personnage> lstBandit = this.getEmplacement().getPersoList();
@@ -49,6 +49,8 @@ public class Marshall extends Personnage {
                 ((Bandit)p).fuir();
             }
         }
+
+        return feed;
 
 
     }

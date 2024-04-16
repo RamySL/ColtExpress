@@ -10,7 +10,8 @@ public abstract class Action {
     public Action (Personnage executeur){
         this.executeur = executeur;
     }
-    public abstract void executer();
+    // retourne un feedBack sur l'action
+    public abstract String executer();
 }
 
 

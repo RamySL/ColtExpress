@@ -40,11 +40,16 @@ public class CotroleurJeu implements ActionListener {
         int manche = 0;
         while (manche < nbManches) {
             //planification
-             this.jeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase de palinification");
+             this.jeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase de palinification pour la manche " + (manche+1) + "/" + nbManches);
+             this.jeu.getCmdPanel().getPhaseFeedPanel().setPlanfication(this.train.getBandits().get(0)); //init
             // on utilise pas une boucle for each pour eviter la cocurrentmodifError avec la methode fuire de bandit
             for (int i = 0; i <nbBandit; i++){
 
                 this.joueurCourant = this.train.getBandits().get(i); // pour que les boutton vide ce bandit specifiquement
+                if(i != 0){
+                    this.jeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualiserPlanificateur(this.joueurCourant);
+                }
+
                 //this.jeu.phase.setText("Phase de planification : c'est le tour à " + this.joueurCourant.getSurnom());
                 //System.out.println("tour de " + this.joueurCourant.getSurnom());
 
@@ -58,7 +63,9 @@ public class CotroleurJeu implements ActionListener {
                 }
 
             }
-            this.jeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase d'action");
+            this.jeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase d'action pour la manche " + (manche+1) + "/" + nbManches);
+            this.jeu.getCmdPanel().getPhaseFeedPanel().setAction();
+
             // action
             this.tourne = 0;
             // le nombre totale d'iteration pour toutes les action des bandit = nbBandit * nbAction
@@ -80,14 +87,15 @@ public class CotroleurJeu implements ActionListener {
 
         if( (e.getSource() instanceof BouttonsJeu.BouttonAction) && actionPhase) {
 
-            this.train.getMarshall().executer();
-
+            String feed =  this.train.getMarshall().executer(); // l'actions est executer et renvoi un feedback
+            this.jeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
             // le principe c'est qu'on veut executer la premiere action du premier bandit ensuite passer
             // à l apremiere action du deuxieme bandit et après quand on arrive au dernier bandit on doit reotuner
             // au premeir et ainsi de suite, il ya une periodicité en le nombre de bandit, qui naturellement traduite par
             // l'opération de modulo
             this.joueurCourant = this.train.getBandits().get(this.tourne % this.nJoueurs);
-            this.joueurCourant.executer();
+            feed = this.joueurCourant.executer();
+            this.jeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
             // on affiche le prchain qui va executer
 
             Bandit bProchain = this.train.getBandits().get((this.tourne + 1) % this.nJoueurs);
@@ -98,20 +106,26 @@ public class CotroleurJeu implements ActionListener {
 
         }if (planPhase) {
             Action a;
+
             if (e.getSource() instanceof BouttonsJeu.BouttonDeplacement) {
                 a = new SeDeplacer(this.joueurCourant, ((BouttonsJeu.BouttonDeplacement) e.getSource()).getDirection());
                 this.joueurCourant.ajouterAction(a);
+                this.jeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
             }
 
             if (e.getSource() instanceof BouttonsJeu.BouttonBraquage){
                 a = new Braquer(this.joueurCourant);
                 this.joueurCourant.ajouterAction(a);
+                this.jeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
             }
 
             if (e.getSource() instanceof BouttonsJeu.BouttonTir){
                 a = new Tirer(this.joueurCourant, ((BouttonsJeu.BouttonTir) e.getSource()).getDirection());
                 this.joueurCourant.ajouterAction(a);
+                this.jeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
             }
+
+
         }
 
 

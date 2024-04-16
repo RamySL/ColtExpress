@@ -207,16 +207,126 @@ public class Jeu extends JPanel implements Observer {
 
             // doit etre actualiser par le controleur
             JLabel phase;
+            PlanififcationPanel planificationPanel;
+            FeedActionPanel feedActionPanel;
             public PhaseFeedPanel (){
+                this.setLayout(new BorderLayout());
+
                 this.phase = new JLabel("Phase de planification");
                 this.setBackground(Color.WHITE);
                 this.setPreferredSize(new Dimension(400,200));
+                this.phase.setHorizontalAlignment(SwingConstants.CENTER);
 
-                this.add(this.phase);
+
             }
 
             public void actuPhase(String txt){
                 this.phase.setText(txt);
+            }
+
+            public void setPlanfication(Bandit planificateur){
+                // on retire aussi phase
+                this.removeAll();
+                this.add(this.phase, BorderLayout.NORTH);
+                this.planificationPanel = new PlanififcationPanel(planificateur);
+                this.add(planificationPanel, BorderLayout.CENTER);
+                repaint();
+                revalidate();
+            }
+
+            public void setAction(){
+                this.removeAll();
+                this.add(this.phase, BorderLayout.NORTH);
+                this.feedActionPanel = new FeedActionPanel();
+                this.add(feedActionPanel, BorderLayout.CENTER);
+                repaint();
+                revalidate();
+            }
+
+            public PlanififcationPanel getPlanificationPanel() {
+                return planificationPanel;
+            }
+
+            public FeedActionPanel getFeedActionPanel() {
+                return feedActionPanel;
+            }
+
+            public class PlanififcationPanel extends JPanel{
+                Bandit banditPlanificateur;
+                JPanel actionsPlanifiePanel;
+                public PlanififcationPanel (Bandit banditPlanificateur){
+                    this.banditPlanificateur = banditPlanificateur;
+                    this.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+//                    this.actionsPlanifiePanel = new JPanel();
+//                    actionsPlanifiePanel.setLayout(new BoxLayout(actionsPlanifiePanel,BoxLayout.Y_AXIS));
+
+                    this.actualiserPlanificateur(this.banditPlanificateur);
+                    //this.add(actionsPlanifiePanel);
+
+
+                }
+                // quand le bandit qui planifi change
+                public void actualiserPlanificateur(Bandit planificateur){
+                    // soit supprime soit ajoute et revalidate
+                    this.removeAll();
+                    // !!: Copier coller de wagon panel
+                    JPanel persoPanel = new JPanel(new BorderLayout());
+                    persoPanel.setBackground(new Color(0x00000FF, true));
+
+                    JLabel persoIcone = new JLabel(Jeu.this.mapPersonnageIcone.get(planificateur));
+                    JLabel persoLabel = new JLabel(planificateur.getSurnom());
+                    //persoLabel.setPreferredSize(new Dimension(0,10));
+                    persoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                    persoLabel.setForeground(Color.BLACK);
+                    persoLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
+
+                    persoPanel.add(persoIcone, BorderLayout.CENTER);
+                    persoPanel.add(persoLabel, BorderLayout.NORTH);
+
+                    this.actionsPlanifiePanel = new JPanel();
+                    actionsPlanifiePanel.setLayout(new BoxLayout(actionsPlanifiePanel,BoxLayout.Y_AXIS));
+
+
+                    this.add(persoPanel);
+                    this.add(actionsPlanifiePanel);
+
+                    repaint();
+                    revalidate();
+                }
+                // quand le bandit liste ses planifications
+                public void actualisePlanfication(String descAction) {
+                    JLabel actionLabel = new JLabel(descAction);
+                    actionLabel.setForeground(Color.BLACK);
+                    actionLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
+                    this.actionsPlanifiePanel.add(actionLabel);
+                    // on actualise tout de suite
+                    this.actionsPlanifiePanel.revalidate();
+                    this.actionsPlanifiePanel.repaint();
+
+
+                }
+
+            }
+
+            public class FeedActionPanel extends  JPanel{
+
+                public FeedActionPanel(){
+                    this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+                }
+
+                public void ajoutFeed (String feed){
+                    JLabel feedLabel = new JLabel(feed);
+                    feedLabel.setForeground(Color.BLACK);
+                    feedLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
+                    this.add(feedLabel);
+                    // on actualise tout de suite
+                    this.revalidate();
+                    this.repaint();
+
+
+
+                }
 
             }
 
@@ -322,6 +432,7 @@ public class Jeu extends JPanel implements Observer {
              * que ça peut etre un non respet de l'architecture MVC parceque le lien c'est quand même lié à la vue
              * @param persos
              */
+            //!!! un copier coller entre marshall et bandit
             public PersoPanel(ArrayList<Personnage> persos){
                 this.persos = persos;
 
