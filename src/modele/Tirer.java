@@ -17,15 +17,13 @@ public class Tirer extends Action {
         super(tireur);
         this.direction = direction;
 
-
-
     }
 
     private String tireDirectionInterieur(Direction d, Personnage tireur){
         // utilisé pour les tirs dans les cabines
         String feed ;
         ComposanteTrain voisin = tireur.getEmplacement().getVoisin(d);
-        if (!voisin.getBanditList(tireur).isEmpty()) {
+        if (!voisin.getBanditListSauf(tireur).isEmpty()) {
 
             Bandit banditBlesse =  this.toucherBandit(voisin, tireur);
             feed = tireur.getSurnom() + " à tirer dans les cabines et a touché : " + banditBlesse;
@@ -34,15 +32,14 @@ public class Tirer extends Action {
         }
         return feed;
 
-
     }
 
     private Bandit toucherBandit (ComposanteTrain cmp, Personnage tireur){
         //doit etre utilsée en s'assurant que cmp possede des bandit sur lesquelles tirer'
         Bandit banditBlesse = cmp.getBanditAlea(tireur);
         if (!banditBlesse.getButtins().isEmpty()) {
-            Buttin buttinPerdu = banditBlesse.retirerButtin();
-            cmp.ajouterButin(buttinPerdu);
+            Butin butinPerdu = banditBlesse.retirerButtin();
+            cmp.ajouterButin(butinPerdu);
 
         }
         return banditBlesse;
@@ -101,11 +98,11 @@ public class Tirer extends Action {
                                 // et après mm principe
                                 Toit toitCourant = ((Toit) (this.executeur.getEmplacement()).getVoisin(Direction.Droite)); // on recup le toit de droite
                                 // tant ya pas de bandit sur le toit de coté et tant que on est pas encore arrivé à la locmotive
-                                while (toitCourant.getBanditList(this.executeur).isEmpty() && !(toitCourant.getCabine() instanceof Locomotive)) {
+                                while (toitCourant.getBanditListSauf(this.executeur).isEmpty() && !(toitCourant.getCabine() instanceof Locomotive)) {
                                     toitCourant = (Toit) toitCourant.getVoisin(Direction.Droite);
                                 }
 
-                                if (!toitCourant.getBanditList(this.executeur).isEmpty()) {
+                                if (!toitCourant.getBanditListSauf(this.executeur).isEmpty()) {
                                     Bandit banditBlesse = this.toucherBandit(toitCourant,this.executeur);
                                     feed = this.executeur.getSurnom() + " à tirer à droite sur le toit sur " + banditBlesse;
                                 }else{
@@ -138,11 +135,11 @@ public class Tirer extends Action {
                                 // il faut parcourir tout les wagons à droite jusqu'a trouver un avec un bandit dedans
                                 // et après mm principe
                                 Toit toitCourant = ((Toit) (this.executeur.getEmplacement()).getVoisin(Direction.Gauche)); // on recup le toit de droite
-                                while (toitCourant.getBanditList(this.executeur).isEmpty() && !(toitCourant.getCabine() instanceof DernierWagon)) {
+                                while (toitCourant.getBanditListSauf(this.executeur).isEmpty() && !(toitCourant.getCabine() instanceof DernierWagon)) {
                                     toitCourant = (Toit) toitCourant.getVoisin(Direction.Gauche);
                                 }
 
-                                if (!toitCourant.getBanditList(this.executeur).isEmpty()) {
+                                if (!toitCourant.getBanditListSauf(this.executeur).isEmpty()) {
                                     Bandit banditBlesse = this.toucherBandit(toitCourant,this.executeur);
                                     feed = this.executeur.getSurnom() + " à tirer à gauche sur le toit sur " + banditBlesse;
                                 }else{
@@ -158,7 +155,7 @@ public class Tirer extends Action {
                         if (this.executeur.getEmplacement() instanceof Toit) {
 
                             Toit toit = (Toit) (this.executeur.getEmplacement());
-                            if (!toit.getBanditList(this.executeur).isEmpty()) {
+                            if (!toit.getBanditListSauf(this.executeur).isEmpty()) {
 
                                 Bandit banditBlesse = this.toucherBandit(toit,this.executeur);
                                 feed = this.executeur.getSurnom() + " à tirer dans sa position sur le toit et a touché " + banditBlesse;
@@ -170,7 +167,7 @@ public class Tirer extends Action {
                         } else {
 
                             Toit toitDuWagon = ((Interieur) this.executeur.getEmplacement()).getToit();
-                            if (!toitDuWagon.getBanditList(this.executeur).isEmpty()) {
+                            if (!toitDuWagon.getBanditListSauf(this.executeur).isEmpty()) {
 
                                 Bandit banditBlesse = this.toucherBandit(toitDuWagon,this.executeur);
                                 feed = this.executeur.getSurnom() + " à tirer vers le toit et a touché " + banditBlesse;
@@ -189,7 +186,7 @@ public class Tirer extends Action {
 
                             Interieur cabine = ((Toit) this.executeur.getEmplacement()).getCabine();
 
-                            if (!cabine.getBanditList(this.executeur).isEmpty()) {
+                            if (!cabine.getBanditListSauf(this.executeur).isEmpty()) {
                                 Bandit banditBlesse = this.toucherBandit(cabine,this.executeur);
                                 feed = this.executeur.getSurnom() + " à tirer vers l'interieur et a touché " + banditBlesse;
                             }else {
@@ -199,7 +196,7 @@ public class Tirer extends Action {
                         } else {
 
                             Interieur cabine = ((Interieur) this.executeur.getEmplacement());
-                            if (!cabine.getBanditList(this.executeur).isEmpty()) {
+                            if (!cabine.getBanditListSauf(this.executeur).isEmpty()) {
                                 Bandit banditBlesse = this.toucherBandit(cabine,this.executeur);
                                 feed = this.executeur.getSurnom() + " à tirer vers la cabine et a touché " + banditBlesse;
 

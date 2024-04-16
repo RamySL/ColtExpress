@@ -1,9 +1,11 @@
 package modele;
 
 import java.util.ArrayList;
+/**
+ * code empreinté de conway
+ */
 
-
- public abstract class Observable {
+public abstract class Observable {
     /**
      * On a une liste [observers] d'observateurs, initialement vide, à laquelle
      * viennent s'inscrire les observateurs via la méthode [addObserver].

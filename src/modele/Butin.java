@@ -3,15 +3,14 @@ package modele;
 
 import java.util.Random;
 
-public abstract class Buttin {
+public abstract class Butin {
     protected int valeur;
-
     public int getValeur(){return this.valeur;}
 
 }
 
 
-class Bourse extends Buttin{
+class Bourse extends Butin {
 
     public Bourse (){
         Random rnd = new Random();
@@ -26,11 +25,10 @@ class Bourse extends Buttin{
 
 }
 
-class Magot extends Buttin{
+class Magot extends Butin {
     public Magot(){
         this.valeur = 1000;
     }
-
     public String toString(){
         return "Magot";
     }

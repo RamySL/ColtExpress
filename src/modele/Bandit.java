@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Bandit extends Personnage {
 
-    private ArrayList<Buttin> buttins = new ArrayList<>();
+    private ArrayList<Butin> butins = new ArrayList<>();
     private ArrayList<Action> actions = new ArrayList<>();
 
 
@@ -33,8 +33,8 @@ public class Bandit extends Personnage {
 
         // Butin perdu et rajouter à l'emplacement
         Random rnd = new Random();
-        if (!this.buttins.isEmpty()) {
-            Buttin butinPerdu = this.buttins.remove(rnd.nextInt(0, this.buttins.size()));
+        if (!this.butins.isEmpty()) {
+            Butin butinPerdu = this.butins.remove(rnd.nextInt(0, this.butins.size()));
             this.getEmplacement().ajouterButin(butinPerdu);
         }
 
@@ -51,21 +51,21 @@ public class Bandit extends Personnage {
         return "Bandit : " + this.surnom + "( " + this.emplacement + " )";
     }
 
-    public void ajouterButtin(Buttin b) {
-        this.buttins.add(b);
+    public void ajouterButtin(Butin b) {
+        this.butins.add(b);
     }
 
 
-    public Buttin retirerButtin() {
+    public Butin retirerButtin() {
         //!!!la liste des buttins doit etre verifiée c'est a dire pas vide
         Random rnd = new Random();
-        Buttin buttinPerdu = this.buttins.remove(rnd.nextInt(0, this.buttins.size()));
-        return  buttinPerdu;
+        Butin butinPerdu = this.butins.remove(rnd.nextInt(0, this.butins.size()));
+        return butinPerdu;
     }
 
     public int score() {
         int res = 0;
-        for (Buttin b : this.buttins) {
+        for (Butin b : this.butins) {
             res += b.getValeur();
         }
         return res;
@@ -82,7 +82,7 @@ public class Bandit extends Personnage {
         }
     }
 
-    public ArrayList<Buttin>getButtins(){ return this.buttins;}
+    public ArrayList<Butin>getButtins(){ return this.butins;}
     public ArrayList<Action> getActions (){return this.actions;}
 
 }

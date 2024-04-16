@@ -10,11 +10,11 @@ public class Braquer extends Action {
 
     public String executer() {
         ComposanteTrain banditPos = this.executeur.getEmplacement();
-        Buttin buttinBraque = banditPos.EnleverButinAlea();
+        Butin butinBraque = banditPos.EnleverButinAlea();
         String feed;
-        if(buttinBraque != null){
-            ((Bandit) this.executeur).ajouterButtin(buttinBraque); // executeur n'est pas un bandit
-            feed = this.executeur.getSurnom() + " Vient de braquer un passager et a récupéré : " + buttinBraque;
+        if(butinBraque != null){
+            ((Bandit) this.executeur).ajouterButtin(butinBraque); // executeur n'est pas un bandit
+            feed = this.executeur.getSurnom() + " Vient de braquer un passager et a récupéré : " + butinBraque;
         }else{
             feed = this.executeur.getSurnom() + "a rien braqué ";
         }

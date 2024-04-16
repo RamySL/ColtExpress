@@ -1,6 +1,6 @@
 package modele;
 
-public class Bijou extends Buttin {
+public class Bijou extends Butin {
     public Bijou() {
         this.valeur = 500;
     }

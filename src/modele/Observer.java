@@ -1,7 +1,8 @@
 package modele;
 
-import java.util.ArrayList;
-
+/**
+ * code empreinté de conway
+ */
 public interface Observer {
     /**
      * Un observateur doit posséder une méthode [update] déclenchant la mise à

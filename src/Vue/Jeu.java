@@ -462,14 +462,14 @@ public class Jeu extends JPanel implements Observer {
         }
 
         class ButtinPanel extends JPanel{
-            ArrayList<Buttin> buttins;
-            public ButtinPanel(ArrayList<Buttin> buttins){
+            ArrayList<Butin> butins;
+            public ButtinPanel(ArrayList<Butin> butins){
                 this.setOpaque(false);
-                this.buttins = buttins;
+                this.butins = butins;
                 //this.setPreferredSize(new Dimension(50,100));
                 this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 
-                for (Buttin b : buttins){
+                for (Butin b : butins){
 
                     JLabel buttinLabel = new JLabel( new ImageIcon("src/assets/images/" + b + ".png"));
                     buttinLabel.setForeground(Color.WHITE);

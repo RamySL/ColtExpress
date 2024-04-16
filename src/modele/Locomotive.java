@@ -1,8 +1,13 @@
 package modele;
-
+// probleme avec generer buttin qcq nous garantit qu'elle va etre utiliser qu'une seule fois ?
+/**
+ * la locomotive ( qui est tout à droite dans notre interprétation)
+ */
 public class Locomotive extends Extremite {
-
-
+    /**
+     * intialise avec un magot à l'interieur
+     * @param train
+     */
     public Locomotive(Train train) {
         super(train);
         genererButtin(1);
@@ -10,9 +15,14 @@ public class Locomotive extends Extremite {
 
     @Override
     public void genererButtin(int nbButtin) {
-        this.buttins.add(new Magot());
+        this.butins.add(new Magot());
     }
 
+    /**
+     * retourne le voisin de gauche si d pointe vers la gauche sinon retourne this
+     * @param d pointe vers la composante voisine à récuperer
+     * @return
+     */
     public ComposanteTrain getVoisin(Direction d) {
         if (d == Direction.Gauche) return this.voisin;
         else return this;

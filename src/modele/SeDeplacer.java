@@ -8,9 +8,8 @@ public class SeDeplacer extends Action {
     }
 
     public String toString(){
-       return " Deplacement en direction " + this.direction;
+        return " Deplacement en direction " + this.direction;
     }
-    // !!!! ESSAYE UN GET AVEC DIRECTION LE PLUS HAUT POSSIBLE
 
     public String executer() {
 
