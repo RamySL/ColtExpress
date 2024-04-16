@@ -1,5 +1,7 @@
 package Vue;
 
+import modele.PlaySound;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,10 +13,12 @@ public class EcranLancement extends JPanel  {
     private Fenetre fenetre;
     private Image imageFond;
 
-
-
+    private PlaySound misqueLancement;
 
     public EcranLancement(Fenetre fenetre) {
+        misqueLancement = new PlaySound("src/assets/sons/lancement.wav");
+        misqueLancement.jouer(true);
+
         this.fenetre = fenetre;
         this.setLayout(new BorderLayout());
         // Charger l'image de fond
@@ -23,6 +27,7 @@ public class EcranLancement extends JPanel  {
         // le conteneur qui va etre ajouté dans le south de EcranLacement
         JPanel southContainer = new JPanel(new BorderLayout());
         JPanel northContainer = new JPanel(new BorderLayout());
+
 
         // Icone de saclay
         ImageIcon saclayIcon = new ImageIcon("src/assets/images/saclay1.png");
@@ -62,6 +67,7 @@ public class EcranLancement extends JPanel  {
             public void keyTyped(KeyEvent e) {}
             @Override
             public void keyPressed(KeyEvent e) {
+
                 EcranLancement.this.fenetre.changerFenetre(EcranLancement.this.fenetre.getAccueilId());}
             @Override
             public void keyReleased(KeyEvent e) {}
@@ -102,4 +108,7 @@ public class EcranLancement extends JPanel  {
         g.drawImage(this.imageFond,0,-20,this.fenetre.getWidth(),this.fenetre.getHeight(),this);
     }
 
+    public PlaySound getMisqueLancement() {
+        return misqueLancement;
+    }
 }

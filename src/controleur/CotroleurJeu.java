@@ -5,6 +5,7 @@ import Vue.Bouttons.BouttonsJeu;
 import modele.*;
 import modele.Action;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -118,6 +119,7 @@ public class CotroleurJeu implements ActionListener {
                 this.joueurCourant.ajouterAction(a);
                 this.jeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
             }
+
 
             if (e.getSource() instanceof BouttonsJeu.BouttonTir){
                 a = new Tirer(this.joueurCourant, ((BouttonsJeu.BouttonTir) e.getSource()).getDirection());

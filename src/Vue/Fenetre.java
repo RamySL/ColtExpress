@@ -11,12 +11,14 @@ public class Fenetre extends JFrame {
     private Accueil accueil;
     private Jeu jeu;
 
+    private EcranFin ecranFin;
+
     //Il va contenir la liste des affichage (Acuueil, Jeu ..)
     private JPanel cards;
 
 
     // On definit les ID pour les fenetres
-    private String jeuId, lancementId, accueilId;
+    private String jeuId, lancementId, accueilId, ecranFinId;
     public Fenetre(){
 
 
@@ -27,11 +29,12 @@ public class Fenetre extends JFrame {
         this.jeuId = "jeu";
         this.lancementId = "lancement";
         this.accueilId = "accueil";
+        this.ecranFinId = "ecranFin";
 
 
         this.setTitle("ColtExpress");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(1200, 700);
+        this.setSize(1250, 700);
         this.setLocationRelativeTo(null);
 
         // Créer le conteneur pour les cartes
@@ -61,6 +64,12 @@ public class Fenetre extends JFrame {
 
     }
 
+    public void ajouterEcranFin(EcranFin ecranFin){
+        this.ecranFin = ecranFin;
+        this.cards.add(this.ecranFin , this.ecranFinId);
+
+    }
+
 
     public void changerFenetre(String nomFenetre) {
         // methode utilise par les differente fenetre pour changer de vue
@@ -70,7 +79,9 @@ public class Fenetre extends JFrame {
     public String getJeuId() {return this.jeuId;}
     public String getLancementId(){return this.lancementId;}
     public String getAccueilId(){return this.accueilId;}
+    public String getEcranFinId() { return this.ecranFinId;}
     public Accueil getAccueil (){return this.accueil;}
+
 
     public Jeu getJeuPanel (){return this.jeu;}
     public JPanel getecranLancementPanel (){return this.ecranLancement;}

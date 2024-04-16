@@ -1,8 +1,10 @@
 package controleur;
 
 import Vue.Accueil;
+import Vue.EcranFin;
 import Vue.Fenetre;
 import Vue.Jeu;
+import modele.Bandit;
 import modele.Personnage;
 import modele.Train;
 
@@ -97,8 +99,22 @@ public class ControleuAccueil implements ActionListener {
         // c'est une méthode qui va etre appelé quand le travail en fond (doInBackGround) sera terminé
         @Override
         protected void done() {
-            // il faut reinitialiser le modele quand une partie se termine pour relancer une nouvelle
-            this.controleur.fenetre.changerFenetre(this.controleur.fenetre.getAccueilId());
+            // on determine le gagnant
+            ArrayList<Bandit> bandits = this.controleur.train.getBandits();
+
+            Bandit banditGagnant = bandits.get(0);
+            for (Bandit b : bandits){
+                if (b.score() > banditGagnant.score()){
+                    banditGagnant = b;
+                }
+            }
+
+            EcranFin ecranFin = new EcranFin(this.controleur.fenetre, banditGagnant,this.controleur.fenetre.getJeuPanel().getMapPersonnageIcone());
+            new ControleurFinJeu(ecranFin);
+            this.controleur.fenetre.ajouterEcranFin(ecranFin);
+            this.controleur.fenetre.changerFenetre(this.controleur.fenetre.getEcranFinId());
+
+
         }
     }
 

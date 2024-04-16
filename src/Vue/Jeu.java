@@ -17,6 +17,7 @@ import java.util.Map;
 public class Jeu extends JPanel implements Observer {
     private Fenetre fenetre;
     Train train;
+    Image imageFond;
 
     CommandePanel cmdPanel;
     JPanel panelCentrale;
@@ -30,6 +31,8 @@ public class Jeu extends JPanel implements Observer {
         this.fenetre = fenetre;
         this.mapPersonnageIcone = mapPersonnageIcone;
 
+        this.imageFond = new ImageIcon("src/assets/images/jeuBack.jpg").getImage();
+
         for (Bandit b : train.getBandits()){
             b.addObserver(this);
         }
@@ -39,33 +42,39 @@ public class Jeu extends JPanel implements Observer {
         cmdPanel = new CommandePanel();
         cmdPanel.setBorder(new LineBorder(Color.WHITE,3));
         JScrollPane scrollCmdPanel = new JScrollPane(cmdPanel);
+        scrollCmdPanel.getViewport().setOpaque(false);
+        scrollCmdPanel.setOpaque(false);
         scrollCmdPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollCmdPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         scrollCmdPanel.setBorder(null);
         scrollCmdPanel.getHorizontalScrollBar().setPreferredSize(new Dimension(0,10));
-        scrollCmdPanel.getHorizontalScrollBar().setBackground(new Color(0x00000FF, true));
+        scrollCmdPanel.getHorizontalScrollBar().setOpaque(false);
 
         scrollCmdPanel.getViewport().setViewPosition(new Point(0,5));
         this.add(scrollCmdPanel, BorderLayout.NORTH);
 
 
         this.panelCentrale = new JPanel(new BorderLayout()); // pour pouvoir se placer à l'interieur d'un Jpanel c'est mieu
-        panelCentrale.setBackground(Color.BLACK);
         panelCentrale.setBorder(new LineBorder(Color.WHITE,3));
+        panelCentrale.setOpaque(false);
 
         JPanel northPanelTrain = new JPanel(); // pour centrer le dessin du train
-        northPanelTrain.setBackground(Color.BLACK);
+        northPanelTrain.setOpaque(false);
         northPanelTrain.setPreferredSize(new Dimension(0,30));
         panelCentrale.add(northPanelTrain, BorderLayout.NORTH);
         // si le nombre de wagons ne peut etre affiché en entier on scroll horizontalement
 
         this.trainPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-        //this.trainPanel.setBorder(new LineBorder(Color.BLUE,2));
-        this.trainPanel.setBackground(Color.BLACK);
         this.dessineTrain(); // on dessine les wagon dans le panel du train
+        this.trainPanel.setOpaque(false);
         JScrollPane trainScrollPanel = new JScrollPane(this.trainPanel);
+
         trainScrollPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        trainScrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        trainScrollPanel.setBorder(null);
+        trainScrollPanel.setOpaque(false);
+        trainScrollPanel.getViewport().setOpaque(false);
         trainScrollPanel.setBorder(null);
         panelCentrale.add(trainScrollPanel, BorderLayout.CENTER);
 
@@ -82,10 +91,21 @@ public class Jeu extends JPanel implements Observer {
         for (ComposanteTrain c : this.train){
             this.trainPanel.add(new WagonPanel((Interieur) c));
         }
+
         this.cmdPanel.setPanneauBandit();
         repaint();
         revalidate();
 
+    }
+
+    public Map<Personnage, ImageIcon> getMapPersonnageIcone(){
+        return this.mapPersonnageIcone;
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponents(g);
+        g.drawImage(this.imageFond,0,3,this.getWidth(),this.getHeight(),this);
     }
 
 
@@ -109,7 +129,7 @@ public class Jeu extends JPanel implements Observer {
 
         public CommandePanel(){
 
-            this.setBackground(Color.BLACK);
+            this.setOpaque(false);
             //this.setBorder(new LineBorder(Color.GREEN,2));
 
             this.setLayout(new FlowLayout(FlowLayout.LEFT,8,0));
@@ -217,10 +237,12 @@ public class Jeu extends JPanel implements Observer {
             PlanififcationPanel planificationPanel;
             FeedActionPanel feedActionPanel;
             public PhaseFeedPanel (){
+                this.setBackground(new Color(0xFFBB7B04, true));
                 this.setLayout(new BorderLayout());
 
                 this.phase = new JLabel("Phase de planification");
-                this.setBackground(Color.WHITE);
+                this.phase.setForeground(Color.WHITE);
+                phase.setFont(new Font("MV Boli", Font.BOLD, 13));
                 this.setPreferredSize(new Dimension(500,250));
                 this.phase.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -236,7 +258,11 @@ public class Jeu extends JPanel implements Observer {
                 this.removeAll();
                 this.add(this.phase, BorderLayout.NORTH);
                 this.planificationPanel = new PlanififcationPanel(planificateur);
+                planificationPanel.setOpaque(false);
                 JScrollPane planScroll = new JScrollPane(planificationPanel);
+                planScroll.setOpaque(false);
+                planScroll.getViewport().setOpaque(false);
+                planScroll.setBorder(null);
                 planScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
                 //feedScroll.setBorder();
                 this.add(planScroll, BorderLayout.CENTER);
@@ -248,7 +274,11 @@ public class Jeu extends JPanel implements Observer {
                 this.removeAll();
                 this.add(this.phase, BorderLayout.NORTH);
                 this.feedActionPanel = new FeedActionPanel();
+                feedActionPanel.setOpaque(false);
                 JScrollPane feedScroll = new JScrollPane(feedActionPanel);
+                feedScroll.setOpaque(false);
+                feedScroll.getViewport().setOpaque(false);
+                feedScroll.setBorder(null);
                 feedScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
                 //feedScroll.setBorder();
                 this.add(feedScroll, BorderLayout.CENTER);
@@ -268,12 +298,9 @@ public class Jeu extends JPanel implements Observer {
                 Bandit banditPlanificateur;
                 JPanel actionsPlanifiePanel;
                 public PlanififcationPanel (Bandit banditPlanificateur){
+                    //this.setBackground(Color.BLACK);
                     this.banditPlanificateur = banditPlanificateur;
                     this.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-//                    this.actionsPlanifiePanel = new JPanel();
-//                    actionsPlanifiePanel.setLayout(new BoxLayout(actionsPlanifiePanel,BoxLayout.Y_AXIS));
-
                     this.actualiserPlanificateur(this.banditPlanificateur);
                     //this.add(actionsPlanifiePanel);
 
@@ -285,19 +312,20 @@ public class Jeu extends JPanel implements Observer {
                     this.removeAll();
                     // !!: Copier coller de wagon panel
                     JPanel persoPanel = new JPanel(new BorderLayout());
-                    persoPanel.setBackground(new Color(0x00000FF, true));
+                    persoPanel.setOpaque(false);
 
                     JLabel persoIcone = new JLabel(Jeu.this.mapPersonnageIcone.get(planificateur));
                     JLabel persoLabel = new JLabel(planificateur.getSurnom());
                     //persoLabel.setPreferredSize(new Dimension(0,10));
                     persoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-                    persoLabel.setForeground(Color.BLACK);
+                    persoLabel.setForeground(Color.WHITE);
                     persoLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
 
                     persoPanel.add(persoIcone, BorderLayout.CENTER);
                     persoPanel.add(persoLabel, BorderLayout.NORTH);
 
                     this.actionsPlanifiePanel = new JPanel();
+                    this.actionsPlanifiePanel.setOpaque(false);
                     actionsPlanifiePanel.setLayout(new BoxLayout(actionsPlanifiePanel,BoxLayout.Y_AXIS));
 
 
@@ -309,13 +337,15 @@ public class Jeu extends JPanel implements Observer {
                 }
                 // quand le bandit liste ses planifications
                 public void actualisePlanfication(String descAction) {
+
                     JLabel actionLabel = new JLabel(descAction);
-                    actionLabel.setForeground(Color.BLACK);
+                    actionLabel.setForeground(Color.WHITE);
                     actionLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
                     this.actionsPlanifiePanel.add(actionLabel);
                     // on actualise tout de suite
-                    this.actionsPlanifiePanel.revalidate();
                     this.actionsPlanifiePanel.repaint();
+                    this.actionsPlanifiePanel.revalidate();
+
 
 
                 }
@@ -325,13 +355,14 @@ public class Jeu extends JPanel implements Observer {
             public class FeedActionPanel extends  JPanel{
 
                 public FeedActionPanel(){
+                    this.setOpaque(false);
                     this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
                 }
 
                 public void ajoutFeed (String feed){
 
                     JLabel feedLabel = new JLabel(feed);
-                    feedLabel.setForeground(Color.BLACK);
+                    feedLabel.setForeground(Color.WHITE);
                     feedLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
                     this.add(feedLabel);
                     // on actualise tout de suite
@@ -350,7 +381,7 @@ public class Jeu extends JPanel implements Observer {
 
             public PanneauBandits(){
                 this.setLayout(new GridLayout(2,2));
-
+                this.setOpaque(false);
                 ArrayList<Bandit> banitListe = Jeu.this.train.getBandits();
                 for (Bandit b : banitListe){
                     this.add(panneauBandit(b));
@@ -360,11 +391,20 @@ public class Jeu extends JPanel implements Observer {
             public JPanel panneauBandit(Bandit b){
 
                 JPanel panel = new JPanel();
+                panel.setBackground(new Color(0xA6000000, true));
                 panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
                 JLabel iconeBandit = new JLabel(Jeu.this.mapPersonnageIcone.get(b));
-                JLabel surnomLabel = new JLabel( " Surnom : " + b.getSurnom());
+                JLabel surnomLabel = new JLabel( "Surnom : " + b.getSurnom());
                 JLabel ballesLabel = new JLabel("Balles restantes : " + b.getNbBalles());
                 JLabel scoreLabel = new JLabel("Score : " + b.score());
+
+                surnomLabel.setForeground(Color.WHITE);
+                ballesLabel.setForeground(Color.WHITE);
+                scoreLabel.setForeground(Color.WHITE);
+
+                surnomLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
+                ballesLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
+                scoreLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
 
                 panel.add(iconeBandit);
                 panel.add(surnomLabel);
@@ -380,29 +420,30 @@ public class Jeu extends JPanel implements Observer {
 
 
     /**
-     * Va représenter graphiquement un wagon et son toit (wagon != locomotive)
+     * Va représenter graphiquement un wagon et son toit
      */
     class WagonPanel extends JPanel{
         Interieur cabine; // et après cabine nous donne accès à son toit
         public WagonPanel(Interieur cabine){
-
+            this.setOpaque(false);
             this.cabine = cabine;
 
             this.setLayout(new BorderLayout());
 
             JPanel cabinePanel = new JPanel(new BorderLayout());
-            cabinePanel.setBackground(Color.BLACK);
-            cabinePanel.setBorder(new LineBorder(Color.WHITE));
+            cabinePanel.setOpaque(false);
+            cabinePanel.setBorder(new LineBorder(Color.WHITE,3));
             JPanel solCabine = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            solCabine.setBackground(Color.BLACK);
+            solCabine.setOpaque(false);
 
             JPanel toitPanel = new toitPanel(this.cabine.getToit());
+            toitPanel.setOpaque(false);
 
 
             ButtinPanel buttinsPanel = new ButtinPanel(this.cabine.getButtins());
             PersoPanel persoPanel = new PersoPanel(this.cabine.getPersoList());
-            buttinsPanel.setBackground(Color.BLACK);
-            persoPanel.setBackground(Color.BLACK);
+            buttinsPanel.setOpaque(false);
+            persoPanel.setOpaque(false);
 
 //            JScrollPane buttinScroll = new JScrollPane(buttinsPanel);
 //            buttinScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -423,6 +464,7 @@ public class Jeu extends JPanel implements Observer {
         class ButtinPanel extends JPanel{
             ArrayList<Buttin> buttins;
             public ButtinPanel(ArrayList<Buttin> buttins){
+                this.setOpaque(false);
                 this.buttins = buttins;
                 //this.setPreferredSize(new Dimension(50,100));
                 this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
@@ -438,6 +480,13 @@ public class Jeu extends JPanel implements Observer {
 
         }
 
+        class LocomotivePanel extends WagonPanel{
+            public LocomotivePanel(Interieur cabine){
+                super(cabine);
+
+            }
+        }
+
         class PersoPanel extends JPanel{
             ArrayList<Personnage> persos;
 
@@ -449,13 +498,13 @@ public class Jeu extends JPanel implements Observer {
             //!!! un copier coller entre marshall et bandit
             public PersoPanel(ArrayList<Personnage> persos){
                 this.persos = persos;
-
+                this.setOpaque(false);
                 this.setLayout(new FlowLayout(FlowLayout.LEFT,5,0)); // à cause du 0 dans verticale le marshall est en haut
 
                 for (Personnage p : persos){
+                    JPanel persoPanel = new JPanel(new BorderLayout());
+                    persoPanel.setOpaque(false);
                     if (!(p instanceof Marshall)) {
-                        JPanel persoPanel = new JPanel(new BorderLayout());
-                        persoPanel.setBackground(new Color(0x00000FF, true));
 
                         JLabel persoIcone = new JLabel(Jeu.this.mapPersonnageIcone.get(p));
                         JLabel persoLabel = new JLabel(p.getSurnom());
@@ -469,8 +518,6 @@ public class Jeu extends JPanel implements Observer {
 
                         this.add(persoPanel);
                     }else {
-                        JPanel persoPanel = new JPanel(new BorderLayout());
-                        persoPanel.setBackground(new Color(0x00000FF, true));
 
                         JLabel persoIcone = new JLabel(new ImageIcon("src/assets/images/sherif.png"));
                         JLabel persoLabel = new JLabel(p.getSurnom());
@@ -485,7 +532,7 @@ public class Jeu extends JPanel implements Observer {
                         this.add(persoPanel);
                     }
                 }
-                this.setBackground(Color.BLACK);
+
 
 
             }
@@ -496,25 +543,26 @@ public class Jeu extends JPanel implements Observer {
             Toit toit;
 
             public toitPanel(Toit toit){
-
-                this.setBackground(Color.BLACK);
+                this.setOpaque(false);
                 this.toit = toit;
                 this.setLayout(new BorderLayout());
 
-
                 JPanel conteneur = new JPanel(); // on a besoin d'un panel parceque si on veut mettre plusieur elemnt dans South il s'ecrase
-                conteneur.setBackground(Color.black);
-
-
+                conteneur.setOpaque(false);
 
                 ButtinPanel buttinsPanel = new ButtinPanel(this.toit.getButtins());
+                buttinsPanel.setOpaque(false);
                 PersoPanel persoPanel = new PersoPanel(this.toit.getPersoList());
+                persoPanel.setOpaque(false);
                 this.setPreferredSize(new Dimension(0,90));
                 //this.setBorder(new LineBorder(Color.RED,5));
                 conteneur.add(buttinsPanel);
                 conteneur.add(persoPanel);
                 // Au cas ou on tombe dans une situation ou le nombre de badit et trop grand pour etre affiché on fait une barre de scroll
                 JScrollPane scrollConteneur = new JScrollPane(conteneur);
+                scrollConteneur.setOpaque(false);
+                scrollConteneur.getViewport().setOpaque(false);
+                scrollConteneur.setBorder(null);
                 // on veut qu'une barre horizontale
                 scrollConteneur.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
                 // La barre s'affiche qua quand ça déborde
@@ -524,30 +572,9 @@ public class Jeu extends JPanel implements Observer {
                 scrollConteneur.setBorder(null);
 
                 scrollConteneur.getViewport().setViewPosition(new Point(0,5));
-                scrollConteneur.getHorizontalScrollBar().setBackground(Color.BLACK);
+                scrollConteneur.getHorizontalScrollBar().setOpaque(false);
 
                 this.add(scrollConteneur, BorderLayout.SOUTH);
-
-
-//            if (! (WagonPanel.this.cabine instanceof Locomotive) ){
-//
-//                this.setPreferredSize(new Dimension(0,70));
-//                //this.setBorder(new LineBorder(Color.RED,5));
-//                conteneur.add(buttinsPanel);
-//                conteneur.add(persoPanel);
-//            }else {
-//
-//                JPanel chemine = new JPanel();
-//                chemine.setPreferredSize(new Dimension(30,70));
-//                chemine.setBorder(new LineBorder(Color.BLACK, 1));
-//
-//                conteneur.add(buttinsPanel);
-//                conteneur.add(persoPanel);
-//                conteneur.add(chemine);
-//
-//            }
-
-
 
 
             }
