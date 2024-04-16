@@ -37,9 +37,16 @@ public class Jeu extends JPanel implements Observer {
 
         this.setLayout(new BorderLayout());
         cmdPanel = new CommandePanel();
-
         cmdPanel.setBorder(new LineBorder(Color.WHITE,3));
-        this.add(cmdPanel, BorderLayout.NORTH);
+        JScrollPane scrollCmdPanel = new JScrollPane(cmdPanel);
+        scrollCmdPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollCmdPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        scrollCmdPanel.setBorder(null);
+        scrollCmdPanel.getHorizontalScrollBar().setPreferredSize(new Dimension(0,10));
+        scrollCmdPanel.getHorizontalScrollBar().setBackground(new Color(0x00000FF, true));
+
+        scrollCmdPanel.getViewport().setViewPosition(new Point(0,5));
+        this.add(scrollCmdPanel, BorderLayout.NORTH);
 
 
         this.panelCentrale = new JPanel(new BorderLayout()); // pour pouvoir se placer à l'interieur d'un Jpanel c'est mieu
@@ -105,7 +112,7 @@ public class Jeu extends JPanel implements Observer {
             this.setBackground(Color.BLACK);
             //this.setBorder(new LineBorder(Color.GREEN,2));
 
-            this.setLayout(new FlowLayout(FlowLayout.LEFT,20,0));
+            this.setLayout(new FlowLayout(FlowLayout.LEFT,8,0));
             DeplacementPanel  d = new DeplacementPanel();
             TirPanel t = new TirPanel();
             this.panneauBandits = new PanneauBandits();
@@ -214,7 +221,7 @@ public class Jeu extends JPanel implements Observer {
 
                 this.phase = new JLabel("Phase de planification");
                 this.setBackground(Color.WHITE);
-                this.setPreferredSize(new Dimension(400,200));
+                this.setPreferredSize(new Dimension(500,250));
                 this.phase.setHorizontalAlignment(SwingConstants.CENTER);
 
 
@@ -229,7 +236,10 @@ public class Jeu extends JPanel implements Observer {
                 this.removeAll();
                 this.add(this.phase, BorderLayout.NORTH);
                 this.planificationPanel = new PlanififcationPanel(planificateur);
-                this.add(planificationPanel, BorderLayout.CENTER);
+                JScrollPane planScroll = new JScrollPane(planificationPanel);
+                planScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+                //feedScroll.setBorder();
+                this.add(planScroll, BorderLayout.CENTER);
                 repaint();
                 revalidate();
             }
@@ -238,7 +248,10 @@ public class Jeu extends JPanel implements Observer {
                 this.removeAll();
                 this.add(this.phase, BorderLayout.NORTH);
                 this.feedActionPanel = new FeedActionPanel();
-                this.add(feedActionPanel, BorderLayout.CENTER);
+                JScrollPane feedScroll = new JScrollPane(feedActionPanel);
+                feedScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+                //feedScroll.setBorder();
+                this.add(feedScroll, BorderLayout.CENTER);
                 repaint();
                 revalidate();
             }
@@ -316,6 +329,7 @@ public class Jeu extends JPanel implements Observer {
                 }
 
                 public void ajoutFeed (String feed){
+
                     JLabel feedLabel = new JLabel(feed);
                     feedLabel.setForeground(Color.BLACK);
                     feedLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
@@ -335,7 +349,7 @@ public class Jeu extends JPanel implements Observer {
         class PanneauBandits extends  JPanel{
 
             public PanneauBandits(){
-                this.setLayout(new FlowLayout(FlowLayout.LEFT));
+                this.setLayout(new GridLayout(2,2));
 
                 ArrayList<Bandit> banitListe = Jeu.this.train.getBandits();
                 for (Bandit b : banitListe){
@@ -356,7 +370,7 @@ public class Jeu extends JPanel implements Observer {
                 panel.add(surnomLabel);
                 panel.add(ballesLabel);
                 panel.add(scoreLabel);
-                panel.setBorder(new LineBorder(Color.GREEN, 2));
+                panel.setBorder(new LineBorder(Color.BLACK, 1));
 
                 return panel;
             }
