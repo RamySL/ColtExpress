@@ -1,100 +1,157 @@
 package modele;
-
+//!! tout est bon
 /**
- * deplacement vers droite,gauche,haut ou bas dans le train
+ * Permet le deplacement des personnages dans le train dans les 4 directions
+ * pour réaliser ça elle s'appuie sur ses 4 classes internes qui chacunes d'entre eux gere un deplacement dans une des
+ * 4 directions
  */
 public class SeDeplacer extends Action {
     Direction direction;
-
-    /**
-     *
-     * @param src celui qui va faire le déplacement
-     * @param direction direction du déplacement
-     */
-    public SeDeplacer(Personnage src, Direction direction) {
-        super(src);
+    public SeDeplacer(Personnage executeur, Direction direction) {
+        super(executeur);
         this.direction = direction;
+
+
     }
 
     /**
-     *
+     * Déplace le personnage vers laquelle elle pointe vers la direction si c'est possible
      * @return feedback sur le déplacement
      */
     public String executer() {
-
-        ComposanteTrain src = this.executeur.getEmplacement();
-        String feed = "";
-
-        switch (this.direction) {
-            case Droite:
-                // on regarde que si on est ni dans la locmotive ni sur son toit
-                if (src instanceof Locomotive ||
-                        (src instanceof Toit) &&
-                                ((Toit) src).getCabine() instanceof Locomotive){
-                    if (!(src instanceof Toit))
-                        feed = this.executeur.getSurnom() + " Vous êtes dans la locomotive, pas de déplacement à droite";
-                    else
-                        feed = this.executeur.getSurnom() + " Vous êtes sur le toit de la locomotive, pas de déplacement à droite";
-
-
-                } else {
-                    // si on etait dans les cabines
-                    if (src instanceof Interieur) {
-                        this.executeur.changerEmplacement(src.getVoisin(Direction.Droite));
-                        feed = this.executeur.getSurnom() + " s'est déplacé à droite";
-                    } else {
-                        // si on etait sur le toit on recuperere d'abbord la cabine à droite puis son toit
-                        this.executeur.changerEmplacement(src.getVoisin(Direction.Droite));
-                        feed = this.executeur.getSurnom() + " s'est déplacé à droite sur le toit";
-                    }
-                }
-                break;
-
-            case Gauche:
-                if (src instanceof DernierWagon ||
-                        (src instanceof Toit) &&
-                                ((Toit) src).getCabine() instanceof DernierWagon) {
-
-                    if (!(src instanceof Toit))
-                        feed = this.executeur.getSurnom() + " Vous êtes dans le dernier wagon, pas de déplacement à gauche";
-                    else
-                        feed = this.executeur.getSurnom() + " Vous êtes sur le toit du dernier wagon, pas de déplacement à gauche";
-                } else {
-                    if (src instanceof Toit) {
-                        this.executeur.changerEmplacement(src.getVoisin(Direction.Gauche));
-                        feed = this.executeur.getSurnom() + " s'est déplacé à gauche sur le toit";
-                    } else {
-                        this.executeur.changerEmplacement(src.getVoisin(Direction.Gauche));
-                        feed = this.executeur.getSurnom() + " s'est déplacé à gauche dans les wagons";
-                    }
-
-                }
-                break;
-
-
-            case Haut:
-                if (src instanceof Interieur) {
-                    this.executeur.changerEmplacement( ((Interieur) src).getToit() );
-                    feed = this.executeur.getSurnom() + " est monté sur le toit";
-                } else {
-                    feed = this.executeur.getSurnom() + " Vous êtes deja sur le toit";
-                }
-                break;
-
-            case Bas:
-                if (src instanceof Toit) {
-                    this.executeur.changerEmplacement(((Toit) src).getCabine());
-                    feed = this.executeur.getSurnom() + " est descendu à l'interieur du wagon";
-                } else {
-                    feed = this.executeur.getSurnom() + " vous ne pouvez pas descendre vous etes deja à l'interieur";
-                }
-                break;
-        }
+        String feed = switch (this.direction) {
+            case Droite -> new SeDeplacerADroite().executer();
+            case Gauche -> new SeDeplacerAGauche().executer();
+            case Haut -> new SeDeplacerHaut().executer();
+            case Bas -> new SeDeplacerBas().executer();
+        };
         return feed;
     }
-
     public String toString(){
         return " Deplacement en direction " + this.direction;
+    }
+
+    private class SeDeplacerADroite {
+        ComposanteTrain ancienEmplacement;
+        public SeDeplacerADroite(){
+            this.ancienEmplacement = executeur.getEmplacement();
+        }
+
+        /**
+         * traite tous les cas possible pour une demande de déplacement à droite du personnage
+         * Si le personage est dans la locomotive ou sur son toit elle ne le déplace pas et renvoi le feedback approprié
+         * sinon recupere le voisin droit de l'ancien emplacement et l'affecte au personnage
+         * @return feedback
+         */
+        public String executer(){
+
+            String feed;
+            if (ancienEmplacement instanceof Locomotive ||
+                    (ancienEmplacement instanceof Toit) &&
+                            ((Toit) ancienEmplacement).getCabine() instanceof Locomotive){
+                if (!(ancienEmplacement instanceof Toit))
+                    feed = executeur.getSurnom() + " Vous êtes dans la locomotive, pas de déplacement à droite";
+                else
+                    feed = executeur.getSurnom() + " Vous êtes sur le toit de la locomotive, pas de déplacement à droite";
+
+
+            } else {
+
+                if (ancienEmplacement instanceof Interieur) {
+                    executeur.changerEmplacement(ancienEmplacement.getVoisin(Direction.Droite));
+                    feed = executeur.getSurnom() + " s'est déplacé à droite dans les cabines";
+                } else {
+
+                    executeur.changerEmplacement(ancienEmplacement.getVoisin(Direction.Droite));
+                    feed = executeur.getSurnom() + " s'est déplacé à droite sur le toit";
+                }
+            }
+            return feed;
+        }
+
+    }
+    private class SeDeplacerAGauche {
+        ComposanteTrain ancienEmplacement;
+        public SeDeplacerAGauche(){
+            this.ancienEmplacement = executeur.getEmplacement();
+        }
+
+        /**
+         * traite tous les cas possible pour une demande de déplacement à gauche du personnage
+         * Si le personage est dans le dernier wagon ou sur son toit elle ne le déplace pas et renvoi le feedback approprié
+         * sinon recupere le voisin gauche de l'ancien emplacement et l'affecte au personnage
+         * @return feedback
+         */
+        public String executer(){
+            String feed;
+            if (ancienEmplacement instanceof DernierWagon ||
+                    (ancienEmplacement instanceof Toit) &&
+                            ((Toit) ancienEmplacement).getCabine() instanceof DernierWagon) {
+
+                if (!(ancienEmplacement instanceof Toit))
+                    feed = executeur.getSurnom() + " Vous êtes dans le dernier wagon, pas de déplacement à gauche";
+                else
+                    feed = executeur.getSurnom() + " Vous êtes sur le toit du dernier wagon, pas de déplacement à gauche";
+            } else {
+                if (ancienEmplacement instanceof Toit) {
+                    executeur.changerEmplacement(ancienEmplacement.getVoisin(Direction.Gauche));
+                    feed = executeur.getSurnom() + " s'est déplacé à gauche sur le toit";
+                } else {
+                    executeur.changerEmplacement(ancienEmplacement.getVoisin(Direction.Gauche));
+                    feed = executeur.getSurnom() + " s'est déplacé à gauche dans les cabines";
+                }
+
+            }
+            return feed;
+        }
+
+    }
+    private class SeDeplacerHaut{
+        ComposanteTrain ancienEmplacement;
+        public SeDeplacerHaut(){
+            this.ancienEmplacement = executeur.getEmplacement();
+        }
+
+        /**
+         * traite tous les cas possible pour une demande de déplacement vers le haut du personnage
+         * Si le personage est sur le toit elle ne le déplace pas et renvoi le feedback approprié
+         * sinon recupere le toit de l'emplacement et l'affecte au personnage
+         * @return feedback
+         */
+        public String executer(){
+            String feed;
+            if (ancienEmplacement instanceof Interieur) {
+                executeur.changerEmplacement( ((Interieur) ancienEmplacement).getToit() );
+                feed = executeur.getSurnom() + " est monté sur le toit";
+            } else {
+                feed = executeur.getSurnom() + " Vous êtes deja sur le toit";
+            }
+            return feed;
+        }
+    }
+    private class SeDeplacerBas {
+        ComposanteTrain ancienEmplacement;
+        public SeDeplacerBas(){
+            this.ancienEmplacement = executeur.getEmplacement();
+        }
+
+        /**
+         * traite tous les cas possible pour une demande de déplacement vers le bas du personnage
+         * Si le personage est dans les cabines elle ne le déplace pas et renvoi le feedback approprié
+         * sinon recupere la cabine associée au toit  l'affecte au personnage
+         * @return feedback
+         */
+        public String executer(){
+            String feed;
+            if (ancienEmplacement instanceof Toit) {
+                executeur.changerEmplacement(((Toit) ancienEmplacement).getCabine());
+                feed = executeur.getSurnom() + " est descendu à l'interieur de la cabine";
+            } else {
+                feed = executeur.getSurnom() + " vous êtes deja à l'interieur";
+            }
+
+            return feed;
+        }
     }
 
 
