@@ -16,8 +16,6 @@ public class EcranLancement extends JPanel  {
     private PlaySound misqueLancement;
 
     public EcranLancement(Fenetre fenetre) {
-        misqueLancement = new PlaySound("src/assets/sons/lancement.wav");
-        misqueLancement.jouer(true);
 
         this.fenetre = fenetre;
         this.setLayout(new BorderLayout());

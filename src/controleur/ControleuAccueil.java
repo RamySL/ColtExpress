@@ -6,6 +6,7 @@ import Vue.Fenetre;
 import Vue.Jeu;
 import modele.Bandit;
 import modele.Personnage;
+import modele.PlaySound;
 import modele.Train;
 
 import javax.swing.*;
@@ -26,8 +27,12 @@ public class ControleuAccueil implements ActionListener {
     // accumulation de classes internes
     private ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJouers = new ArrayList<>(); // contiendra le surnom et icone
 
+    PlaySound misqueLancement;
 
     public ControleuAccueil(Fenetre fenetre){
+        misqueLancement = new PlaySound("src/assets/sons/lancement.wav");
+        misqueLancement.jouer(true);
+
         this.fenetre = fenetre;
         this.accueil = this.fenetre.getAccueil();
         this.accueil.liaisonAvecControleur(this);
@@ -44,7 +49,7 @@ public class ControleuAccueil implements ActionListener {
         if (e.getSource() == this.accueil.getOptionsJeu().lancerJeu){
             // On recupere ce qui a été saisie avec getTexte et on intialise le jeu
             // !! RECUERE LE NOMBRE DE BALLES
-
+            this.misqueLancement.arreter();
             Map<Personnage, ImageIcon> mapPersonnageIcone = new HashMap<>();
             int nbBallesBandits = this.accueil.getOptionsJeu().getNbBalles();
             Double nervositeMarshall = this.accueil.getOptionsJeu().getNervosite();
@@ -96,7 +101,7 @@ public class ControleuAccueil implements ActionListener {
             return null;
         }
 
-        // c'est une méthode qui va etre appelé quand le travail en fond (doInBackGround) sera terminé
+        // c'est une méthode qui va etre appelé quand le travail en fond (doInBackGround) sera terminé cad quand la boucle de jeu termine
         @Override
         protected void done() {
             // on determine le gagnant
@@ -108,11 +113,12 @@ public class ControleuAccueil implements ActionListener {
                     banditGagnant = b;
                 }
             }
-
+            this.controleur.getMapSonsJeu().get("jeuBack").arreter();
             EcranFin ecranFin = new EcranFin(this.controleur.fenetre, banditGagnant,this.controleur.fenetre.getJeuPanel().getMapPersonnageIcone());
             new ControleurFinJeu(ecranFin);
             this.controleur.fenetre.ajouterEcranFin(ecranFin);
             this.controleur.fenetre.changerFenetre(this.controleur.fenetre.getEcranFinId());
+
 
 
         }

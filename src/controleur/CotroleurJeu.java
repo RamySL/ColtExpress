@@ -8,6 +8,8 @@ import modele.Action;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CotroleurJeu implements ActionListener {
     Train train;
@@ -18,9 +20,16 @@ public class CotroleurJeu implements ActionListener {
     boolean actionPhase=false,planPhase=true;
     Bandit joueurCourant;
 
+    Map<String, PlaySound> mapSonsJeu = new HashMap<>();
+
     int tourne; // pour determiner que le boutton action à été appuer et qu'il faut passer au prochain ensemble d'action à executée
 
     public CotroleurJeu(Train train, Fenetre fenetre, int n){
+
+        mapSonsJeu.put("tir", new PlaySound("src/assets/sons/gun-shot.wav"));
+        mapSonsJeu.put("braquage", new PlaySound("src/assets/sons/braquage.wav"));
+        mapSonsJeu.put("jeuBack", new PlaySound("src/assets/sons/jeuBack.wav"));
+
         this.train = train;
         this.fenetre = fenetre;
         this.jeu = this.fenetre.getJeuPanel();
@@ -32,7 +41,7 @@ public class CotroleurJeu implements ActionListener {
     }
     // boucle du jeu !!! PROBELEME AVEC LA GESTIONS DES THREADS
     public void lancerJeu(int nbManches) {
-
+        this.mapSonsJeu.get("jeuBack").jouer(true);
         int nbBandit = this.train.getBandits().size();
         // Exemple d'utilisation de SwingUtilities.invokeLater() pour mettre à jour l'interface utilisateur
 
@@ -41,8 +50,8 @@ public class CotroleurJeu implements ActionListener {
         int manche = 0;
         while (manche < nbManches) {
             //planification
-             this.jeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase de palinification pour la manche " + (manche+1) + "/" + nbManches);
-             this.jeu.getCmdPanel().getPhaseFeedPanel().setPlanfication(this.train.getBandits().get(0)); //init
+            this.jeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase de palinification pour la manche " + (manche+1) + "/" + nbManches);
+            this.jeu.getCmdPanel().getPhaseFeedPanel().setPlanfication(this.train.getBandits().get(0)); //init
             // on utilise pas une boucle for each pour eviter la cocurrentmodifError avec la methode fuire de bandit
             for (int i = 0; i <nbBandit; i++){
 
@@ -80,6 +89,7 @@ public class CotroleurJeu implements ActionListener {
             }
             manche++;
         }
+
     }
 
 
@@ -87,7 +97,8 @@ public class CotroleurJeu implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if( (e.getSource() instanceof BouttonsJeu.BouttonAction) && actionPhase) {
-
+            this.mapSonsJeu.get("tir").arreter(); // pour que les sons se lance mm si on spam action
+            this.mapSonsJeu.get("braquage").arreter();
             String feed =  this.train.getMarshall().executer(); // l'actions est executer et renvoi un feedback
             this.jeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
             // le principe c'est qu'on veut executer la premiere action du premier bandit ensuite passer
@@ -95,14 +106,26 @@ public class CotroleurJeu implements ActionListener {
             // au premeir et ainsi de suite, il ya une periodicité en le nombre de bandit, qui naturellement traduite par
             // l'opération de modulo
             this.joueurCourant = this.train.getBandits().get(this.tourne % this.nJoueurs);
+            Action actionAExecuter = this.joueurCourant.getActions().peek();
+
+            boolean assezDeBalles = this.joueurCourant.getNbBalles() > 0;
+            boolean braquageReussie = !this.joueurCourant.getEmplacement().getButtins().isEmpty();
+
             feed = this.joueurCourant.executer();
             this.jeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
+
+            if (actionAExecuter instanceof Tirer && assezDeBalles){
+                this.mapSonsJeu.get("tir").jouer(false);
+            }else {
+                if (actionAExecuter instanceof Braquer && braquageReussie){
+                    this.mapSonsJeu.get("braquage").jouer(false);
+                }
+            }
+
             // on affiche le prchain qui va executer
+//            Bandit bProchain = this.train.getBandits().get((this.tourne + 1) % this.nJoueurs);
+//            //this.jeu.phase.setText("Phase de d'action " + bProchain.getSurnom());
 
-            Bandit bProchain = this.train.getBandits().get((this.tourne + 1) % this.nJoueurs);
-            //this.jeu.phase.setText("Phase de d'action " + bProchain.getSurnom());
-
-            //System.out.println(); // pour un affichage plus claire à la console
             this.tourne++;
 
         }if (planPhase) {
@@ -133,19 +156,6 @@ public class CotroleurJeu implements ActionListener {
 
     }
 
-//    public static void main(String[] args) {
-//
-//        Train train = new Train(4);
-//        train.ajouterBandit("ouané");
-//        train.ajouterBandit("ramy");
-//        train.ajouterBandit("kelia");
-//
-//
-//        FenetrePlus fen = new FenetrePlus();
-//        ControleurPlus controleur = new ControleurPlus(train,fen,3); // n : nActions
-//
-//        controleur.lancerJeu();
-//
-//
-//    }
+    public Map<String,PlaySound> getMapSonsJeu(){ return this.mapSonsJeu;}
+
 }

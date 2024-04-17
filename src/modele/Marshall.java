@@ -2,29 +2,38 @@ package modele;
 
 import java.util.ArrayList;
 import java.util.Random;
-
+// rajouter une methode check des wagon pour savoir si un bandit est arrivé à son emplacement pour lui tirer dessun ce check se fait dans le controleur
+/**
+ * marshall se deplace uniquement à l'interieur du train en essayant de chasser les bandits
+ */
 public class Marshall extends Personnage {
+    private final double nervosite;
 
-    private double nervosite;
-
+    /**
+     * un marshall est créer avec une nervosité qui représente la probabilité de son déplacement dans le train
+     * @param emp
+     * @param nervosite entre 0 et 1
+     */
     public Marshall(ComposanteTrain emp, double nervosite) {
-
-        super(emp, "Marshall", 1);
+        super(emp, "Marshall");
         this.nervosite = nervosite;
 
     }
 
+    /**
+     * Deplace le marshall avec une probabilité p (p== nervosité) dans une direction qui a du sense (si il est au millieu le déplace aléatoirement entre gauche et droite)
+     * et fait fuire les bandits se trouvant à cette emplacement
+     * on modélise le coté aléatoire le faite de tirer un aleatoire n entre [1,10] et que si n appartient à [1,p*10] le marshall se déplace
+     * @return feedback
+     */
     public String executer(){
-        // execute une action avec une proba de p
-        // on modelise ce fait par le faite de tirer n un aleatoire entre [1-10]
-        // et que si n appartient à [1-p*10]
+
         String feed = "";
         Random rnd = new Random();
         int n = rnd.nextInt(1,10);
 
         if ( n <= 10*this.nervosite ){
             Action a;
-            // on choisit encore aleatoirement soit de tirer soit de se deplacer
             if (this.getEmplacement() instanceof Locomotive){ a = new SeDeplacer(this, Direction.Gauche);}
             else {
                 if (this.getEmplacement() instanceof DernierWagon) {
@@ -43,7 +52,8 @@ public class Marshall extends Personnage {
         }
 
         ArrayList<Personnage> lstBandit = this.getEmplacement().getPersoList();
-        for (int i = 0; i<lstBandit.size(); i++){ // on utilise pas une boucle for each pour eviter la cocurrentmodifError avec la methode fuire de bandit
+        // on utilise pas une boucle for each pour eviter la cocurrentmodifError avec la methode fuir de bandit
+        for (int i = 0; i<lstBandit.size(); i++){
             Personnage p = lstBandit.get(i);
             if (p instanceof Bandit){
                 ((Bandit)p).fuir();
@@ -55,8 +65,4 @@ public class Marshall extends Personnage {
 
     }
 
-
-    public double getNervosite() {
-        return this.nervosite;
-    }
 }

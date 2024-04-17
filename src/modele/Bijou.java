@@ -1,5 +1,8 @@
 package modele;
 
+/**
+ * un butin avec une valeur de 500 $
+ */
 public class Bijou extends Butin {
     public Bijou() {
         this.valeur = 500;
