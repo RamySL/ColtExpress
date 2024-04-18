@@ -299,7 +299,7 @@ public class Accueil extends JPanel {
                 if (selection == "Enervé") {
                     return 0.6;
                 }else{
-                    return 9.0;
+                    return 0.9;
                 }
             }
 
