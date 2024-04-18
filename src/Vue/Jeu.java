@@ -91,7 +91,6 @@ public class Jeu extends JPanel implements Observer {
         for (ComposanteTrain c : this.train){
             this.trainPanel.add(new WagonPanel((Interieur) c));
         }
-
         this.cmdPanel.setPanneauBandit();
         repaint();
         revalidate();
@@ -445,21 +444,23 @@ public class Jeu extends JPanel implements Observer {
             buttinsPanel.setOpaque(false);
             persoPanel.setOpaque(false);
 
-//            JScrollPane buttinScroll = new JScrollPane(buttinsPanel);
-//            buttinScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-//            buttinScroll.setBorder(null);
+            JScrollPane buttinScroll = getjScrollPane(buttinsPanel);
 
-            solCabine.add(buttinsPanel);
+            solCabine.add(buttinScroll);
             solCabine.add(persoPanel);
+
+            JScrollPane scrollSolCabine =getScrollPerso(solCabine);
 
             this.setPreferredSize(new Dimension(280,350));
 
-            cabinePanel.add(solCabine, BorderLayout.SOUTH);
+
+            cabinePanel.add(scrollSolCabine, BorderLayout.SOUTH);
 
             this.add(toitPanel,BorderLayout.NORTH);
             this.add(cabinePanel,BorderLayout.CENTER);
 
         }
+
 
         class ButtinPanel extends JPanel{
             ArrayList<Butin> butins;
@@ -468,6 +469,7 @@ public class Jeu extends JPanel implements Observer {
                 this.butins = butins;
                 //this.setPreferredSize(new Dimension(50,100));
                 this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+                this.add(Box.createVerticalGlue()); // pour que les buttin se remplissent à partir du bas
 
                 for (Butin b : butins){
 
@@ -520,7 +522,7 @@ public class Jeu extends JPanel implements Observer {
                     }else {
 
                         JLabel persoIcone = new JLabel(new ImageIcon("src/assets/images/sherif.png"));
-                        JLabel persoLabel = new JLabel(p.getSurnom());
+                        JLabel persoLabel = new JLabel("p.getSurnom()");
 
                         persoLabel.setHorizontalAlignment(SwingConstants.CENTER);
                         persoLabel.setForeground(Color.WHITE);
@@ -552,35 +554,65 @@ public class Jeu extends JPanel implements Observer {
 
                 ButtinPanel buttinsPanel = new ButtinPanel(this.toit.getButtins());
                 buttinsPanel.setOpaque(false);
+                JScrollPane buttinScroll = getjScrollPane(buttinsPanel);
+                buttinScroll.setPreferredSize(new Dimension(64,80));
+
                 PersoPanel persoPanel = new PersoPanel(this.toit.getPersoList());
                 persoPanel.setOpaque(false);
                 this.setPreferredSize(new Dimension(0,90));
                 //this.setBorder(new LineBorder(Color.RED,5));
-                conteneur.add(buttinsPanel);
+                conteneur.add(buttinScroll);
                 conteneur.add(persoPanel);
                 // Au cas ou on tombe dans une situation ou le nombre de badit et trop grand pour etre affiché on fait une barre de scroll
-                JScrollPane scrollConteneur = new JScrollPane(conteneur);
-                scrollConteneur.setOpaque(false);
-                scrollConteneur.getViewport().setOpaque(false);
-                scrollConteneur.setBorder(null);
-                // on veut qu'une barre horizontale
-                scrollConteneur.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-                // La barre s'affiche qua quand ça déborde
-                scrollConteneur.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-                scrollConteneur.getHorizontalScrollBar().setPreferredSize(new Dimension(2,10));
-
-                scrollConteneur.setBorder(null);
-
-                scrollConteneur.getViewport().setViewPosition(new Point(0,5));
-                scrollConteneur.getHorizontalScrollBar().setOpaque(false);
+                JScrollPane scrollConteneur = WagonPanel.getScrollPerso(conteneur);
 
                 this.add(scrollConteneur, BorderLayout.SOUTH);
 
 
             }
+
+
         }
 
+        /**
+         * factorisation parceque on met buttin en scroll exactement de la meme maniere entre wagon et toit
+         * @param buttinsPanel
+         * @return
+         */
+        private static JScrollPane getjScrollPane(ButtinPanel buttinsPanel) {
+            JScrollPane buttinScroll = new JScrollPane(buttinsPanel);
+            buttinScroll.setPreferredSize(new Dimension(64,64*4 -20)); // 64*64 pour les icones
+            buttinScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            buttinScroll.setBorder(null);
+            buttinScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            buttinScroll.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); //pour que la barre de scroll se mette à gauche
+            buttinScroll.setOpaque(false);
+            buttinScroll.getViewport().setOpaque(false);
+            buttinScroll.getVerticalScrollBar().setOpaque(false);
+            buttinScroll.getVerticalScrollBar().setPreferredSize(new Dimension(10,0));
+            return buttinScroll;
+        }
 
+        /**
+         * factorisation du scroll pour les personnages
+         * @param conteneur
+         * @return
+         */
+        private static JScrollPane getScrollPerso(JPanel conteneur) {
+            JScrollPane scrollConteneur = new JScrollPane(conteneur);
+            scrollConteneur.setOpaque(false);
+            scrollConteneur.getViewport().setOpaque(false);
+            scrollConteneur.setBorder(null);
+            // on veut qu'une barre horizontale
+            scrollConteneur.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+            // La barre s'affiche qua quand ça déborde
+            scrollConteneur.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            scrollConteneur.getHorizontalScrollBar().setPreferredSize(new Dimension(2,10));
+            scrollConteneur.setBorder(null);
+            scrollConteneur.getViewport().setViewPosition(new Point(0,5));
+            scrollConteneur.getHorizontalScrollBar().setOpaque(false);
+            return scrollConteneur;
+        }
 
 
     }
