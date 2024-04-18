@@ -5,9 +5,9 @@ import Vue.Bouttons.BouttonsJeu;
 import modele.*;
 import modele.Action;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,11 +95,23 @@ public class CotroleurJeu implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        Marshall marshall = this.train.getMarshall();
         if( (e.getSource() instanceof BouttonsJeu.BouttonAction) && actionPhase) {
             this.mapSonsJeu.get("tir").arreter(); // pour que les sons se lance mm si on spam action
             this.mapSonsJeu.get("braquage").arreter();
-            String feed =  this.train.getMarshall().executer(); // l'actions est executer et renvoi un feedback
+            String feed =  marshall.seDeplacer(); // l'actions est executer et renvoi un feedback
+
+            if (feed != ""){ // les bandits fuits
+                // ça veut dire le marshall s'est déplacé et a donné un feedback sur son deplacement
+                // dans ce cas les bandit qui sont sur le nouvel emplacement fuit
+                // peut etre c'est le controleur qui fait fuir les bandit
+                ArrayList<Bandit> lstBandit = marshall.getEmplacement().getBanditListSauf(marshall);
+                while (!lstBandit.isEmpty()){
+                    System.out.println(lstBandit);
+                    lstBandit.get(0).fuir();
+                    lstBandit.remove(0);
+                }
+            }
             this.jeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
             // le principe c'est qu'on veut executer la premiere action du premier bandit ensuite passer
             // à l apremiere action du deuxieme bandit et après quand on arrive au dernier bandit on doit reotuner
@@ -119,6 +131,16 @@ public class CotroleurJeu implements ActionListener {
             }else {
                 if (actionAExecuter instanceof Braquer && braquageReussie){
                     this.mapSonsJeu.get("braquage").jouer(false);
+                }else {
+
+                    if (actionAExecuter instanceof SeDeplacer) {
+                        if (this.joueurCourant.getEmplacement().getPersoList().contains(marshall)) { // marsall tire quand un bandit arrive sur lui
+
+                            this.jeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(marshall.tirer());
+                            this.mapSonsJeu.get("tir").jouer(false);
+                            new SeDeplacer(this.joueurCourant, Direction.Haut).executer();
+                        }
+                    }
                 }
             }
 

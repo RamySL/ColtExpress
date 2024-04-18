@@ -26,7 +26,7 @@ public class Marshall extends Personnage {
      * on modélise le coté aléatoire le faite de tirer un aleatoire n entre [1,10] et que si n appartient à [1,p*10] le marshall se déplace
      * @return feedback
      */
-    public String executer(){
+    public String seDeplacer(){
 
         String feed = "";
         Random rnd = new Random();
@@ -49,20 +49,14 @@ public class Marshall extends Personnage {
                 }
             }
             feed = a.executer();
-        }
 
-        ArrayList<Personnage> lstBandit = this.getEmplacement().getPersoList();
-        // on utilise pas une boucle for each pour eviter la cocurrentmodifError avec la methode fuir de bandit
-        for (int i = 0; i<lstBandit.size(); i++){
-            Personnage p = lstBandit.get(i);
-            if (p instanceof Bandit){
-                ((Bandit)p).fuir();
-            }
         }
-
         return feed;
+    }
 
-
+    public String tirer (){
+        // tire que dans son emplacement et que quand un bandit vient vers lui
+        return new Tirer(this, Direction.Bas).executer();
     }
 
 }

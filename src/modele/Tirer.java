@@ -1,11 +1,4 @@
 package modele;
-
-import java.util.Random;
-
-/* Pour tirer, on a besoin d'un tireur et d'une direction.
-Lorsqu'un bandit tire son nbr de balle diminue.
-Tandis que le nbr de balle du Marshall ne diminue pas.
- */
 public class Tirer extends Action {
 
     private Direction direction;
@@ -22,18 +15,18 @@ public class Tirer extends Action {
 
     public String executer() {
         String feed;
-        if (((Bandit)executeur).getNbBalles() <= 0) {
-            feed = executeur.getSurnom() + " n'a plus de balles";
-        }else {
-            if (executeur instanceof Bandit) ((Bandit) executeur).diminueBalle();
 
-            feed = switch (this.direction) {
+        if (executeur instanceof Bandit && ((Bandit)executeur).getNbBalles() > 0) ((Bandit) executeur).diminueBalle();
+        else if (executeur instanceof Bandit) {
+            return executeur.getSurnom() + " n'a plus de balles";
+        }
+        feed = switch (this.direction) {
                 case Droite -> new TirerAdroite().executer();
                 case Gauche -> new TirerAGauche().executer();
                 case Haut -> new TirerHaut().executer();
                 case Bas -> new TirerBas().executer();
             };
-        }
+
         return feed;
     }
 
@@ -78,9 +71,9 @@ public class Tirer extends Action {
                             ((Toit) this.emplacement).getCabine() instanceof Locomotive) {
 
                 if (!(this.emplacement instanceof Toit))
-                    feed = executeur.getSurnom() + " à tirer à droite dans le vide dans la locmotive ( nombres balles : " + ((Bandit)executeur).getNbBalles();
+                    feed = executeur.getSurnom() + " à tirer à droite dans le vide dans la locmotive ";
                 else
-                    feed = executeur.getSurnom() + " à tirer à droite dans le vide  sur le toit de la locomotive ( nombres balles : " +  ((Bandit)executeur).getNbBalles();
+                    feed = executeur.getSurnom() + " à tirer à droite dans le vide  sur le toit de la locomotive ";
 
 
             } else {

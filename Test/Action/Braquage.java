@@ -20,7 +20,7 @@ public class Braquage {
     private Bandit bandit;
     private ComposanteTrain emplacementBandit;
     private Braquer braquage;
-    private ArrayList<Buttin> buttinsBanditAvantBraquage,buttinsEmplacementAvantBraquage;
+    private ArrayList<Butin> buttinsBanditAvantBraquage,buttinsEmplacementAvantBraquage;
     @Before
     public void initialisation(){
 
@@ -63,35 +63,35 @@ public class Braquage {
         this.bandit.ajouterAction(this.braquage);
         this.bandit.executer();
 
-        ArrayList<Buttin> listeButtinEmplacementApres = this.bandit.getEmplacement().getButtins();
-        ArrayList<Buttin> listeAprèsBraquage = this.bandit.getButtins();
+        ArrayList<Butin> listeButinEmplacementApres = this.bandit.getEmplacement().getButtins();
+        ArrayList<Butin> listeAprèsBraquage = this.bandit.getButtins();
 
-        assertEquals(this.buttinsEmplacementAvantBraquage , listeButtinEmplacementApres);
+        assertEquals(this.buttinsEmplacementAvantBraquage , listeButinEmplacementApres);
         assertEquals(listeAprèsBraquage , this.buttinsBanditAvantBraquage);
     }
     @Test
     public void ajoutButtinEmplacement(){
         // on s'assure que l'ajout marche avec succes
-        Buttin buttinABraquer = new Bijou();
-        this.emplacementBandit.ajouterButin(buttinABraquer);
+        Butin butinABraquer = new Bijou();
+        this.emplacementBandit.ajouterButin(butinABraquer);
 
         assertTrue(this.emplacementBandit.getButtins().size() == 1 &&
-                this.emplacementBandit.getButtins().contains(buttinABraquer));
+                this.emplacementBandit.getButtins().contains(butinABraquer));
     }
     @Test
     public void BraquerCabineUnButtin(){
         //il faut qu'on le force dans un emplacement ou il ya des buttin, donc on ajoute un buttin
-        Buttin buttinABraquer = new Bijou();
-        this.emplacementBandit.ajouterButin(buttinABraquer);
+        Butin butinABraquer = new Bijou();
+        this.emplacementBandit.ajouterButin(butinABraquer);
 
         this.bandit.ajouterAction(this.braquage);
         this.bandit.executer();
 
-        ArrayList<Buttin> buttinEmplacementApres = this.bandit.getEmplacement().getButtins();
-        ArrayList<Buttin> buttinBanditApres = this.bandit.getButtins();
+        ArrayList<Butin> butinEmplacementApres = this.bandit.getEmplacement().getButtins();
+        ArrayList<Butin> butinBanditApres = this.bandit.getButtins();
         // on s'assure que après le braquage l'emplacement ne contient plus le buttin brauqer et que le bandit le possede
-        assertTrue( !buttinEmplacementApres.contains(buttinABraquer) &&
-                                        buttinBanditApres.contains(buttinABraquer));
+        assertTrue( !butinEmplacementApres.contains(butinABraquer) &&
+                                        butinBanditApres.contains(butinABraquer));
 
 
     }

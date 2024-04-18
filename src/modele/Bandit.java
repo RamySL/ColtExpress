@@ -1,5 +1,6 @@
 package modele;
 
+import java.security.DigestException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
@@ -45,12 +46,14 @@ public class Bandit extends Personnage {
      * perdu à l'emplacement
      */
     public void fuir() {
-        Random rnd = new Random();
+        //System.out.println("execution de fuir");
         if (!this.butins.isEmpty()) {
-            Butin butinPerdu = this.retirerButtin(); //this.butins.remove(rnd.nextInt(0, this.butins.size()));
+            Butin butinPerdu = this.retirerButtin();
             this.getEmplacement().ajouterButin(butinPerdu);
         }
         //fuite
+//        this.ajouterAction(new SeDeplacer(this, Direction.Haut));
+//        this.executer();
         new SeDeplacer(this, Direction.Haut).executer();
 
     }

@@ -22,11 +22,6 @@ public abstract class Personnage extends Observable{
     }
 
     /**
-     *
-     * @return un feedback sur l'execution de l'action
-     */
-    public abstract String executer();
-    /**
      * Enlève le personnage de son ancien emplacement et le met dans celui précisé en paramètre
      * @param nouvelleEmplacement la nouvelle position
      */
