@@ -90,8 +90,7 @@ public class EcranFin extends JPanel {
         return this.bouttonRejouer;
     }
 
-
-
-
-
+    public Fenetre getFenetre() {
+        return fenetre;
+    }
 }

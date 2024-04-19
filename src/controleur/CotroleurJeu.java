@@ -13,18 +13,23 @@ import java.util.Map;
 
 public class CotroleurJeu implements ActionListener {
     Train train;
-    Jeu jeu;
+    Jeu vueJeu;
     Fenetre fenetre;
-    int nbAction, nJoueurs;
-
+    int nbAction, nBandits;
     boolean actionPhase=false,planPhase=true;
     Bandit joueurCourant;
-
     Map<String, PlaySound> mapSonsJeu = new HashMap<>();
 
-    int tourne; // pour determiner que le boutton action à été appuer et qu'il faut passer au prochain ensemble d'action à executée
+    int nbActionExecute; // pour determiner que le boutton action à été appuer et qu'il faut passer au prochain ensemble d'action à executée
 
-    public CotroleurJeu(Train train, Fenetre fenetre, int n){
+    /**
+     * Intialise le controleur et fait la liason avec les bouttons du jeu pour réagir au evenements
+     * initialise une hashMap entre un identifiant et sa musique pour les effets pendant la partie
+     * @param train
+     * @param fenetre fenetre du jeu qui stock les identifiants de toutes les vues
+     * @param nbAction nombre d'actions à planifier pour chaque bandit pendant la phase de planification
+     */
+    public CotroleurJeu(Train train, Fenetre fenetre, int nbAction){
 
         mapSonsJeu.put("tir", new PlaySound("src/assets/sons/gun-shot.wav"));
         mapSonsJeu.put("braquage", new PlaySound("src/assets/sons/braquage.wav"));
@@ -32,79 +37,96 @@ public class CotroleurJeu implements ActionListener {
 
         this.train = train;
         this.fenetre = fenetre;
-        this.jeu = this.fenetre.getJeuPanel();
-        this.nbAction = n;
-        this.nJoueurs = this.train.getBandits().size(); // le nombre de jr doit etre donnée en pramatere d'une classe
+        this.vueJeu = this.fenetre.getJeuPanel();
+        this.nbAction = nbAction;
+        this.nBandits = this.train.getBandits().size();
 
-        this.jeu.liaisonCommandesControleur(this);
+        this.vueJeu.liaisonCommandesControleur(this);
 
     }
-    // boucle du jeu !!! PROBELEME AVEC LA GESTIONS DES THREADS
+
+    /**
+     *
+     * @param nbManches nombre de manche à jouer avant la fin du jeu
+     */
     public void lancerJeu(int nbManches) {
         this.mapSonsJeu.get("jeuBack").jouer(true);
-        int nbBandit = this.train.getBandits().size();
-        // Exemple d'utilisation de SwingUtilities.invokeLater() pour mettre à jour l'interface utilisateur
 
-
-        // pour l'instant pas de condition d'arret
+        int totaleActionsManche = this.nbAction * this.nBandits; // le nombre d'actions que planifie tous les joeurs en une manche
         int manche = 0;
+
         while (manche < nbManches) {
             //planification
-            this.jeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase de palinification pour la manche " + (manche+1) + "/" + nbManches);
-            this.jeu.getCmdPanel().getPhaseFeedPanel().setPlanfication(this.train.getBandits().get(0)); //init
-            // on utilise pas une boucle for each pour eviter la cocurrentmodifError avec la methode fuire de bandit
-            for (int i = 0; i <nbBandit; i++){
+            planPhase = true;
+            actionPhase = false;
+
+            this.vueJeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase de palinification pour la manche " + (manche+1) + "/" + nbManches);
+            this.vueJeu.getCmdPanel().getPhaseFeedPanel().setPlanfication(this.train.getBandits().get(0));
+            // concurrentmodifError avec for each
+            for (int i = 0; i <this.nBandits; i++){
 
                 this.joueurCourant = this.train.getBandits().get(i); // pour que les boutton vide ce bandit specifiquement
                 if(i != 0){
-                    this.jeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualiserPlanificateur(this.joueurCourant);
+                    this.vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualiserPlanificateur(this.joueurCourant);
                 }
 
-                //this.jeu.phase.setText("Phase de planification : c'est le tour à " + this.joueurCourant.getSurnom());
-                //System.out.println("tour de " + this.joueurCourant.getSurnom());
-
-                planPhase = true;
-                actionPhase = false;
-
-                while (this.joueurCourant.lenAction() < this.nbAction){
-                    // pour l'instant il ya rien à mettre dans cette boucle mais elle necessaire pour attendre que joueur est planifié ces action
-                    // on ne peut pas la mettre vide sinon je crois elle est ignoré par le compilateur
-                    System.out.print("");
+                synchronized(this.joueurCourant) {
+                    while (this.joueurCourant.lenAction() < this.nbAction) {
+                        try {
+                            this.joueurCourant.wait(); // arrete le calcule de la condition de la boucle sur le thread en attente de la notification de joueurcourant
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
                 }
+
 
             }
-            this.jeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase d'action pour la manche " + (manche+1) + "/" + nbManches);
-            this.jeu.getCmdPanel().getPhaseFeedPanel().setAction();
-
             // action
-            this.tourne = 0;
-            // le nombre totale d'iteration pour toutes les action des bandit = nbBandit * nbAction
-            this.joueurCourant = this.train.getBandits().get(0);
-            //this.jeu.phase.setText("Phase de d'action " + this.joueurCourant.getSurnom());
-            while (this.tourne < this.nbAction * this.nJoueurs ){ // optimise
-                System.out.print("");
-                planPhase = false;
-                actionPhase = true;
+            this.vueJeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase d'action pour la manche " + (manche+1) + "/" + nbManches);
+            this.vueJeu.getCmdPanel().getPhaseFeedPanel().setAction();
 
+            this.nbActionExecute = 0;
+            this.joueurCourant = this.train.getBandits().get(0);
+
+            planPhase = false;
+            actionPhase = true;
+
+            synchronized(this.joueurCourant) {
+                while (this.nbActionExecute < totaleActionsManche) {
+                    try {
+                        this.joueurCourant.wait(); // arrete le calcule de la condition de la boucle sur le thread en attente de la notification de joueurcourant
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
             }
+
+
             manche++;
         }
+        // fin jeu
+        this.versFinJeu();
 
     }
 
-
+    /**
+     *             // le principe c'est qu'on veut executer la premiere action du premier bandit ensuite passer
+     *             // à l apremiere action du deuxieme bandit et après quand on arrive au dernier bandit on doit reotuner
+     *             // au premeir et ainsi de suite, il ya une periodicité en le nombre de bandit, qui naturellement traduite par
+     *         l'opération de modulo
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         Marshall marshall = this.train.getMarshall();
         if( (e.getSource() instanceof BouttonsJeu.BouttonAction) && actionPhase) {
+
             this.mapSonsJeu.get("tir").arreter(); // pour que les sons se lance mm si on spam action
             this.mapSonsJeu.get("braquage").arreter();
             String feed =  marshall.seDeplacer(); // l'actions est executer et renvoi un feedback
 
             if (feed != ""){ // les bandits fuits
-                // ça veut dire le marshall s'est déplacé et a donné un feedback sur son deplacement
-                // dans ce cas les bandit qui sont sur le nouvel emplacement fuit
-                // peut etre c'est le controleur qui fait fuir les bandit
                 ArrayList<Bandit> lstBandit = marshall.getEmplacement().getBanditListSauf(marshall);
                 while (!lstBandit.isEmpty()){
                     System.out.println(lstBandit);
@@ -112,19 +134,16 @@ public class CotroleurJeu implements ActionListener {
                     lstBandit.remove(0);
                 }
             }
-            this.jeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
-            // le principe c'est qu'on veut executer la premiere action du premier bandit ensuite passer
-            // à l apremiere action du deuxieme bandit et après quand on arrive au dernier bandit on doit reotuner
-            // au premeir et ainsi de suite, il ya une periodicité en le nombre de bandit, qui naturellement traduite par
-            // l'opération de modulo
-            this.joueurCourant = this.train.getBandits().get(this.tourne % this.nJoueurs);
+            this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
+
+            this.joueurCourant = this.train.getBandits().get(this.nbActionExecute % this.nBandits);
             Action actionAExecuter = this.joueurCourant.getActions().peek();
 
             boolean assezDeBalles = this.joueurCourant.getNbBalles() > 0;
             boolean braquageReussie = !this.joueurCourant.getEmplacement().getButtins().isEmpty();
 
             feed = this.joueurCourant.executer();
-            this.jeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
+            this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
 
             if (actionAExecuter instanceof Tirer && assezDeBalles){
                 this.mapSonsJeu.get("tir").jouer(false);
@@ -132,49 +151,71 @@ public class CotroleurJeu implements ActionListener {
                 if (actionAExecuter instanceof Braquer && braquageReussie){
                     this.mapSonsJeu.get("braquage").jouer(false);
                 }else {
-
                     if (actionAExecuter instanceof SeDeplacer) {
-                        if (this.joueurCourant.getEmplacement().getPersoList().contains(marshall)) { // marsall tire quand un bandit arrive sur lui
-
-                            this.jeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(marshall.tirer());
+                        // si bandit va vers marshall il lui tir dessus
+                        if (this.joueurCourant.getEmplacement().getPersoList().contains(marshall)) {
+                            //this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(marshall.tirer());
                             this.mapSonsJeu.get("tir").jouer(false);
-                            new SeDeplacer(this.joueurCourant, Direction.Haut).executer();
+                            this.joueurCourant.fuir();
+                            this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(this.joueurCourant.getSurnom() +
+                                    " a fuit vers le toit");
                         }
                     }
                 }
             }
+            this.nbActionExecute++;
+            // on notifie le thread qui ete en attente qu'il a un calcule à faire puisque une action a été executée
+            synchronized (this.joueurCourant){
+                this.joueurCourant.notify();
+            }
 
-            // on affiche le prchain qui va executer
-//            Bandit bProchain = this.train.getBandits().get((this.tourne + 1) % this.nJoueurs);
-//            //this.jeu.phase.setText("Phase de d'action " + bProchain.getSurnom());
-
-            this.tourne++;
 
         }if (planPhase) {
+            synchronized(this.joueurCourant) {
+                this.joueurCourant.notify();
+            }
             Action a;
 
             if (e.getSource() instanceof BouttonsJeu.BouttonDeplacement) {
                 a = new SeDeplacer(this.joueurCourant, ((BouttonsJeu.BouttonDeplacement) e.getSource()).getDirection());
                 this.joueurCourant.ajouterAction(a);
-                this.jeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+                this.vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
             }
 
             if (e.getSource() instanceof BouttonsJeu.BouttonBraquage){
                 a = new Braquer(this.joueurCourant);
                 this.joueurCourant.ajouterAction(a);
-                this.jeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+                this.vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
             }
 
 
             if (e.getSource() instanceof BouttonsJeu.BouttonTir){
                 a = new Tirer(this.joueurCourant, ((BouttonsJeu.BouttonTir) e.getSource()).getDirection());
                 this.joueurCourant.ajouterAction(a);
-                this.jeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+                this.vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
             }
 
 
         }
 
+
+    }
+
+    public void versFinJeu(){
+        // on determine le gagnant
+        ArrayList<Bandit> bandits = this.train.getBandits();
+
+        Bandit banditGagnant = bandits.get(0);
+        for (Bandit b : bandits){
+            if (b.score() > banditGagnant.score()){
+                banditGagnant = b;
+            }
+        }
+        this.getMapSonsJeu().get("jeuBack").arreter();
+        EcranFin ecranFin = new EcranFin(this.fenetre, banditGagnant,this.fenetre.getJeuPanel().getMapPersonnageIcone());
+        new ControleurFinJeu(ecranFin);
+        this.fenetre.ajouterEcranFin(ecranFin);
+        this.fenetre.changerFenetre(this.fenetre.getEcranFinId());
 
     }
 

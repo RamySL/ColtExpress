@@ -54,9 +54,5 @@ public class Marshall extends Personnage {
         return feed;
     }
 
-    public String tirer (){
-        // tire que dans son emplacement et que quand un bandit vient vers lui
-        return new Tirer(this, Direction.Bas).executer();
-    }
 
 }

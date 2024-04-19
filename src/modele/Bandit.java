@@ -46,14 +46,10 @@ public class Bandit extends Personnage {
      * perdu à l'emplacement
      */
     public void fuir() {
-        //System.out.println("execution de fuir");
         if (!this.butins.isEmpty()) {
             Butin butinPerdu = this.retirerButtin();
             this.getEmplacement().ajouterButin(butinPerdu);
         }
-        //fuite
-//        this.ajouterAction(new SeDeplacer(this, Direction.Haut));
-//        this.executer();
         new SeDeplacer(this, Direction.Haut).executer();
 
     }

@@ -522,7 +522,7 @@ public class Jeu extends JPanel implements Observer {
                     }else {
 
                         JLabel persoIcone = new JLabel(new ImageIcon("src/assets/images/sherif.png"));
-                        JLabel persoLabel = new JLabel("p.getSurnom()");
+                        JLabel persoLabel = new JLabel(p.getSurnom());
 
                         persoLabel.setHorizontalAlignment(SwingConstants.CENTER);
                         persoLabel.setForeground(Color.WHITE);

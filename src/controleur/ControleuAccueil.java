@@ -18,17 +18,21 @@ import java.util.Map;
 
 /**
  * Le controleur qui va gerer les événenement qui proviennent de l'initialisation du jeu avec la fenetre d'accueil
- * il doit ensuite intialiser le controleur du jeu avec le modele (train)
+ * et le choix des parametres du jeu, il doit ensuite intialiser le controleur du jeu avec le modele (train)
  */
 public class ControleuAccueil implements ActionListener {
 
     private Accueil accueil;
     private Fenetre fenetre;
     // accumulation de classes internes
-    private ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJouers = new ArrayList<>(); // contiendra le surnom et icone
+    private ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJouers = new ArrayList<>(); // contiendra le surnom et icone des bandits
 
     PlaySound misqueLancement;
 
+    /**
+     * Intialise le controleur et fait la liason avec les composantes d'accueil dont il va ecouter les evenements
+     * @param fenetre du jeu qui contient tous les différentes vu du jeu
+     */
     public ControleuAccueil(Fenetre fenetre){
         misqueLancement = new PlaySound("src/assets/sons/lancement.wav");
         misqueLancement.jouer(true);
@@ -39,16 +43,16 @@ public class ControleuAccueil implements ActionListener {
 
     }
 
-    public void lancer(){
-        this.fenetre.setVisible(true);
-    }
-
+    /**
+     * lance le jeu en recuperant tous les parmetre saisie si le boutton de lancer le jeu et appuié
+     * récupere l'icone et le surnom choisie si le boutton bouttonCreationBandit est appuyé
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         /// !!!! à changer il travail avec public
         if (e.getSource() == this.accueil.getOptionsJeu().lancerJeu){
-            // On recupere ce qui a été saisie avec getTexte et on intialise le jeu
-            // !! RECUERE LE NOMBRE DE BALLES
+
             this.misqueLancement.arreter();
             Map<Personnage, ImageIcon> mapPersonnageIcone = new HashMap<>();
             int nbBallesBandits = this.accueil.getOptionsJeu().getNbBalles();
@@ -56,7 +60,7 @@ public class ControleuAccueil implements ActionListener {
 
             Train train = new Train(this.accueil.getOptionsJeu().getNbWagon());
             train.ajouterMarshall(nervositeMarshall);
-            // boucle pour ajouter les bandit
+
             // invariant qui garde ça correcte c'est que le premier elt  de this.creationsJouers va etre le premier Personnage dans la liste du train
             for (Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infos : this.creationsJouers){
                 // quand le bandit est ajouté au train il faut garder un lien avec le chemin de son icone
@@ -75,12 +79,9 @@ public class ControleuAccueil implements ActionListener {
 
 
         }
-
-
         if (e.getSource() == this.accueil.getOptionsJeu().getSlectionPersoPanel().bouttonCreationBandit) {
             ImageIcon iconePerso = this.accueil.getOptionsJeu().getSlectionPersoPanel().getPersoSlectionneIcone();
             String surnom = this.accueil.getOptionsJeu().getSlectionPersoPanel().getBanditSurnom();
-
             this.creationsJouers.add(new Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation(iconePerso,surnom));  // on recup le perso choisie sur la liste et le nomb saisie
         }
 
@@ -101,27 +102,14 @@ public class ControleuAccueil implements ActionListener {
             return null;
         }
 
-        // c'est une méthode qui va etre appelé quand le travail en fond (doInBackGround) sera terminé cad quand la boucle de jeu termine
-        @Override
-        protected void done() {
-            // on determine le gagnant
-            ArrayList<Bandit> bandits = this.controleur.train.getBandits();
 
-            Bandit banditGagnant = bandits.get(0);
-            for (Bandit b : bandits){
-                if (b.score() > banditGagnant.score()){
-                    banditGagnant = b;
-                }
-            }
-            this.controleur.getMapSonsJeu().get("jeuBack").arreter();
-            EcranFin ecranFin = new EcranFin(this.controleur.fenetre, banditGagnant,this.controleur.fenetre.getJeuPanel().getMapPersonnageIcone());
-            new ControleurFinJeu(ecranFin);
-            this.controleur.fenetre.ajouterEcranFin(ecranFin);
-            this.controleur.fenetre.changerFenetre(this.controleur.fenetre.getEcranFinId());
+    }
 
-
-
-        }
+    /**
+     * Affcihe la fenetre du jeu
+     */
+    public void lancer(){
+        this.fenetre.setVisible(true);
     }
 
     public static void main(String[] args) {
