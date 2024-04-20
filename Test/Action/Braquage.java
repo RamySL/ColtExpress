@@ -9,12 +9,7 @@ import java.util.ArrayList;
 import static org.junit.Assert.*;
 
 
-/**
- Pour compiler et exécuter en ligne de commande, après compilation de Bolide.java
- javac -cp .:junit-4.12.jar:hamcrest-core-1.3.jar BolideTest.java
- java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore BolideTest
- */
-// ! DANS LES TEST UNITAIRE IL FAUT EVITER LES DEPENDANCES ENTRE LES TESTES ?
+
 public class Braquage {
 
     private Bandit bandit;

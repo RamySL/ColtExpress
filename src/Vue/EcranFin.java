@@ -41,9 +41,9 @@ public class EcranFin extends JPanel {
         bouttonRejouer.setBackground(new Color(0xDA523B25, true));
         bouttonRejouer.setFont(new Font("MV Boli", Font.BOLD, 20));
 
-////////////////////////////////////// copier coller de panneau de config
+
         JPanel persoPanel = new JPanel();
-        //persoPanel.setBackground(new Color(0xA6000000, true));
+
         persoPanel.setOpaque(false);
         persoPanel.setLayout(new BorderLayout());
         JLabel iconeBandit = new JLabel(mapPersonnageIcone.get(banditGagnant));
@@ -58,9 +58,6 @@ public class EcranFin extends JPanel {
         surnomLabel.setHorizontalAlignment(SwingConstants.CENTER);
         persoPanel.add(iconeBandit,BorderLayout.CENTER);
         persoPanel.add(surnomLabel, BorderLayout.SOUTH);
-
-        //persoPanel.setBorder(new LineBorder(Color.BLACK, 1));
-        ////////////////////////////////////
 
         panelCentrale.add(persoPanel,BorderLayout.CENTER);
         //persoPanel.setBorder(new LineBorder(Color.GREEN,3));

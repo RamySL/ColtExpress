@@ -11,8 +11,6 @@ public abstract class BouttonsJeu extends JButton {
 
     }
 
-
-
     public static class BouttonTir extends BouttonsJeu{
         Direction direction;
         public BouttonTir(Direction direction, String txt){

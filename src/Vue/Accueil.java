@@ -5,6 +5,7 @@ import controleur.ControleuAccueil;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.Objects;
 
 public class Accueil extends JPanel {
     private Fenetre fenetre;
@@ -27,11 +28,10 @@ public class Accueil extends JPanel {
         westPanel.setPreferredSize(new Dimension(200,100));
         northPanel.setPreferredSize(new Dimension(100,70));
         southPanel.setPreferredSize(new Dimension(100,70));
-        eastPanel.setBackground(new Color(0x0EEEEEE, true));
-        westPanel.setBackground(new Color(0x0EEEEEE, true));
-        northPanel.setBackground(new Color(0x0EEEEEE, true));
-        southPanel.setBackground(new Color(0x0EEEEEE, true));
-
+        eastPanel.setOpaque(false);
+        westPanel.setOpaque(false);
+        northPanel.setOpaque(false);
+        southPanel.setOpaque(false);
 
         this.optionsJeu = new OptionsJeu();
 
@@ -64,7 +64,7 @@ public class Accueil extends JPanel {
 
     public  class OptionsJeu extends JPanel{
 
-        public JButton lancerJeu;
+        private JButton lancerJeu;
         private JTextField saisieNbWagon, saisieNbActions, saisieNbBalles, saisieNbManches;
 
         private SelectionPersonnages slectPersoPanel;
@@ -77,7 +77,7 @@ public class Accueil extends JPanel {
             // on va faire un menu vertical
             this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 
-            JLabel titreMenu = new JLabel("Choisissez les options du jeu");
+            JLabel titreMenu = new JLabel("  Choisissez les options du jeu  ");
             JPanel premierEtage = new JPanel(); // premiere etage du menu
             JPanel deuxiemeEtage = new JPanel();
             JPanel troisiemeEtage = new JPanel();
@@ -88,13 +88,13 @@ public class Accueil extends JPanel {
 
             //Titre du menu
             titreMenu.setForeground(Color.WHITE);
-            titreMenu.setFont(new Font("MV Boli", Font.BOLD, 20));
+            titreMenu.setFont(new Font("MV Boli", Font.BOLD, 25));
             titreMenu.setAlignmentX(Component.CENTER_ALIGNMENT); // pour centrer
             titreMenu.setBackground(new Color(0,0,0, 221));
             titreMenu.setOpaque(true); // pour que la couleur de fond soit visible
             // Premiere Etage
 
-            premierEtage.setBackground(new Color(0x0000000, true));
+            premierEtage.setOpaque(false);
             premierEtage.setBorder(new LineBorder(Color.BLACK,1));
             slectPersoPanel = new SelectionPersonnages();
             premierEtage.add(slectPersoPanel);
@@ -106,7 +106,7 @@ public class Accueil extends JPanel {
             nbBallesLabel.setForeground(Color.WHITE);
             nbBallesLabel.setFont(new Font("MV Boli", Font.BOLD, 15));
             saisieNbBalles= new JTextField("6");//
-            saisieNbBalles.setPreferredSize(new Dimension(40,20));
+            saisieNbBalles.setPreferredSize(new Dimension(25,20));
             deuxiemeEtage.add(nbBallesLabel);
             deuxiemeEtage.add(saisieNbBalles);
             //Troiseme Etage
@@ -117,10 +117,9 @@ public class Accueil extends JPanel {
             nbWagonLabel.setForeground(Color.WHITE);
             nbWagonLabel.setFont(new Font("MV Boli", Font.BOLD, 15));
             saisieNbWagon = new JTextField("4");//
-            saisieNbWagon.setPreferredSize(new Dimension(40,20));
+            saisieNbWagon.setPreferredSize(new Dimension(25,20));
             troisiemeEtage.add(nbWagonLabel);
             troisiemeEtage.add(saisieNbWagon);
-
             //Quatrieme Etage
             quatriemeEtage.setPreferredSize(new Dimension(100,70));
             quatriemeEtage.setBackground(new Color(0,0,0, 0));
@@ -129,7 +128,7 @@ public class Accueil extends JPanel {
             nbActionsLabel.setForeground(Color.WHITE);
             nbActionsLabel.setFont(new Font("MV Boli", Font.BOLD, 15));
             saisieNbActions = new JTextField("4");//
-            saisieNbActions.setPreferredSize(new Dimension(40,20));
+            saisieNbActions.setPreferredSize(new Dimension(25,20));
             quatriemeEtage.add(nbActionsLabel);
             quatriemeEtage.add(saisieNbActions);
 
@@ -141,7 +140,7 @@ public class Accueil extends JPanel {
             nbManchesLabel.setForeground(Color.WHITE);
             nbManchesLabel.setFont(new Font("MV Boli", Font.BOLD, 15));
             saisieNbManches = new JTextField("5");//
-            saisieNbManches.setPreferredSize(new Dimension(40,20));
+            saisieNbManches.setPreferredSize(new Dimension(25,20));
             cinquiemeEtage.add(nbManchesLabel);
             cinquiemeEtage.add(saisieNbManches);
 
@@ -155,7 +154,7 @@ public class Accueil extends JPanel {
 
 
             this.lancerJeu = new JButton("Lancer");
-            //this.lancerJeu.addActionListener(e -> AccueilPlus.this.fenetre.changerFenetre(AccueilPlus.this.fenetre.getJeuId()));
+            this.lancerJeu.setEnabled(false);
             dernierEtage.add(this.lancerJeu);
             dernierEtage.setBackground(new Color(0,0,0, 0));
             dernierEtage.setBorder(new LineBorder(Color.BLACK,1));
@@ -189,7 +188,9 @@ public class Accueil extends JPanel {
 
         public Integer getNbManches (){ return Integer.parseInt(this.saisieNbManches.getText()); }
 
-
+        public JButton getLancerJeu() {
+            return lancerJeu;
+        }
 
         public SelectionPersonnages getSlectionPersoPanel () { return this.slectPersoPanel;}
         public Double getNervosite(){return this.selectNervositePanel.getNervosteMarshall();}
@@ -202,16 +203,20 @@ public class Accueil extends JPanel {
         public class SelectionPersonnages extends JPanel{
 
             private ImageIcon [] persoListIcones;
-            public JButton bouttonCreationBandit;
+            private JButton bouttonCreationBandit;
             private JList<ImageIcon> jListPerso;
 
             private JTextField saisieNomJoueur;
 
             public SelectionPersonnages(){
                 this.setLayout(new BorderLayout());
+                this.setOpaque(false);
 
                 JLabel descLabel = new JLabel("Créer le nombre de bandit que vous voulez");
-
+                descLabel.setOpaque(false);
+                descLabel.setForeground(Color.WHITE);
+                descLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                descLabel.setFont(new Font("MV Boli", Font.BOLD, 15));
                 this.initPersoListeIcones("src/assets/images/");
 
                 jListPerso = new JList<>(persoListIcones);
@@ -220,13 +225,20 @@ public class Accueil extends JPanel {
                 // pour que ça s'affiche horizontalement
                 jListPerso.setLayoutOrientation(JList.HORIZONTAL_WRAP);
                 jListPerso.setVisibleRowCount(1); // affichage d'une seule ligne
+                jListPerso.setBackground(new Color(0x80FFE7A1));
 
                 JPanel sudPanel = new JPanel();
                 this.bouttonCreationBandit = new JButton("Créer Bandit");
-                saisieNomJoueur = new JTextField("Surnom");
+                this.bouttonCreationBandit.setForeground(Color.WHITE);
+                this.bouttonCreationBandit.setFont(new Font("MV Boli", Font.BOLD, 15));
+                this.bouttonCreationBandit.setMargin(new Insets(0,2,0,2));
+                this.bouttonCreationBandit.setBackground(new Color(0x775533));
+
+                saisieNomJoueur = new JTextField("  Surnom  ");
 
                 sudPanel.add(saisieNomJoueur);
                 sudPanel.add(this.bouttonCreationBandit);
+                sudPanel.setOpaque(false);
 
                 this.add(descLabel, BorderLayout.NORTH);
                 this.add(jListPerso, BorderLayout.CENTER);
@@ -249,6 +261,10 @@ public class Accueil extends JPanel {
 
             public String getBanditSurnom() { return this.saisieNomJoueur.getText();}
 
+            public JButton getBouttonCreationBandit() {
+                return bouttonCreationBandit;
+            }
+
             /**
              * structure pour stocker les infos necessaire pour créer la vue du personnage et mm son surnom pour le créer dans le modele
              */
@@ -262,6 +278,8 @@ public class Accueil extends JPanel {
 
                 public ImageIcon getIcone () {return this.icone;}
                 public String getSurnom () {return this.surnom;}
+
+
             }
         }
 
@@ -271,19 +289,29 @@ public class Accueil extends JPanel {
 
     public class SlectionNervositeMarshall extends JPanel{
         private JList<String> jListNervositeNiveaux;
+        String calme, enerve,furieux;
 
         public SlectionNervositeMarshall(){
-
+            calme   = "   Calme";
+            enerve  = "   Enervé";
+            furieux = "   Furieux";
+            this.setOpaque(false);
             this.setLayout(new BorderLayout());
-            JLabel descLabel = new JLabel("Slectionnez la nervoté du marshall");
+            JLabel descLabel = new JLabel(" Slectionnez la nervosité du marshall ");
+            descLabel.setForeground(Color.WHITE);
+            descLabel.setOpaque(false);
+            descLabel.setFont(new Font("MV Boli", Font.BOLD, 15));
 
-            String[] nervositeNiveaux = {"Calme","Enervé","Furieux"};
+            String[] nervositeNiveaux = {calme,enerve,furieux};
             jListNervositeNiveaux = new JList<>(nervositeNiveaux);
             // nervosité par défaut c'est Calme
-            jListNervositeNiveaux.setSelectedValue("Calme",false);
+            jListNervositeNiveaux.setSelectedValue(calme,false);
             // pour que ça s'affiche horizontalement
             jListNervositeNiveaux.setLayoutOrientation(JList.HORIZONTAL_WRAP);
             jListNervositeNiveaux.setVisibleRowCount(1); // affichage d'une seule ligne
+            jListNervositeNiveaux.setFixedCellWidth(100);
+            jListNervositeNiveaux.setFont(new Font("MV Boli", Font.BOLD, 13));
+            jListNervositeNiveaux.setBackground(new Color(0x80FFE7A1));
 
             this.add(descLabel, BorderLayout.NORTH);
             this.add(this.jListNervositeNiveaux, BorderLayout.CENTER);
@@ -293,10 +321,10 @@ public class Accueil extends JPanel {
         public Double getNervosteMarshall(){
             String selection = this.jListNervositeNiveaux.getSelectedValue();
 
-            if (selection == "Calme"){
+            if (selection == calme){
                 return 0.3;
             }else{
-                if (selection == "Enervé") {
+                if (selection == enerve) {
                     return 0.6;
                 }else{
                     return 0.9;

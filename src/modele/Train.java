@@ -12,7 +12,7 @@ import java.util.Random;
  */
 public class Train implements Iterable <Interieur>{
 
-    private final int nWagons;
+    private  int nWagons;
     private DernierWagon last;
     private Locomotive first;
     private ArrayList<Bandit> bandits = new ArrayList<>();
@@ -23,8 +23,8 @@ public class Train implements Iterable <Interieur>{
      * @param n nombre de composantes de train (wagons + locomotive)
      */
     public Train (int n) {
-        assert n >= 2;
-        this.nWagons = n;
+
+        this.nWagons = 2;
         last = new DernierWagon(this);
         this.first = new Locomotive(this);
 
@@ -34,6 +34,7 @@ public class Train implements Iterable <Interieur>{
             Wagon prochain = new Wagon(this,courant);
             courant.lierAvec(prochain);
             courant = prochain;
+            this.nWagons++;
         }
 
         courant.lierAvec(this.first);

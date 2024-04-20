@@ -51,7 +51,7 @@ public class ControleuAccueil implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         /// !!!! à changer il travail avec public
-        if (e.getSource() == this.accueil.getOptionsJeu().lancerJeu){
+        if (e.getSource() == this.accueil.getOptionsJeu().getLancerJeu()){
 
             this.misqueLancement.arreter();
             Map<Personnage, ImageIcon> mapPersonnageIcone = new HashMap<>();
@@ -68,6 +68,7 @@ public class ControleuAccueil implements ActionListener {
                 train.ajouterBandit(infos.getSurnom(),nbBallesBandits);
                 mapPersonnageIcone.put(train.getBandits().getLast(),infos.getIcone());
             }
+            mapPersonnageIcone.put(train.getMarshall(),new ImageIcon("src/assets/images/sherif.png"));
             Jeu jeu = new Jeu(train, this.fenetre, mapPersonnageIcone);
 
             this.fenetre.ajouterFenetreJeu(jeu);
@@ -79,7 +80,8 @@ public class ControleuAccueil implements ActionListener {
 
 
         }
-        if (e.getSource() == this.accueil.getOptionsJeu().getSlectionPersoPanel().bouttonCreationBandit) {
+        if (e.getSource() == this.accueil.getOptionsJeu().getSlectionPersoPanel().getBouttonCreationBandit()) {
+            this.accueil.getOptionsJeu().getLancerJeu().setEnabled(true);
             ImageIcon iconePerso = this.accueil.getOptionsJeu().getSlectionPersoPanel().getPersoSlectionneIcone();
             String surnom = this.accueil.getOptionsJeu().getSlectionPersoPanel().getBanditSurnom();
             this.creationsJouers.add(new Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation(iconePerso,surnom));  // on recup le perso choisie sur la liste et le nomb saisie
