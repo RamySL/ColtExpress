@@ -28,6 +28,23 @@ public class Bandit extends Personnage {
     }
 
     /**
+     * deuxieme constrcuteur utile pour les tests unitaires
+     * @param surnom
+     * @param nbBalles
+     */
+    public Bandit(String surnom, int nbBalles) {
+        super(surnom);
+        this.surnom = surnom;
+        this.nbBalles = nbBalles;
+    }
+
+    public void setEmplacement (ComposanteTrain emp){
+
+        this.emplacement = emp;
+        emp.ajouterPersonnage(this);
+    }
+
+    /**
      * Execute la première action sur la file d'attente d'actions du bandit et la retire de la file
      * @return feedback de l'execution
      */

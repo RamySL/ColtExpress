@@ -8,9 +8,9 @@ import java.util.Random;
 /**
  * Le train représennté par une structure semblante à une liste doublement chainées entre les wagons
  * c'est l'élément pricipale du modèle de l'application il stock les bandits, marshall qu'il contient
- * en attribut. étant itérable une boucle for each sur les wagons est possible
+ * en attribut. étant itérable une boucle for each sur les wagons est possible, iterable sur l'interieur du train
  */
-public class Train implements Iterable <ComposanteTrain>{
+public class Train implements Iterable <Interieur>{
 
     private final int nWagons;
     private DernierWagon last;
@@ -70,13 +70,13 @@ public class Train implements Iterable <ComposanteTrain>{
 
 
     @Override
-    public Iterator<ComposanteTrain> iterator() {
+    public Iterator<Interieur> iterator() {
         return new IterateurTrain();
     }
 
 
-    public class IterateurTrain implements Iterator<ComposanteTrain> {
-        private ComposanteTrain composanteCourante;
+    public class IterateurTrain implements Iterator<Interieur> {
+        private Interieur composanteCourante;
         private boolean end = false; // pour determiner la fin de l'iteration
         public IterateurTrain (){
             this.composanteCourante = Train.this.last;
@@ -86,13 +86,50 @@ public class Train implements Iterable <ComposanteTrain>{
             return !(this.composanteCourante instanceof Locomotive) || !end;
         }
         @Override
-        public ComposanteTrain next() {
-            ComposanteTrain tmp = this.composanteCourante;
-            this.composanteCourante = this.composanteCourante.getVoisin(Direction.Droite);
+        public Interieur next() {
+            Interieur tmp = this.composanteCourante;
+            this.composanteCourante =(Interieur) this.composanteCourante.getVoisin(Direction.Droite);
             if ( tmp instanceof Locomotive) end = true;
             return  tmp;
         }
     }
+
+    /**
+     * pour les tests unitaires
+     * @param bandit
+     * @param emplacement
+     */
+    public void ajouterObjetBandit (Bandit bandit, ComposanteTrain emplacement){
+        bandit.setEmplacement(emplacement);
+        this.bandits.add(bandit);
+
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder trainInfo = new StringBuilder();
+        int wagonIndex = 0;
+
+        for (Interieur composante : this) {
+            trainInfo.append("Wagon ").append(wagonIndex).append(": ");
+
+            if (!bandits.isEmpty()) {
+                for (Bandit bandit : bandits) {
+                    if (bandit.getEmplacement() == composante) {
+                        trainInfo.append(bandit.getSurnom()).append(", ");
+                    }
+                }
+            } else {
+                trainInfo.append("No bandits, ");
+            }
+
+            trainInfo.append("\n");
+            wagonIndex++;
+        }
+
+        return trainInfo.toString();
+    }
+
 }
 
 
@@ -135,6 +172,8 @@ class Wagon extends Interieur {
         else if (d == Direction.Droite) return this.CabineDroite;
         else return this;
     }
+
+
 
     public String toString (){
         return "Wagon";

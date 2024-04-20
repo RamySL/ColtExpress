@@ -125,8 +125,8 @@ public class CotroleurJeu implements ActionListener {
             this.mapSonsJeu.get("tir").arreter(); // pour que les sons se lance mm si on spam action
             this.mapSonsJeu.get("braquage").arreter();
             String feed =  marshall.seDeplacer(); // l'actions est executer et renvoi un feedback
-
-            if (feed != ""){ // les bandits fuits
+            boolean marshallSestDeplace = feed != "";
+            if (marshallSestDeplace){ // les bandits fuits
                 ArrayList<Bandit> lstBandit = marshall.getEmplacement().getBanditListSauf(marshall);
                 while (!lstBandit.isEmpty()){
                     System.out.println(lstBandit);
@@ -151,7 +151,7 @@ public class CotroleurJeu implements ActionListener {
                 if (actionAExecuter instanceof Braquer && braquageReussie){
                     this.mapSonsJeu.get("braquage").jouer(false);
                 }else {
-                    if (actionAExecuter instanceof SeDeplacer) {
+                    if (actionAExecuter instanceof SeDeplacer && !marshallSestDeplace) {
                         // si bandit va vers marshall il lui tir dessus
                         if (this.joueurCourant.getEmplacement().getPersoList().contains(marshall)) {
                             //this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(marshall.tirer());

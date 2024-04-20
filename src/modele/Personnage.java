@@ -21,6 +21,10 @@ public abstract class Personnage extends Observable{
         this.emplacement.ajouterPersonnage(this);
     }
 
+    public Personnage (String surnom){
+        this.surnom = surnom;
+    }
+
     /**
      * Enlève le personnage de son ancien emplacement et le met dans celui précisé en paramètre
      * @param nouvelleEmplacement la nouvelle position
