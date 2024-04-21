@@ -7,6 +7,9 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
+/**
+ * L'ecran où l'utilisateur chosit les options du jeu et créé les bandits
+ */
 public class Accueil extends JPanel {
     private Fenetre fenetre;
     private Image imageFond;
@@ -16,7 +19,6 @@ public class Accueil extends JPanel {
     public Accueil(Fenetre fenetre){
         this.setLayout(new BorderLayout());
         this.fenetre = fenetre;
-
         this.imageFond = new ImageIcon("src/assets/images/colt_accueil.png").getImage();
 
         // C'est pour centerer le menu d'option
@@ -50,7 +52,6 @@ public class Accueil extends JPanel {
         g.drawImage(this.imageFond,0,-20,this.fenetre.getWidth(),this.fenetre.getHeight(),this);
 
     }
-
     public OptionsJeu getOptionsJeu(){return  this.optionsJeu;}
 
     public void liaisonAvecControleur(ControleuAccueil controleur){
@@ -59,9 +60,8 @@ public class Accueil extends JPanel {
     }
 
     /**
-     * On doit permettre de saisir : nb action à planifier, NB_BALLES peut etre NERVOSITE_MARSHALL,
+     * regroupe les composants swing qui stock les saisie utilisateur
      */
-
     public  class OptionsJeu extends JPanel{
 
         private Bouttons lancerJeu;
@@ -148,7 +148,7 @@ public class Accueil extends JPanel {
             sixiemeEtage.setPreferredSize(new Dimension(100,70));
             sixiemeEtage.setBackground(new Color(0,0,0, 0));
             sixiemeEtage.setBorder(new LineBorder(Color.BLACK,1));
-             this.selectNervositePanel = new SlectionNervositeMarshall();
+            this.selectNervositePanel = new SlectionNervositeMarshall();
             sixiemeEtage.add(selectNervositePanel);
 
 
@@ -197,17 +197,14 @@ public class Accueil extends JPanel {
         public SelectionPersonnages getSlectionPersoPanel () { return this.slectPersoPanel;}
         public Double getNervosite(){return this.selectNervositePanel.getNervosteMarshall();}
 
-
         /**
-         * ici mettre une methode qui recupere la liste des bandit (nom et lien) quand on appui sur lancer jeu
+         * contient la Jlist qui permet de selectionner l'icone pour son personnage et de saisir son surnom
          */
-
         public class SelectionPersonnages extends JPanel{
 
             private ImageIcon [] persoListIcones;
             private Bouttons bouttonCreationBandit;
             private JList<ImageIcon> jListPerso;
-
             private JTextField saisieNomJoueur;
 
             public SelectionPersonnages(){
@@ -266,7 +263,8 @@ public class Accueil extends JPanel {
             }
 
             /**
-             * structure pour stocker les infos necessaire pour créer la vue du personnage et mm son surnom pour le créer dans le modele
+             * structure pour stocker les infos necessaire pour créer la vue du personnage avec son icone
+             * et son surnom saisie dans la fenetre d'option
              */
             public static class JoueurInfoCreation{
                 private ImageIcon icone;
@@ -283,10 +281,11 @@ public class Accueil extends JPanel {
             }
         }
 
-
-
     }
 
+    /**
+     * Jliste avec 3 nervosité differente pour le marshall 0.3,0.6 et 0.9
+     */
     public class SlectionNervositeMarshall extends JPanel{
         private JList<String> jListNervositeNiveaux;
         String calme, enerve,furieux;

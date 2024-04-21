@@ -1,7 +1,5 @@
 package Vue;
 
-import controleur.JouerSon;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,11 +7,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * La vue qu'on va avoir au lancement du jeu
+ */
 public class EcranLancement extends JPanel  {
     private Fenetre fenetre;
     private Image imageFond;
-
-    private JouerSon misqueLancement;
 
     public EcranLancement(Fenetre fenetre) {
 
@@ -45,12 +44,18 @@ public class EcranLancement extends JPanel  {
         northContainer.add(saclayLabel, BorderLayout.WEST);
         this.addKeyListener(new KeyListener() {
             @Override
-            public void keyTyped(KeyEvent e) {}
+            public void keyTyped(KeyEvent e) {
+            }
+
             @Override
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == 10)  EcranLancement.this.fenetre.changerFenetre(EcranLancement.this.fenetre.getAccueilId());}
+                if (e.getKeyCode() == 10)
+                    EcranLancement.this.fenetre.changerVue(EcranLancement.this.fenetre.getAccueilId());
+            }
+
             @Override
-            public void keyReleased(KeyEvent e) {}
+            public void keyReleased(KeyEvent e) {
+            }
         });
 
 
@@ -63,6 +68,7 @@ public class EcranLancement extends JPanel  {
         // Pour le clignotement
         Timer timer = new Timer(800, new ActionListener() {
             boolean visible = true;
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 appyerCommencer.setVisible(visible);
@@ -78,17 +84,10 @@ public class EcranLancement extends JPanel  {
 
 
     }
-
-
-
-
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponents(g);
         g.drawImage(this.imageFond,0,-20,this.fenetre.getWidth(),this.fenetre.getHeight(),this);
     }
 
-    public JouerSon getMisqueLancement() {
-        return misqueLancement;
-    }
 }

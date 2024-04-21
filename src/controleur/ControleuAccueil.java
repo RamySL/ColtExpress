@@ -75,7 +75,7 @@ public class ControleuAccueil implements ActionListener {
                 Jeu jeu = new Jeu(train, this.fenetre, mapPersonnageIcone);
 
                 this.fenetre.ajouterFenetreJeu(jeu);
-                this.fenetre.changerFenetre(this.fenetre.getJeuId());
+                this.fenetre.changerVue(this.fenetre.getJeuId());
                 CotroleurJeu cotroleurJeu = new CotroleurJeu(train,this.fenetre,Integer.parseInt(nbActions) );
 
                 BoucleJeu boucleJeu = new BoucleJeu(cotroleurJeu);

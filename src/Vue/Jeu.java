@@ -17,10 +17,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
-//!! BARRE DE SCROLL DANS LES CABINES
-/**
- * Il faut que jeuPlus soit une fenetre independantte pour eviter les probleme de gestion de threads
- */
+
 
 public class Jeu extends JPanel implements Observer {
     private Fenetre fenetre;

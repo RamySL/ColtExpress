@@ -23,7 +23,7 @@ public class ControleurFinJeu implements ActionListener {
         if (e.getSource() == this.ecranFin.getBouttonRejouer()){
             this.ecranFin.getFenetre().dispose(); // ferme l'ancienne fenetre
             Fenetre fenetre = new Fenetre();
-            fenetre.changerFenetre(fenetre.getAccueilId());
+            fenetre.changerVue(fenetre.getAccueilId());
             ControleuAccueil controleuAccueil = new ControleuAccueil(fenetre);
             controleuAccueil.lancer();
 

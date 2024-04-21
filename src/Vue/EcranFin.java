@@ -6,16 +6,19 @@ import modele.personnages.Personnage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class EcranFin extends JPanel {
-    Bandit banditGagnant;
+    ArrayList<Bandit>  banditGagnant;
+    private int score;
     Fenetre fenetre;
-
     JButton bouttonRejouer;
     Image imageFond;
-    public EcranFin(Fenetre fenetre, Bandit banditGagnant, Map<Personnage, ImageIcon> mapPersonnageIcone){
-
+    Map<Personnage, ImageIcon> mapPersonnageIcone;
+    public EcranFin(Fenetre fenetre, ArrayList<Bandit> banditGagnant,int score, Map<Personnage, ImageIcon> mapPersonnageIcone){
+        this.mapPersonnageIcone = mapPersonnageIcone;
+        this.score = score;
         this.imageFond =  new ImageIcon("src/assets/images/FondFin.jpg").getImage();
         this.fenetre = fenetre;
         this.banditGagnant = banditGagnant;
@@ -38,36 +41,55 @@ public class EcranFin extends JPanel {
         bouttonRejouer.setBackground(new Color(0xDA523B25, true));
         bouttonRejouer.setFont(new Font("MV Boli", Font.BOLD, 20));
 
+        JPanel persoPanel;
+        if (banditGagnant.size() == 1){
+            persoPanel = persoPanel(banditGagnant.get(0));
+        }else {
+            persoPanel = new JPanel(new  GridLayout (2,2));
+            for (Bandit b : banditGagnant){
+                JPanel perso = this.persoPanel(b);
+                perso.setOpaque(false);
+                persoPanel.add(perso);
 
-        JPanel persoPanel = new JPanel();
-
+            }
+        }
         persoPanel.setOpaque(false);
-        persoPanel.setLayout(new BorderLayout());
-        JLabel iconeBandit = new JLabel(mapPersonnageIcone.get(banditGagnant));
-        JLabel surnomLabel = new JLabel( banditGagnant.getSurnom());
-        JLabel scoreLabel = new JLabel(banditGagnant.score() + " €");
-        //iconeBandit.setBorder(new LineBorder(Color.BLUE));
-        surnomLabel.setForeground(Color.black);
-        scoreLabel.setForeground(Color.black);
-
-        surnomLabel.setFont(new Font("MV Boli", Font.BOLD, 20));
+        JLabel scoreLabel = new JLabel(score + " €");
         scoreLabel.setFont(new Font("MV Boli", Font.BOLD, 20));
-        surnomLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        persoPanel.add(iconeBandit,BorderLayout.CENTER);
-        persoPanel.add(surnomLabel, BorderLayout.SOUTH);
-
+        scoreLabel.setForeground(Color.black);
         panelCentrale.add(persoPanel,BorderLayout.CENTER);
         //persoPanel.setBorder(new LineBorder(Color.GREEN,3));
         scoreLabel.setBounds(131 + 70,538,200,40);
         panelCentrale.setBounds(88 ,169 ,270,274);
+
         wantedIconeLabel.setBounds(decalageX,decalageY,wantedIcone.getIconWidth(),wantedIcone.getIconHeight()-10);
         bouttonRejouer.setBounds(100,this.fenetre.getHeight()/2,130,35);
+
         wantedIconeLabel.add(scoreLabel);
         wantedIconeLabel.add(panelCentrale);
-
         this.add(wantedIconeLabel);
         this.add(bouttonRejouer);
 
+    }
+
+    private JPanel persoPanel(Bandit b) {
+
+        JPanel persoPanel = new JPanel();
+        // affichage pour un seul gagnant
+        persoPanel.setOpaque(false);
+        persoPanel.setLayout(new BorderLayout());
+        JLabel iconeBandit = new JLabel(mapPersonnageIcone.get(b));
+        JLabel surnomLabel = new JLabel(b.getSurnom());
+
+        //iconeBandit.setBorder(new LineBorder(Color.BLUE));
+        surnomLabel.setForeground(Color.black);
+        surnomLabel.setFont(new Font("MV Boli", Font.BOLD, 20));
+
+        surnomLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        persoPanel.add(iconeBandit,BorderLayout.CENTER);
+        persoPanel.add(surnomLabel, BorderLayout.SOUTH);
+
+        return persoPanel;
     }
 
     public void liaisonControleur(ControleurFinJeu controleurFinJeu){
