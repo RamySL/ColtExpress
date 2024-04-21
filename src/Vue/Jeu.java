@@ -21,14 +21,14 @@ import java.util.Map;
 
 public class Jeu extends JPanel implements Observer {
     private Fenetre fenetre;
-    Train train;
-    Image imageFond;
+    private Train train;
+    private Image imageFond;
 
-    CommandePanel cmdPanel;
-    JPanel panelCentrale;
+    private CommandePanel cmdPanel;
+    private JPanel panelCentrale;
 
     // liaison entre chaque bojet Personngae et son icone
-    Map<Personnage, ImageIcon> mapPersonnageIcone;
+    private Map<Personnage, ImageIcon> mapPersonnageIcone;
 
     private JPanel trainPanel;
     public Jeu(Train t, Fenetre fenetre, Map<Personnage, ImageIcon> mapPersonnageIcone) {

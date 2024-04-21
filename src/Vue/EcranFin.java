@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class EcranFin extends JPanel {
-    ArrayList<Bandit>  banditGagnant;
+    private ArrayList<Bandit>  banditGagnant;
     private int score;
-    Fenetre fenetre;
-    JButton bouttonRejouer;
-    Image imageFond;
-    Map<Personnage, ImageIcon> mapPersonnageIcone;
+    private Fenetre fenetre;
+    private JButton bouttonRejouer;
+    private Image imageFond;
+    private Map<Personnage, ImageIcon> mapPersonnageIcone;
     public EcranFin(Fenetre fenetre, ArrayList<Bandit> banditGagnant,int score, Map<Personnage, ImageIcon> mapPersonnageIcone){
         this.mapPersonnageIcone = mapPersonnageIcone;
         this.score = score;

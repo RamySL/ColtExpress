@@ -11,7 +11,7 @@ import modele.trainEtComposantes.*;
  * 4 directions
  */
 public class SeDeplacer extends Action {
-    Direction direction;
+    private Direction direction;
     public SeDeplacer(Personnage executeur, Direction direction) {
         super(executeur);
         this.direction = direction;
@@ -37,7 +37,7 @@ public class SeDeplacer extends Action {
     }
 
     private class SeDeplacerADroite {
-        ComposanteTrain ancienEmplacement;
+        private ComposanteTrain ancienEmplacement;
         public SeDeplacerADroite(){
             this.ancienEmplacement = executeur.getEmplacement();
         }
@@ -76,7 +76,7 @@ public class SeDeplacer extends Action {
 
     }
     private class SeDeplacerAGauche {
-        ComposanteTrain ancienEmplacement;
+        private ComposanteTrain ancienEmplacement;
         public SeDeplacerAGauche(){
             this.ancienEmplacement = executeur.getEmplacement();
         }
@@ -112,7 +112,7 @@ public class SeDeplacer extends Action {
 
     }
     private class SeDeplacerHaut{
-        ComposanteTrain ancienEmplacement;
+        private ComposanteTrain ancienEmplacement;
         public SeDeplacerHaut(){
             this.ancienEmplacement = executeur.getEmplacement();
         }
@@ -135,7 +135,7 @@ public class SeDeplacer extends Action {
         }
     }
     private class SeDeplacerBas {
-        ComposanteTrain ancienEmplacement;
+        private ComposanteTrain ancienEmplacement;
         public SeDeplacerBas(){
             this.ancienEmplacement = executeur.getEmplacement();
         }
