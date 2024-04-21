@@ -43,7 +43,7 @@ public class Marshall extends Personnage {
             if (this.getEmplacement() instanceof Locomotive){ a = new SeDeplacer(this, Direction.Gauche);}
             else {
                 if (this.getEmplacement() instanceof DernierWagon) {
-                    a = new SeDeplacer(this,Direction.Gauche);
+                    a = new SeDeplacer(this,Direction.Droite);
                 }
                 else{
                     int alea = rnd.nextInt(0,2);
@@ -57,6 +57,7 @@ public class Marshall extends Personnage {
             feed = a.executer();
 
         }
+        this.notifyObservers();
         return feed;
     }
 

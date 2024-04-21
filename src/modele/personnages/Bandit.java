@@ -73,6 +73,7 @@ public class Bandit extends Personnage {
             this.getEmplacement().ajouterButin(butinPerdu);
         }
         new SeDeplacer(this, Direction.Haut).executer();
+        this.notifyObservers();
 
     }
 

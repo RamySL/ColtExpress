@@ -9,6 +9,7 @@ import modele.actions.SeDeplacer;
 import modele.actions.Tirer;
 import modele.personnages.Bandit;
 import modele.personnages.Marshall;
+import modele.personnages.Personnage;
 import modele.trainEtComposantes.Train;
 
 import javax.swing.*;
@@ -84,7 +85,7 @@ public class CotroleurJeu implements ActionListener {
 
                 while (this.joueurCourant.lenAction() < this.nbAction) {
                     try {
-                        Thread.sleep(200);
+                        Thread.sleep(10);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -103,9 +104,22 @@ public class CotroleurJeu implements ActionListener {
             planPhase = false;
             actionPhase = true;
 
+            Marshall marshall = this.train.getMarshall();
+            String feed =  marshall.seDeplacer();
+            this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
+
+            // fuite des bandits si le marshall vient dans le mm emplacement qu'eux
+            ArrayList<Bandit> lstBandit = this.train.getMarshall().getEmplacement().getBanditListSauf(marshall);
+            while (!lstBandit.isEmpty()){
+                lstBandit.get(0).fuir();
+                this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(lstBandit.get(0).getSurnom() + " Vient de fuir vers le toit ");
+                lstBandit.remove(0);
+
+            }
+
             while (this.nbActionExecute < totaleActionsManche) {
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -162,17 +176,17 @@ public class CotroleurJeu implements ActionListener {
     private void executionAction(Marshall marshall) {
         this.mapSonsJeu.get("tir").arreter(); // pour que les sons se lance mm si on spam action
         this.mapSonsJeu.get("braquage").arreter();
-        String feed =  marshall.seDeplacer(); // l'actions est executer et renvoi un feedback
-        boolean marshallSestDeplace = feed != "";
-        if (marshallSestDeplace){ // les bandits fuits
-            ArrayList<Bandit> lstBandit = marshall.getEmplacement().getBanditListSauf(marshall);
-            while (!lstBandit.isEmpty()){
-                System.out.println(lstBandit);
-                lstBandit.get(0).fuir();
-                lstBandit.remove(0);
-            }
-        }
-        this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
+
+        //String feed =  marshall.seDeplacer(); // l'actions est executer et renvoi un feedback
+        //boolean marshallSestDeplace = feed != "";
+
+       // fuite des bandits si le marshall vient dans le mm emplacement qu'eux
+//        ArrayList<Bandit> lstBandit = marshall.getEmplacement().getBanditListSauf(marshall);
+//        while (!lstBandit.isEmpty()){
+//            System.out.println(lstBandit);
+//            lstBandit.get(0).fuir();
+//            lstBandit.remove(0);
+//        }
 
         this.joueurCourant = this.train.getBandits().get(this.nbActionExecute % this.nBandits);
         Action actionAExecuter = this.joueurCourant.getActions().peek();
@@ -180,7 +194,7 @@ public class CotroleurJeu implements ActionListener {
         boolean assezDeBalles = this.joueurCourant.getNbBalles() > 0;
         boolean braquageReussie = !this.joueurCourant.getEmplacement().getButtins().isEmpty();
 
-        feed = this.joueurCourant.executer();
+        String feed = this.joueurCourant.executer();
         this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
 
         if (actionAExecuter instanceof Tirer && assezDeBalles){
@@ -189,10 +203,9 @@ public class CotroleurJeu implements ActionListener {
             if (actionAExecuter instanceof Braquer && braquageReussie){
                 this.mapSonsJeu.get("braquage").jouer(false);
             }else {
-                if (actionAExecuter instanceof SeDeplacer && !marshallSestDeplace) {
+                if (actionAExecuter instanceof SeDeplacer ) {
                     // si bandit va vers marshall il lui tir dessus
                     if (this.joueurCourant.getEmplacement().getPersoList().contains(marshall)) {
-                        //this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(marshall.tirer());
                         this.mapSonsJeu.get("tir").jouer(false);
                         this.joueurCourant.fuir();
                         this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(this.joueurCourant.getSurnom() +
@@ -201,8 +214,28 @@ public class CotroleurJeu implements ActionListener {
                 }
             }
         }
+        // execution avant prochaine action
+        feed =  marshall.seDeplacer();
+        this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
+
+        // fuite des bandits si le marshall vient dans le mm emplacement qu'eux
+        ArrayList<Bandit> lstBandit = this.train.getMarshall().getEmplacement().getBanditListSauf(marshall);
+        while (!lstBandit.isEmpty()){
+            lstBandit.get(0).fuir();
+            this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(lstBandit.get(0).getSurnom() + " Vient de fuir vers le toit ");
+            lstBandit.remove(0);
+
+        }
         this.nbActionExecute++;
     }
+
+    /**
+     * test si le marshall est dans le mm emplacement que b
+     * @param b
+     * @param m
+     * @return
+     */
+
 
     /**
      * calcule le gagnant (ou les gagnants) de la partie et l'envoi à l'ecran de fin,
