@@ -62,7 +62,7 @@ public class CotroleurJeu implements ActionListener {
      * @param nbManches nombre de manche à jouer avant la fin du jeu
      */
     public void lancerJeu(int nbManches) {
-        this.mapSonsJeu.get("jeuBack").jouer(true);
+        //this.mapSonsJeu.get("jeuBack").jouer(true);
 
         int totaleActionsManche = this.nbAction * this.nBandits; // le nombre d'actions que planifie tous les joeurs en une manche
         int manche = 0;
@@ -82,14 +82,13 @@ public class CotroleurJeu implements ActionListener {
                     this.vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualiserPlanificateur(this.joueurCourant);
                 }
 
-                synchronized(this.joueurCourant) {
-                    while (this.joueurCourant.lenAction() < this.nbAction) {
-                        try {
-                            this.joueurCourant.wait(); // arrete le calcule de la condition de la boucle sur le thread en attente de la notification de joueurcourant
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                        }
+                while (this.joueurCourant.lenAction() < this.nbAction) {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
+
                 }
 
 
@@ -104,16 +103,13 @@ public class CotroleurJeu implements ActionListener {
             planPhase = false;
             actionPhase = true;
 
-            synchronized(this.joueurCourant) {
-                while (this.nbActionExecute < totaleActionsManche) {
-                    try {
-                        this.joueurCourant.wait(); // arrete le calcule de la condition de la boucle sur le thread en attente de la notification de joueurcourant
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
+            while (this.nbActionExecute < totaleActionsManche) {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
-
 
             manche++;
         }
@@ -133,9 +129,6 @@ public class CotroleurJeu implements ActionListener {
             executionAction(marshall);
 
         }if (planPhase) {
-            synchronized(this.joueurCourant) {
-                this.joueurCourant.notify();
-            }
             Action a;
 
             if (e.getSource() instanceof Bouttons.BouttonDeplacement) {
@@ -209,10 +202,6 @@ public class CotroleurJeu implements ActionListener {
             }
         }
         this.nbActionExecute++;
-        // on notifie le thread qui ete en attente qu'il a un calcule à faire puisque une action a été executée
-        synchronized (this.joueurCourant){
-            this.joueurCourant.notify();
-        }
     }
 
     /**
@@ -255,9 +244,6 @@ public class CotroleurJeu implements ActionListener {
         AbstractAction deplacementDroite = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                synchronized (joueurCourant) {
-                    joueurCourant.notify();
-                }
                 if (planPhase) {
                     Action a;
                     a = new SeDeplacer(joueurCourant, Direction.Droite);
@@ -270,9 +256,6 @@ public class CotroleurJeu implements ActionListener {
         AbstractAction deplacementHaut = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                synchronized (joueurCourant) {
-                    joueurCourant.notify();
-                }
                 if (planPhase) {
                     Action a;
                     a = new SeDeplacer(joueurCourant, Direction.Haut);
@@ -285,9 +268,6 @@ public class CotroleurJeu implements ActionListener {
         AbstractAction deplacementBas = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                synchronized (joueurCourant) {
-                    joueurCourant.notify();
-                }
                 if (planPhase) {
                     Action a;
                     a = new SeDeplacer(joueurCourant, Direction.Bas);
@@ -300,9 +280,6 @@ public class CotroleurJeu implements ActionListener {
         AbstractAction deplacementGauche = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                synchronized (joueurCourant) {
-                    joueurCourant.notify();
-                }
                 if (planPhase) {
                     Action a;
                     a = new SeDeplacer(joueurCourant, Direction.Gauche);
@@ -315,9 +292,6 @@ public class CotroleurJeu implements ActionListener {
         AbstractAction braquage = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                synchronized (joueurCourant) {
-                    joueurCourant.notify();
-                }
                 if (planPhase) {
                     Action a;
                     a = new Braquer(joueurCourant);
@@ -330,9 +304,6 @@ public class CotroleurJeu implements ActionListener {
         AbstractAction tirDroit = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                synchronized (joueurCourant) {
-                    joueurCourant.notify();
-                }
                 if (planPhase) {
                     Action a;
                     a = new Tirer(joueurCourant, Direction.Droite);
@@ -345,9 +316,6 @@ public class CotroleurJeu implements ActionListener {
         AbstractAction tirHaut = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                synchronized (joueurCourant) {
-                    joueurCourant.notify();
-                }
                 if   (planPhase) {
                     Action a;
                     a = new Tirer(joueurCourant, Direction.Haut);
@@ -360,9 +328,6 @@ public class CotroleurJeu implements ActionListener {
         AbstractAction tirBas = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                synchronized (joueurCourant) {
-                    joueurCourant.notify();
-                }
                 if (planPhase) {
                     Action a;
                     a = new Tirer(joueurCourant, Direction.Bas);
@@ -375,9 +340,6 @@ public class CotroleurJeu implements ActionListener {
         AbstractAction tirGauche = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                synchronized (joueurCourant) {
-                    joueurCourant.notify();
-                }
                 if (planPhase) {
                     Action a;
                     a = new Tirer(joueurCourant, Direction.Gauche);

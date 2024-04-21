@@ -326,7 +326,7 @@ public class Accueil extends JPanel {
                 if (selection == enerve) {
                     return 0.6;
                 }else{
-                    return 0.9;
+                    return 1.0;
                 }
             }
 
