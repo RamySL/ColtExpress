@@ -1,6 +1,6 @@
 package Vue;
 
-import Vue.Bouttons.BouttonsJeu;
+import Vue.Bouttons.Bouttons;
 import controleur.CotroleurJeu;
 import modele.*;
 
@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Il faut que jeuPlus soit une fenetre independantte pour eviter les probleme de gestion de threads
  */
-/* !!! L'actualisation des infos de bandit pour que ça soit optimisé peut etre faur pas la mettre dans dessineTrain */
+
 public class Jeu extends JPanel implements Observer {
     private Fenetre fenetre;
     Train train;
@@ -57,6 +57,8 @@ public class Jeu extends JPanel implements Observer {
         panelCentrale.add(trainScrollPanel, BorderLayout.CENTER);
 
         this.add(panelCentrale,BorderLayout.CENTER );
+        this.setFocusable(true);
+
 
     }
 
@@ -98,9 +100,9 @@ public class Jeu extends JPanel implements Observer {
      */
     public class CommandePanel extends JPanel {
 
-        private BouttonsJeu.BouttonAction action;
-        private BouttonsJeu.BouttonBraquage braquage;
-        private ArrayList<BouttonsJeu> bouttonsCommande = new ArrayList<>();
+        private Bouttons.BouttonAction action;
+        private Bouttons.BouttonBraquage braquage;
+        private ArrayList<Bouttons> bouttonsCommande = new ArrayList<>();
         private PanneauBandits panneauBandits;
         private PhaseFeedPanel phaseFeedPanel;
 
@@ -115,8 +117,8 @@ public class Jeu extends JPanel implements Observer {
             this.panneauBandits = new PanneauBandits();
             phaseFeedPanel = new PhaseFeedPanel();
 
-            this.action = new BouttonsJeu.BouttonAction("Action");
-            this.braquage = new BouttonsJeu.BouttonBraquage("Braquer");
+            this.action = new Bouttons.BouttonAction("Action");
+            this.braquage = new Bouttons.BouttonBraquage("Braquer");
             this.bouttonsCommande.add(this.action);
             this.bouttonsCommande.add(this.braquage);
 
@@ -132,8 +134,9 @@ public class Jeu extends JPanel implements Observer {
         }
 
         public void liaisonBouttonsControleur(CotroleurJeu controleur){
-            for(BouttonsJeu b : this.bouttonsCommande){
+            for(Bouttons b : this.bouttonsCommande){
                 b.addActionListener(controleur);
+
             }
         }
 
@@ -151,7 +154,7 @@ public class Jeu extends JPanel implements Observer {
         }
 
         class DeplacementPanel extends JPanel{
-            private BouttonsJeu.BouttonDeplacement gaucheDep,droiteDep,hautDep,basDep;
+            private Bouttons.BouttonDeplacement gaucheDep,droiteDep,hautDep,basDep;
             public DeplacementPanel(){
                 this.setLayout(new BorderLayout());
 
@@ -159,10 +162,10 @@ public class Jeu extends JPanel implements Observer {
                 tirLabel.setPreferredSize(new Dimension(40,30));
                 tirLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-                gaucheDep = new BouttonsJeu.BouttonDeplacement(Direction.Gauche,"<");
-                droiteDep = new BouttonsJeu.BouttonDeplacement(Direction.Droite,">");
-                hautDep =new BouttonsJeu.BouttonDeplacement(Direction.Haut,"^");
-                basDep = new BouttonsJeu.BouttonDeplacement(Direction.Bas,"v");
+                gaucheDep = new Bouttons.BouttonDeplacement(Direction.Gauche,"<");
+                droiteDep = new Bouttons.BouttonDeplacement(Direction.Droite,">");
+                hautDep =new Bouttons.BouttonDeplacement(Direction.Haut,"^");
+                basDep = new Bouttons.BouttonDeplacement(Direction.Bas,"v");
                 CommandePanel.this.bouttonsCommande.add(gaucheDep);
                 CommandePanel.this.bouttonsCommande.add(droiteDep);
                 CommandePanel.this.bouttonsCommande.add(basDep);
@@ -179,17 +182,17 @@ public class Jeu extends JPanel implements Observer {
 
         class TirPanel extends JPanel{
 
-            private BouttonsJeu.BouttonTir tirGauche, tirDroit,tirHaut,tirBas;
+            private Bouttons.BouttonTir tirGauche, tirDroit,tirHaut,tirBas;
             public TirPanel(){
                 this.setLayout(new BorderLayout());
 
                 JLabel tirLabel = new JLabel("Tir");
                 tirLabel.setPreferredSize(new Dimension(40,30));
                 tirLabel.setHorizontalAlignment(SwingConstants.CENTER);
-                tirGauche = new BouttonsJeu.BouttonTir(Direction.Gauche,"<");
-                tirDroit = new BouttonsJeu.BouttonTir(Direction.Droite,">");
-                tirBas = new BouttonsJeu.BouttonTir(Direction.Bas,"v");
-                tirHaut = new BouttonsJeu.BouttonTir(Direction.Haut,"^");
+                tirGauche = new Bouttons.BouttonTir(Direction.Gauche,"<");
+                tirDroit = new Bouttons.BouttonTir(Direction.Droite,">");
+                tirBas = new Bouttons.BouttonTir(Direction.Bas,"v");
+                tirHaut = new Bouttons.BouttonTir(Direction.Haut,"^");
                 CommandePanel.this.bouttonsCommande.add(tirGauche);
                 CommandePanel.this.bouttonsCommande.add(tirDroit);
                 CommandePanel.this.bouttonsCommande.add(tirBas);
@@ -214,12 +217,12 @@ public class Jeu extends JPanel implements Observer {
             private PlanififcationPanel planificationPanel;
             private FeedActionPanel feedActionPanel;
             public PhaseFeedPanel (){
-                this.setBackground(new Color(0xF7BB7B04));
+                this.setBackground(new Color(0xFDB531));
                 this.setLayout(new BorderLayout());
 
                 this.phase = new JLabel("Phase de planification");
-                this.phase.setForeground(Color.WHITE);
-                phase.setFont(new Font("MV Boli", Font.BOLD, 13));
+                this.phase.setForeground(Color.BLACK);
+                phase.setFont(new Font("MV Boli", Font.BOLD, 17));
                 this.setPreferredSize(new Dimension(500,250));
                 this.phase.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -295,7 +298,7 @@ public class Jeu extends JPanel implements Observer {
                 public void actualisePlanfication(String descAction) {
 
                     JLabel actionLabel = new JLabel(descAction);
-                    actionLabel.setForeground(Color.WHITE);
+                    actionLabel.setForeground(Color.BLACK);
                     actionLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
                     this.actionsPlanifiePanel.add(actionLabel);
                     // on actualise tout de suite
@@ -318,7 +321,7 @@ public class Jeu extends JPanel implements Observer {
                 public void ajoutFeed (String feed){
 
                     JLabel feedLabel = new JLabel(feed);
-                    feedLabel.setForeground(Color.WHITE);
+                    feedLabel.setForeground(Color.BLACK);
                     feedLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
                     this.add(feedLabel);
                     // on actualise tout de suite
@@ -347,16 +350,16 @@ public class Jeu extends JPanel implements Observer {
             public JPanel panneauBandit(Bandit b){
 
                 JPanel panel = new JPanel();
-                panel.setBackground(new Color(0xA6000000, true));
+                panel.setBackground(new Color(0xFDB531));
                 panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
                 JLabel iconeBandit = new JLabel(Jeu.this.mapPersonnageIcone.get(b));
                 JLabel surnomLabel = new JLabel( "Surnom : " + b.getSurnom());
                 JLabel ballesLabel = new JLabel("Balles restantes : " + b.getNbBalles());
                 JLabel scoreLabel = new JLabel("Score : " + b.score());
 
-                surnomLabel.setForeground(Color.WHITE);
-                ballesLabel.setForeground(Color.WHITE);
-                scoreLabel.setForeground(Color.WHITE);
+                surnomLabel.setForeground(Color.BLACK);
+                ballesLabel.setForeground(Color.BLACK);
+                scoreLabel.setForeground(Color.BLACK);
 
                 surnomLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
                 ballesLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
@@ -370,6 +373,16 @@ public class Jeu extends JPanel implements Observer {
 
                 return panel;
             }
+
+//            public class listeButtinBandit extends JPanel{
+//
+//                public listeButtinBandit(){
+//                    this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+//                    JPanel nbBijouPanel = new JPanel()
+//                }
+//
+//
+//            }
         }
     }
 
@@ -380,7 +393,8 @@ public class Jeu extends JPanel implements Observer {
      * Va représenter graphiquement un wagon et son toit
      */
     class WagonPanel extends JPanel{
-        Interieur cabine; // et après cabine nous donne accès à son toit
+        Interieur cabine;
+        ImageIcon iconeWagon = new ImageIcon("src/assets/images/wagon.png");
         public WagonPanel(Interieur cabine){
             this.setOpaque(false);
             this.cabine = cabine;
@@ -389,7 +403,27 @@ public class Jeu extends JPanel implements Observer {
 
             JPanel cabinePanel = new JPanel(new BorderLayout());
             cabinePanel.setOpaque(false);
-            cabinePanel.setBorder(new LineBorder(Color.WHITE,3));
+            //cabinePanel.setBorder(new LineBorder(Color.WHITE,3));
+//            cabinePanel.setBorder(new Border() {
+//                @Override
+//                public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+//                    g.setColor(Color.WHITE);
+//                    g.drawImage(iconeWagon.getImage(), x-50, y-10, width+50, height+100, null);
+//                }
+//
+//                @Override
+//                public Insets getBorderInsets(Component c) {
+//                    return new Insets(0,0,0,0);
+//                }
+//
+//                @Override
+//                public boolean isBorderOpaque() {
+//                    return false;
+//                }
+//            });
+
+            cabinePanel.setBorder(new LineBorder(Color.WHITE,5));
+
             JPanel solCabine = new JPanel(new FlowLayout(FlowLayout.LEFT));
             solCabine.setOpaque(false);
 
@@ -548,9 +582,10 @@ public class Jeu extends JPanel implements Observer {
 
         JLabel persoIcone = new JLabel(icone);
         JLabel persoLabel = new JLabel(planificateur.getSurnom());
-        //persoLabel.setPreferredSize(new Dimension(0,10));
+
         persoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        persoLabel.setForeground(Color.WHITE);
+        if (planificateur instanceof Marshall) persoLabel.setForeground(new Color(45, 45, 246));
+        else persoLabel.setForeground(Color.BLACK);
         persoLabel.setFont(new Font("MV Boli", Font.BOLD, 13));
 
         persoPanel.add(persoIcone, BorderLayout.CENTER);

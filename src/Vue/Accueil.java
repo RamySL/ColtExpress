@@ -1,11 +1,11 @@
 package Vue;
 
+import Vue.Bouttons.Bouttons;
 import controleur.ControleuAccueil;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.util.Objects;
 
 public class Accueil extends JPanel {
     private Fenetre fenetre;
@@ -64,7 +64,7 @@ public class Accueil extends JPanel {
 
     public  class OptionsJeu extends JPanel{
 
-        private JButton lancerJeu;
+        private Bouttons lancerJeu;
         private JTextField saisieNbWagon, saisieNbActions, saisieNbBalles, saisieNbManches;
 
         private SelectionPersonnages slectPersoPanel;
@@ -152,8 +152,9 @@ public class Accueil extends JPanel {
             sixiemeEtage.add(selectNervositePanel);
 
 
-
-            this.lancerJeu = new JButton("Lancer");
+            this.lancerJeu = new Bouttons.BouttonHorsJeu(" Lancer ");
+            this.lancerJeu.setBackground(new Color(0x775533));
+            this.lancerJeu.setForeground(Color.WHITE);
             this.lancerJeu.setEnabled(false);
             dernierEtage.add(this.lancerJeu);
             dernierEtage.setBackground(new Color(0,0,0, 0));
@@ -173,20 +174,21 @@ public class Accueil extends JPanel {
             this.setPreferredSize(new Dimension(100,100));
         }
 
-        public Integer getNbWagon (){
-            return Integer.parseInt(this.saisieNbWagon.getText());
+        public JTextField getSaisieNbWagon() {
+            return saisieNbWagon;
         }
 
-
-        public Integer getNbActions(){
-            return Integer.parseInt(this.saisieNbActions.getText());
+        public JTextField getSaisieNbBalles() {
+            return saisieNbBalles;
         }
 
-        public Integer getNbBalles(){
-            return Integer.parseInt(this.saisieNbBalles.getText());
+        public JTextField getSaisieNbManches() {
+            return saisieNbManches;
         }
 
-        public Integer getNbManches (){ return Integer.parseInt(this.saisieNbManches.getText()); }
+        public JTextField getSaisieNbActions() {
+            return saisieNbActions;
+        }
 
         public JButton getLancerJeu() {
             return lancerJeu;
@@ -203,7 +205,7 @@ public class Accueil extends JPanel {
         public class SelectionPersonnages extends JPanel{
 
             private ImageIcon [] persoListIcones;
-            private JButton bouttonCreationBandit;
+            private Bouttons bouttonCreationBandit;
             private JList<ImageIcon> jListPerso;
 
             private JTextField saisieNomJoueur;
@@ -228,11 +230,9 @@ public class Accueil extends JPanel {
                 jListPerso.setBackground(new Color(0x80FFE7A1));
 
                 JPanel sudPanel = new JPanel();
-                this.bouttonCreationBandit = new JButton("Créer Bandit");
-                this.bouttonCreationBandit.setForeground(Color.WHITE);
-                this.bouttonCreationBandit.setFont(new Font("MV Boli", Font.BOLD, 15));
-                this.bouttonCreationBandit.setMargin(new Insets(0,2,0,2));
+                this.bouttonCreationBandit = new Bouttons.BouttonHorsJeu("Créer Bandit");
                 this.bouttonCreationBandit.setBackground(new Color(0x775533));
+                this.bouttonCreationBandit.setForeground(Color.WHITE);
 
                 saisieNomJoueur = new JTextField("  Surnom  ");
 

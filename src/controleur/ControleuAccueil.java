@@ -1,15 +1,14 @@
 package controleur;
 
 import Vue.Accueil;
-import Vue.EcranFin;
 import Vue.Fenetre;
 import Vue.Jeu;
-import modele.Bandit;
 import modele.Personnage;
 import modele.PlaySound;
 import modele.Train;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ public class ControleuAccueil implements ActionListener {
      */
     public ControleuAccueil(Fenetre fenetre){
         misqueLancement = new PlaySound("src/assets/sons/lancement.wav");
-        misqueLancement.jouer(true);
+        //misqueLancement.jouer(true);
 
         this.fenetre = fenetre;
         this.accueil = this.fenetre.getAccueil();
@@ -50,44 +49,72 @@ public class ControleuAccueil implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        /// !!!! à changer il travail avec public
+        JButton bouttonLancement = this.accueil.getOptionsJeu().getLancerJeu();
         if (e.getSource() == this.accueil.getOptionsJeu().getLancerJeu()){
-
-            this.misqueLancement.arreter();
-            Map<Personnage, ImageIcon> mapPersonnageIcone = new HashMap<>();
-            int nbBallesBandits = this.accueil.getOptionsJeu().getNbBalles();
+            String nbBallesBandits = this.accueil.getOptionsJeu().getSaisieNbBalles().getText();
             Double nervositeMarshall = this.accueil.getOptionsJeu().getNervosite();
+            String nbWagons = this.accueil.getOptionsJeu().getSaisieNbWagon().getText();
+            String nbActions = this.accueil.getOptionsJeu().getSaisieNbActions().getText();
+            String nbManches = ControleuAccueil.this.accueil.getOptionsJeu().getSaisieNbManches().getText();
 
-            Train train = new Train(this.accueil.getOptionsJeu().getNbWagon());
-            train.ajouterMarshall(nervositeMarshall);
+            if (checkInfoSaisieValide(nbBallesBandits,nbWagons,nbActions,nbManches)){
+                this.misqueLancement.arreter();
+                Map<Personnage, ImageIcon> mapPersonnageIcone = new HashMap<>();
 
-            // invariant qui garde ça correcte c'est que le premier elt  de this.creationsJouers va etre le premier Personnage dans la liste du train
-            for (Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infos : this.creationsJouers){
-                // quand le bandit est ajouté au train il faut garder un lien avec le chemin de son icone
-                // qu'il faudra passer à la vue
-                train.ajouterBandit(infos.getSurnom(),nbBallesBandits);
-                mapPersonnageIcone.put(train.getBandits().getLast(),infos.getIcone());
+                Train train = new Train (Integer.parseInt(nbWagons) );
+                train.ajouterMarshall(nervositeMarshall);
+
+                // invariant qui garde ça correcte c'est que le premier elt  de this.creationsJouers va etre le premier Personnage dans la liste du train
+                for (Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infos : this.creationsJouers){
+                    // quand le bandit est ajouté au train il faut garder un lien avec le chemin de son icone
+                    // qu'il faudra passer à la vue
+                    train.ajouterBandit(infos.getSurnom(),Integer.parseInt(nbBallesBandits));
+                    mapPersonnageIcone.put(train.getBandits().getLast(),infos.getIcone());
+                }
+                mapPersonnageIcone.put(train.getMarshall(),new ImageIcon("src/assets/images/sherif.png"));
+                Jeu jeu = new Jeu(train, this.fenetre, mapPersonnageIcone);
+
+                this.fenetre.ajouterFenetreJeu(jeu);
+                this.fenetre.changerFenetre(this.fenetre.getJeuId());
+                CotroleurJeu cotroleurJeu = new CotroleurJeu(train,this.fenetre,Integer.parseInt(nbActions) );
+
+                BoucleJeu boucleJeu = new BoucleJeu(cotroleurJeu);
+                boucleJeu.execute();
+            }else {
+                bouttonLancement.setBackground(Color.RED);
+                bouttonLancement.setText("Invalide !");
             }
-            mapPersonnageIcone.put(train.getMarshall(),new ImageIcon("src/assets/images/sherif.png"));
-            Jeu jeu = new Jeu(train, this.fenetre, mapPersonnageIcone);
-
-            this.fenetre.ajouterFenetreJeu(jeu);
-            this.fenetre.changerFenetre(this.fenetre.getJeuId());
-            CotroleurJeu cotroleurJeu = new CotroleurJeu(train,this.fenetre,this.accueil.getOptionsJeu().getNbActions());
-
-            BoucleJeu boucleJeu = new BoucleJeu(cotroleurJeu);
-            boucleJeu.execute();
-
 
         }
         if (e.getSource() == this.accueil.getOptionsJeu().getSlectionPersoPanel().getBouttonCreationBandit()) {
-            this.accueil.getOptionsJeu().getLancerJeu().setEnabled(true);
+            bouttonLancement.setEnabled(true);
             ImageIcon iconePerso = this.accueil.getOptionsJeu().getSlectionPersoPanel().getPersoSlectionneIcone();
             String surnom = this.accueil.getOptionsJeu().getSlectionPersoPanel().getBanditSurnom();
             this.creationsJouers.add(new Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation(iconePerso,surnom));  // on recup le perso choisie sur la liste et le nomb saisie
         }
 
     }
+
+    /**
+     * pour verifier les options choisis par l'utilisateur
+     * @param nbBalles
+     * @param nbWagons
+     * @param nbActions
+     * @param nbManches
+     * @return
+     */
+    private boolean checkInfoSaisieValide (String nbBalles, String nbWagons, String nbActions,String nbManches){
+        try {
+            int nbBallesI =  Integer.parseInt(nbBalles);
+            int nbWagonsI =  Integer.parseInt(nbWagons);
+            int nbActionsI = Integer.parseInt(nbActions);
+            int nbManchesI =   Integer.parseInt(nbManches);
+            return (  nbBallesI >= 0 && nbWagonsI>= 2 && nbActionsI >= 1 && nbManchesI >=1 );
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+    }
+
 
     class BoucleJeu extends SwingWorker<Void, Void>{
 
@@ -100,7 +127,7 @@ public class ControleuAccueil implements ActionListener {
         @Override
         // la boucle de notre jeu qui va tourner sur un thread different que l'EDT qui est responsable pour l'actualisation de l'affchage
         protected Void doInBackground() {
-            controleur.lancerJeu(ControleuAccueil.this.accueil.getOptionsJeu().getNbManches());
+            controleur.lancerJeu(Integer.parseInt(ControleuAccueil.this.accueil.getOptionsJeu().getSaisieNbManches().getText()));
             return null;
         }
 
