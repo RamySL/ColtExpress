@@ -8,12 +8,15 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
-
+/**
+ * toutes les méthodes intermediaires utilisées ont été testées dans le module TestAxiomes.java
+ */
 public class TestTir {
 
     private Bandit tireur;
     private Train train;
     private ComposanteTrain emplacementTireur;
+    Locomotive locomotive;
 
     @Before
     public void initialisation() {
@@ -27,6 +30,7 @@ public class TestTir {
             this.emplacementTireur = empl;
             break;
         }
+        this.locomotive =(Locomotive) this.emplacementTireur.getVoisin(Direction.Droite).getVoisin(Direction.Droite).getVoisin(Direction.Droite);
 
     }
 
@@ -47,7 +51,7 @@ public class TestTir {
      */
     @Test
     public void nbBallesNegatif() {
-        // nb balles ne descend en dessous de 0
+
         this.tireur = new Bandit("test", 0);
         Tirer tir = new Tirer(this.tireur, Direction.Droite);
         tir.executer();
@@ -334,7 +338,7 @@ public class TestTir {
     @Test
     public void tireGaucheSurToitLongueDistance() {
         Bandit victime = new Bandit("victime", 6);
-        this.emplacementTireur = (((Interieur) this.emplacementTireur).getToit()).getVoisin(Direction.Droite).getVoisin(Direction.Droite).getVoisin(Direction.Droite);
+        this.emplacementTireur = this.locomotive.getToit();
         this.tireur.setEmplacement(this.emplacementTireur);
         train.ajouterObjetBandit(victime,this.emplacementTireur.getVoisin(Direction.Gauche).getVoisin(Direction.Gauche).getVoisin(Direction.Gauche));
 
@@ -392,7 +396,7 @@ public class TestTir {
     @Test
     public void tireGaucheDansCabineLongueDistance() {
         Bandit victime = new Bandit("victime", 6);
-        this.emplacementTireur = (this.emplacementTireur).getVoisin(Direction.Droite).getVoisin(Direction.Droite).getVoisin(Direction.Droite);
+        this.emplacementTireur = this.locomotive;
         this.tireur.setEmplacement(this.emplacementTireur);
         train.ajouterObjetBandit(victime,this.emplacementTireur.getVoisin(Direction.Gauche).getVoisin(Direction.Gauche).getVoisin(Direction.Gauche));
 

@@ -8,69 +8,109 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
+/**
+ * toutes les méthodes intermediaires utilisées ont été testées dans le module TestAxiomes.java
+ */
 
-
+/**
+ * il n'ya pas besoin de tester specifiquement le braquage sur le toit parceque on a fait le teste sur un ComposanteTrain
+ * et le toit est un ComposanteTrain
+ */
 public class TestBraquage {
-
+    Train train;
     private Bandit bandit;
     private ComposanteTrain emplacementBandit;
+
+    Locomotive locomotive;
     private Braquer braquage;
-    private ArrayList<Butin> buttinsBanditAvantBraquage,buttinsEmplacementAvantBraquage;
     @Before
     public void initialisation(){
 
-        Train train = new Train(4);
-        train.ajouterBandit("ramy",2);
-        this.bandit = train.getBandits().get(0); // verfier que bandit contient vraiment le bandit ajoute avant
-
-        this.buttinsBanditAvantBraquage = this.bandit.getButtins();
-        this.buttinsEmplacementAvantBraquage = this.bandit.getEmplacement().getButtins();
-
-        this.emplacementBandit = this.bandit.getEmplacement();
-
+        this.train = new Train(4);
+        this.bandit = new Bandit("test",6);
+        for (ComposanteTrain empl : train) {
+            // on l'ajoute dans la cabine du dernier wagon
+            this.emplacementBandit = empl;
+            break;
+        }
+        this.locomotive = (Locomotive) this.emplacementBandit.getVoisin(Direction.Droite).getVoisin(Direction.Droite).getVoisin(Direction.Droite);
+        this.train.ajouterObjetBandit(this.bandit,this.emplacementBandit);
         this.braquage = new Braquer(this.bandit);
+        this.bandit.ajouterAction(this.braquage);
 
     }
 
+    /**
+     * teste que rien ne change si on braque dans un emplacement vide
+     */
     @Test
-    // a on s'apuit sur l'hypothese qu'on commence sur le toit et que sur le toit il n'ya pas de buttin
     public void BraquerVide(){
-        // !!! pas forcement besoin de faire ajouter action
-        // rjouter dans personnage la liste d'action (donc mem le marshall en a ?)
-        this.bandit.ajouterAction(this.braquage);
+        this.emplacementBandit.getButtins().clear();
+        ArrayList<Butin> butinsBandit = this.bandit.getButtins();
+        ArrayList<Butin> butinsEmplacement= this.emplacementBandit.getButtins();
+
+        assertTrue(butinsBandit.isEmpty());
+        assertTrue(butinsEmplacement.isEmpty());
+
         this.bandit.executer();
 
-        ArrayList<Butin> listeButinEmplacementApres = this.bandit.getEmplacement().getButtins();
-        ArrayList<Butin> listeAprèsBraquage = this.bandit.getButtins();
-
-        assertEquals(this.buttinsEmplacementAvantBraquage , listeButinEmplacementApres);
-        assertEquals(listeAprèsBraquage , this.buttinsBanditAvantBraquage);
+        assertTrue(butinsBandit.isEmpty());
+        assertTrue(butinsEmplacement.isEmpty());
     }
+
+    /**
+     * on teste que si il ya un seule butin dans son emplacement à l'interieur du train alors il le prend lui
+     * on force ça en vidant son emplacement de butin et en ajoutant un butin
+     */
     @Test
-    public void ajoutButtinEmplacement(){
-        // on s'assure que l'ajout marche avec succes
+    public void BraquerUnButtin(){
+        this.emplacementBandit.getButtins().clear();
         Butin butinABraquer = new Bijou();
         this.emplacementBandit.ajouterButin(butinABraquer);
 
-        assertTrue(this.emplacementBandit.getButtins().size() == 1 &&
-                this.emplacementBandit.getButtins().contains(butinABraquer));
-    }
-    @Test
-    public void BraquerCabineUnButtin(){
-        //il faut qu'on le force dans un emplacement ou il ya des buttin, donc on ajoute un buttin
-        Butin butinABraquer = new Bijou();
-        this.emplacementBandit.ajouterButin(butinABraquer);
+        ArrayList<Butin> butinsBandit = this.bandit.getButtins();
+        ArrayList<Butin> butinsEmplacement= this.emplacementBandit.getButtins();
 
-        this.bandit.ajouterAction(this.braquage);
+        assertTrue( butinsEmplacement.contains(butinABraquer) &&
+                !butinsBandit.contains(butinABraquer));
+
         this.bandit.executer();
 
-        ArrayList<Butin> butinEmplacementApres = this.bandit.getEmplacement().getButtins();
-        ArrayList<Butin> butinBanditApres = this.bandit.getButtins();
         // on s'assure que après le braquage l'emplacement ne contient plus le buttin brauqer et que le bandit le possede
-        assertTrue( !butinEmplacementApres.contains(butinABraquer) &&
-                                        butinBanditApres.contains(butinABraquer));
+        assertTrue( !butinsEmplacement.contains(butinABraquer) &&
+                butinsBandit.contains(butinABraquer));
 
 
+
+    }
+
+    /**
+     * on s'assure que si il est dans un emplacement avec plusiuers butins alors il en prend qu'un seule
+     * on remplie pour cela son emplacement de butins
+     */
+    @Test
+    public void BraquerPlusieursButtin(){
+        this.emplacementBandit.getButtins().clear();
+        this.remplireButins(this.emplacementBandit);
+
+        ArrayList<Butin> butinsBandit = this.bandit.getButtins();
+        ArrayList<Butin> butinsEmplacement= this.emplacementBandit.getButtins();
+
+        assertEquals(butinsEmplacement.size(),5);
+        assertTrue(butinsBandit.isEmpty());
+
+        this.bandit.executer();
+
+        assertEquals(butinsEmplacement.size(),4);
+        assertEquals(butinsBandit.size(),1);
+
+
+
+    }
+    public void remplireButins (ComposanteTrain emplacement){
+        for (int i = 0;i<5;i++){
+            emplacement.ajouterButin(new Bijou());
+        }
     }
 
 
