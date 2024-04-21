@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * controle la fenetre de  fin de partie si le joueur veut relancer une nouvelle partie
+ * controle la fenetre de  fin de partie, si le joueur veut relancer une nouvelle partie
  *
  */
 public class ControleurFinJeu implements ActionListener {

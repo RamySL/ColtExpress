@@ -23,7 +23,7 @@ public class ControleuAccueil implements ActionListener {
     private Accueil accueil;
     private Fenetre fenetre;
     // accumulation de classes internes
-    private ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJouers = new ArrayList<>(); // contiendra le surnom et icone des bandits
+    private ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJouers = new ArrayList<>();
 
     JouerSon misqueLancement;
 
@@ -42,9 +42,10 @@ public class ControleuAccueil implements ActionListener {
     }
 
     /**
-     * lance le jeu en recuperant tous les parmetre saisie si le boutton de lancer le jeu et appuié
-     * récupere l'icone et le surnom choisie si le boutton bouttonCreationBandit est appuyé
-     * @param e the event to be processed
+     * lance le jeu en recuperant tous les parmetre saisie si le boutton de lancer le jeu et appuié (et vérifie que les parametres sont valides)
+     * récupere l'icone et le surnom choisie si le boutton bouttonCreationBandit est appuyé et permet de lier ensuite cette icone
+     * à l'objet Bandit correspendant quand le boutton de lancer le jeu est appuyé
+     * @param e
      */
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -63,10 +64,10 @@ public class ControleuAccueil implements ActionListener {
                 Train train = new Train (Integer.parseInt(nbWagons) );
                 train.ajouterMarshall(nervositeMarshall);
 
-                // invariant qui garde ça correcte c'est que le premier elt  de this.creationsJouers va etre le premier Personnage dans la liste du train
+                // invariant qui garde ça correcte c'est que le premier elt  de this.creationsJouers va corresependre au
+                // premier Personnage dans la liste du train et le deuxieme au deuxieme etc
                 for (Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infos : this.creationsJouers){
-                    // quand le bandit est ajouté au train il faut garder un lien avec le chemin de son icone
-                    // qu'il faudra passer à la vue
+
                     train.ajouterBandit(infos.getSurnom(),Integer.parseInt(nbBallesBandits));
                     mapPersonnageIcone.put(train.getBandits().getLast(),infos.getIcone());
                 }
@@ -114,7 +115,12 @@ public class ControleuAccueil implements ActionListener {
         }
     }
 
-
+    /**
+     * Boucle principale de notre jeu va tourner sur un thread différent que EDT  en arriere plans pour garder la reactivité de
+     * l'affichage avec la boucle du jeu et ne pas bloquer l'EDT
+     * Void : premier void pour préciser que ça retourne rien à la fin de l'execution, le deuxieme c'est pour dire ça publi rien
+     * pendant l'execution
+     */
     class BoucleJeu extends SwingWorker<Void, Void>{
 
         private CotroleurJeu controleur;
@@ -123,8 +129,11 @@ public class ControleuAccueil implements ActionListener {
             this.controleur = controleur;
         }
 
+        /**
+         * on lance la boucle en arriere plans
+         * @return
+         */
         @Override
-        // la boucle de notre jeu qui va tourner sur un thread different que l'EDT qui est responsable pour l'actualisation de l'affchage
         protected Void doInBackground() {
             controleur.lancerJeu(Integer.parseInt(ControleuAccueil.this.accueil.getOptionsJeu().getSaisieNbManches().getText()));
             return null;

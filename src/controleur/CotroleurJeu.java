@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controle tous les evenements pendant le deroulement de la partie
+ */
 public class CotroleurJeu implements ActionListener {
     Train train;
     Jeu vueJeu;
@@ -73,7 +76,7 @@ public class CotroleurJeu implements ActionListener {
             // concurrentmodifError avec for each
             for (int i = 0; i <this.nBandits; i++){
 
-                this.joueurCourant = this.train.getBandits().get(i); // pour que les boutton vide ce bandit specifiquement
+                this.joueurCourant = this.train.getBandits().get(i);
                 if(i != 0){
                     this.vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualiserPlanificateur(this.joueurCourant);
                 }
