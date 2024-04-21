@@ -1,5 +1,4 @@
 package modele.personnages;
-// !! probleme normalement le personnage ne doit pas avoir accès à tous les personnage de son emplacement
 
 import modele.trainEtComposantes.ComposanteTrain;
 import modele.Observable;

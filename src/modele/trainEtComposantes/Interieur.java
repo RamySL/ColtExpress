@@ -4,7 +4,7 @@ import modele.butins.Bijou;
 import modele.butins.Bourse;
 
 import java.util.Random;
-// probleme avec l'utilisation de genererButtin
+
 /**
  * Représente les cabines du train et point vers son toit
  */

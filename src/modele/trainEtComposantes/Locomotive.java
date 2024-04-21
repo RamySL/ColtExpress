@@ -1,5 +1,4 @@
 package modele.trainEtComposantes;
-// probleme avec generer buttin qcq nous garantit qu'elle va etre utiliser qu'une seule fois ?
 
 import modele.Direction;
 import modele.butins.Magot;
