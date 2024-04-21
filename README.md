@@ -2,6 +2,8 @@
 
 
 ## 1.Les parties du sujet que vous avez traitées.
+- Pour les PDF de diagramme des classes mit, on a décidé de les séparer sinon c'était trop ilisible mais au lieu des fleches on a laissé la attributs qui pointaient vers les différentes
+  classes entre modele vue et controleur
 
 ### Description générale du jeu
 Notre jeu se déroule bien à bord d'un train qui se compose d'une locomotive, de wagons et d'un dernier wagon. On y retrouve initialement
@@ -20,8 +22,6 @@ bouttons présents dans le jeu.
 Pour la partie controleur, on retrouve le ControleurAccueil, ControleurJeu, ControleuFinJeu et notamment la classe JouerSon pour les différents sons
 qui compose le jeu. 
 
-Voici le lien vers le diagramme de classe : "https://lucid.app/lucidchart/13bc1b04-0832-41a9-b564-53e2586f50f3/edit?invitationId=inv_4a7964f2-4bec-43cf-9799-22bedca664ad&page=0_0#"
-
 ### Modèle détailles
 - le tarain ayant composé par un nombre donné wagons.
 - l'hiearchie de classes a été choisi en essayant de composer un train de la maniere la plus naturelle et proche de réalité que possible (avec par exemple un wagon de train est relié à ses deux voisins) 
@@ -33,6 +33,7 @@ Et dans le sommet de la hiearchie des composantes de train se trouve la classe a
 des bandits et des butins etc.
 - naturellement les bijoux, magot et boursres sont tous des butins donc il heritent d'une classe abstrainte Butin
 - Bandit est Marshall herite par leur tours de Personnage
+- c'est la classe personnage qui etend Observable parceque tout les changement dans le modele passent par des action de la part des bandit ou du marshall 
 
 ### Une belle vue
 Notre jeu se compose de plusieurs vues. Une première avec une page d'accueil dans laquelle on retrouve le titre du jeu, une seconde dans laquelle on retrouve toutes une liste de choix. On a le choix entre
@@ -44,6 +45,7 @@ les lettres "Z","Q","S","D" pour le tir, "B" pour braquer et entré pour exécut
 La partie en haut à droite presente une petit partie pour les informations des joueurs ( icone, nbr de balles restantes et score qui correspond aux butins). Puis on retrouve
 le compte rendu qui precise les differentes actions des joueurs, la phase dans laquelle on se situe et enfin la manche dans laquelle on est. 
 Pour terminer, on a une quatrième fenetre qui montre quel bandit a gagné avec son score et son icone, et un bouton "rejoué" pour les joueurs. 
+- c'est Jeu.Vue qui implemente Observer pour actualiser l'affichage pendant la partie
 
 ### Une poignée de dollars
 - On a l'intérieur de chaque wagon entre 1 et 4 butins de type bourse ou bijou aléatoire. Ils sont representés des images. Avant chaque action du bandir, le marshall se deplace avec une probabilité
