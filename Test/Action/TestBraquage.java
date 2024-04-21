@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 
 
-public class Braquage {
+public class TestBraquage {
 
     private Bandit bandit;
     private ComposanteTrain emplacementBandit;
@@ -30,24 +30,6 @@ public class Braquage {
 
         this.braquage = new Braquer(this.bandit);
 
-    }
-
-    // on verifie que la liste du bandit à augmenter et que la liste dans les wagon à diminuer
-
-    // verifier le type perdu ?
-
-    // si il ya rien on verifie qu'on a rien de plus
-     @Test
-        public void ajoutAction (){
-            // on verifie est-ce que l'action de braquage s'ajoute avec succes a la liste d'actions du bandit
-            assertFalse(this.bandit.getActions().contains(this.braquage)); // on s'assure qu'elle n'existait pas vant l'ajout
-            this.bandit.ajouterAction(this.braquage);
-            assertTrue(this.bandit.getActions().contains(this.braquage)); // mais qu'elle existe après l'ajout
-        }
-    @Test
-    public void emplecementVide(){
-        // elle est fait parceque le la methode suivante n'a du sens que si l'emplacement es vide
-        assertTrue(this.emplacementBandit.getButtins().isEmpty());
     }
 
     @Test

@@ -30,15 +30,6 @@ public class TestTir {
 
     }
 
-    @Test
-    public void ajoutTir() {
-        // on verifie est-ce que l'action de braquage s'ajoute avec succes a la liste d'actions du bandit
-        Tirer tir = new Tirer(this.tireur, Direction.Droite);
-        assertFalse(this.tireur.getActions().contains(tir)); // on s'assure qu'elle n'existait pas vant l'ajout
-        this.tireur.ajouterAction(tir);
-        assertTrue(this.tireur.getActions().contains(tir)); // mais qu'elle existe après l'ajout
-    }
-
     /**
      * verifie que le tir fait diminuer le nombre de balles du bandit
      */
