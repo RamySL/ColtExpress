@@ -1,5 +1,10 @@
-package modele;
+package modele.actions;
 //!! tout est bon
+
+import modele.*;
+import modele.personnages.Personnage;
+import modele.trainEtComposantes.*;
+
 /**
  * Permet le deplacement des personnages dans le train dans les 4 directions
  * pour réaliser ça elle s'appuie sur ses 4 classes internes qui chacunes d'entre eux gere un deplacement dans une des

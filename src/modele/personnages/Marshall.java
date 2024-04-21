@@ -1,6 +1,12 @@
-package modele;
+package modele.personnages;
 
-import java.util.ArrayList;
+import modele.trainEtComposantes.ComposanteTrain;
+import modele.trainEtComposantes.DernierWagon;
+import modele.Direction;
+import modele.trainEtComposantes.Locomotive;
+import modele.actions.Action;
+import modele.actions.SeDeplacer;
+
 import java.util.Random;
 // rajouter une methode check des wagon pour savoir si un bandit est arrivé à son emplacement pour lui tirer dessun ce check se fait dans le controleur
 /**

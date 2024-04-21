@@ -1,5 +1,12 @@
-package modele;
+package modele.actions;
 //!! tout est bon
+
+import modele.*;
+import modele.butins.Butin;
+import modele.personnages.Bandit;
+import modele.personnages.Personnage;
+import modele.trainEtComposantes.*;
+
 /**
  * un tir possede une direction Haut, Bas, Gauche, Droite
  */

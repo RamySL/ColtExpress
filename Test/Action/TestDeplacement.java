@@ -1,5 +1,9 @@
 package Action;
 import modele.*;
+import modele.actions.Action;
+import modele.actions.SeDeplacer;
+import modele.personnages.Bandit;
+import modele.trainEtComposantes.*;
 import org.junit.Before;
 import org.junit.Test;
 

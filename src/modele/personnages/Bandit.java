@@ -1,6 +1,11 @@
-package modele;
+package modele.personnages;
 
-import java.security.DigestException;
+import modele.butins.Butin;
+import modele.trainEtComposantes.ComposanteTrain;
+import modele.Direction;
+import modele.actions.Action;
+import modele.actions.SeDeplacer;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;

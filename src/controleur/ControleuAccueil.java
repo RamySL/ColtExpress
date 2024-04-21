@@ -3,9 +3,8 @@ package controleur;
 import Vue.Accueil;
 import Vue.Fenetre;
 import Vue.Jeu;
-import modele.Personnage;
-import modele.PlaySound;
-import modele.Train;
+import modele.personnages.Personnage;
+import modele.trainEtComposantes.Train;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,14 +25,14 @@ public class ControleuAccueil implements ActionListener {
     // accumulation de classes internes
     private ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJouers = new ArrayList<>(); // contiendra le surnom et icone des bandits
 
-    PlaySound misqueLancement;
+    JouerSon misqueLancement;
 
     /**
      * Intialise le controleur et fait la liason avec les composantes d'accueil dont il va ecouter les evenements
      * @param fenetre du jeu qui contient tous les différentes vu du jeu
      */
     public ControleuAccueil(Fenetre fenetre){
-        misqueLancement = new PlaySound("src/assets/sons/lancement.wav");
+        misqueLancement = new JouerSon("src/assets/sons/lancement.wav");
         //misqueLancement.jouer(true);
 
         this.fenetre = fenetre;

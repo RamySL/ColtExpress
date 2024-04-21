@@ -1,4 +1,7 @@
-package modele;
+package modele.trainEtComposantes;
+
+import modele.butins.Bijou;
+import modele.butins.Bourse;
 
 import java.util.Random;
 // probleme avec l'utilisation de genererButtin

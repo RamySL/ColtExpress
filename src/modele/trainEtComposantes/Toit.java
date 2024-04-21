@@ -1,9 +1,14 @@
-package modele;
+package modele.trainEtComposantes;
+
+import modele.Direction;
+import modele.trainEtComposantes.ComposanteTrain;
+import modele.trainEtComposantes.Interieur;
+import modele.trainEtComposantes.Train;
 
 /**
  * Toit d'un Objet Interieur
  */
-public class Toit extends ComposanteTrain{
+public class Toit extends ComposanteTrain {
     private Interieur cabine;
 
     /**
@@ -11,7 +16,7 @@ public class Toit extends ComposanteTrain{
      * @param train train
      * @param cabine la cabine dont this est le toit
      */
-    public Toit(Train train,Interieur cabine){
+    public Toit(Train train, Interieur cabine){
         super (train);
         this.cabine = cabine;
     }

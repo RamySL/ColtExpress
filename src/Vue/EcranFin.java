@@ -1,14 +1,11 @@
 package Vue;
 
 import controleur.ControleurFinJeu;
-import modele.Bandit;
-import modele.Personnage;
+import modele.personnages.Bandit;
+import modele.personnages.Personnage;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Map;
 
 public class EcranFin extends JPanel {

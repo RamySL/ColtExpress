@@ -1,4 +1,9 @@
-package modele;
+package modele.trainEtComposantes;
+
+import modele.Direction;
+import modele.butins.Butin;
+import modele.personnages.Bandit;
+import modele.personnages.Personnage;
 
 import java.util.ArrayList;
 import java.util.Random;

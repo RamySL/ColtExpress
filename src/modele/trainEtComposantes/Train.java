@@ -1,4 +1,8 @@
-package modele;
+package modele.trainEtComposantes;
+
+import modele.*;
+import modele.personnages.Bandit;
+import modele.personnages.Marshall;
 
 import java.util.ArrayList;
 import java.util.Iterator;

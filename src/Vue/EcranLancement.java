@@ -1,6 +1,6 @@
 package Vue;
 
-import modele.PlaySound;
+import controleur.JouerSon;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +13,7 @@ public class EcranLancement extends JPanel  {
     private Fenetre fenetre;
     private Image imageFond;
 
-    private PlaySound misqueLancement;
+    private JouerSon misqueLancement;
 
     public EcranLancement(Fenetre fenetre) {
 
@@ -88,7 +88,7 @@ public class EcranLancement extends JPanel  {
         g.drawImage(this.imageFond,0,-20,this.fenetre.getWidth(),this.fenetre.getHeight(),this);
     }
 
-    public PlaySound getMisqueLancement() {
+    public JouerSon getMisqueLancement() {
         return misqueLancement;
     }
 }

@@ -1,9 +1,9 @@
-package modele;
+package modele.trainEtComposantes;
 
 /**
  * Pour représenter le dernier wagon et la locomotive du train
  */
-public abstract class Extremite extends Interieur{
+public abstract class Extremite extends Interieur {
     Interieur voisin;
     public Extremite(Train train){
         super ( train);

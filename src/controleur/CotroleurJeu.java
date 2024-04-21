@@ -3,13 +3,17 @@ package controleur;
 import Vue.*;
 import Vue.Bouttons.Bouttons;
 import modele.*;
-import modele.Action;
+import modele.actions.Action;
+import modele.actions.Braquer;
+import modele.actions.SeDeplacer;
+import modele.actions.Tirer;
+import modele.personnages.Bandit;
+import modele.personnages.Marshall;
+import modele.trainEtComposantes.Train;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +25,7 @@ public class CotroleurJeu implements ActionListener {
     int nbAction, nBandits;
     boolean actionPhase=false,planPhase=true;
     Bandit joueurCourant;
-    Map<String, PlaySound> mapSonsJeu = new HashMap<>();
+    Map<String, JouerSon> mapSonsJeu = new HashMap<>();
 
     int nbActionExecute; // pour determiner que le boutton action à été appuer et qu'il faut passer au prochain ensemble d'action à executée
 
@@ -34,9 +38,9 @@ public class CotroleurJeu implements ActionListener {
      */
     public CotroleurJeu(Train train, Fenetre fenetre, int nbAction){
 
-        mapSonsJeu.put("tir", new PlaySound("src/assets/sons/gun-shot.wav"));
-        mapSonsJeu.put("braquage", new PlaySound("src/assets/sons/braquage.wav"));
-        mapSonsJeu.put("jeuBack", new PlaySound("src/assets/sons/jeuBack.wav"));
+        mapSonsJeu.put("tir", new JouerSon("src/assets/sons/gun-shot.wav"));
+        mapSonsJeu.put("braquage", new JouerSon("src/assets/sons/braquage.wav"));
+        mapSonsJeu.put("jeuBack", new JouerSon("src/assets/sons/jeuBack.wav"));
 
         this.train = train;
         this.fenetre = fenetre;
@@ -222,7 +226,7 @@ public class CotroleurJeu implements ActionListener {
 
     }
 
-    public Map<String,PlaySound> getMapSonsJeu(){ return this.mapSonsJeu;}
+    public Map<String, JouerSon> getMapSonsJeu(){ return this.mapSonsJeu;}
 
     /**
      * Ajout de la possibilité de jouer avec les touches du clavier en faisant la liason entre les touche du clavier et les action à effectuer

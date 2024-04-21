@@ -1,12 +1,16 @@
-package modele;
+package modele.personnages;
 // !! probleme normalement le personnage ne doit pas avoir accès à tous les personnage de son emplacement
+
+import modele.trainEtComposantes.ComposanteTrain;
+import modele.Observable;
+
 /**
  * regroupe les objets qui interviennent pendant le déroulement de la partie (Marshall et Bandits pour l'instant)
  * étend observable parce que sa methode executer modifie le modèle
  */
-public abstract class Personnage extends Observable{
-    ComposanteTrain emplacement;
-    String surnom;
+public abstract class Personnage extends Observable {
+    protected ComposanteTrain emplacement;
+    protected String surnom;
 
     /**
      * un personnage est créé en indiquant son surnom et la position qu'il a dans le train
@@ -31,9 +35,9 @@ public abstract class Personnage extends Observable{
      */
     public void changerEmplacement(ComposanteTrain nouvelleEmplacement){
         // on l'enleve de l'ancien emplacement
-        this.emplacement.persoList.remove(this);
+        this.emplacement.getPersoList().remove(this);
         this.emplacement = nouvelleEmplacement;
-        this.emplacement.persoList.add(this);
+        this.emplacement.getPersoList().add(this);
     }
 
     public ComposanteTrain getEmplacement(){

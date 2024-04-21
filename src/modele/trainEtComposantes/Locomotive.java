@@ -1,5 +1,12 @@
-package modele;
+package modele.trainEtComposantes;
 // probleme avec generer buttin qcq nous garantit qu'elle va etre utiliser qu'une seule fois ?
+
+import modele.Direction;
+import modele.butins.Magot;
+import modele.trainEtComposantes.ComposanteTrain;
+import modele.trainEtComposantes.Extremite;
+import modele.trainEtComposantes.Train;
+
 /**
  * la locomotive ( qui est tout à droite dans notre interprétation)
  */

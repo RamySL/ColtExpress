@@ -3,6 +3,14 @@ package Vue;
 import Vue.Bouttons.Bouttons;
 import controleur.CotroleurJeu;
 import modele.*;
+import modele.butins.Butin;
+import modele.personnages.Bandit;
+import modele.personnages.Marshall;
+import modele.personnages.Personnage;
+import modele.trainEtComposantes.ComposanteTrain;
+import modele.trainEtComposantes.Interieur;
+import modele.trainEtComposantes.Toit;
+import modele.trainEtComposantes.Train;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;

@@ -1,4 +1,6 @@
-package modele;
+package modele.butins;
+
+import modele.butins.Butin;
 
 /**
  * un butin avec une valeur de 500 $

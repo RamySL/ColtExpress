@@ -1,6 +1,11 @@
 package Action;
 
 import modele.*;
+import modele.actions.Tirer;
+import modele.butins.Bijou;
+import modele.butins.Butin;
+import modele.personnages.Bandit;
+import modele.trainEtComposantes.*;
 import org.junit.Before;
 import org.junit.Test;
 

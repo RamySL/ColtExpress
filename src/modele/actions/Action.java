@@ -1,5 +1,8 @@
-package modele;
+package modele.actions;
 // tout est bon
+
+import modele.personnages.Personnage;
+
 /**
  * Regroupe les actions possibles pour les personnages du jeu (deplacement, tir, braquage ..)
  */

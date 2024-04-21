@@ -1,4 +1,6 @@
-package modele;
+package modele.trainEtComposantes;
+
+import modele.Direction;
 
 import java.util.Random;
 

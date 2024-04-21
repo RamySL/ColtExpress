@@ -1,11 +1,13 @@
-package modele;
+package modele.trainEtComposantes;
+
+import modele.Direction;
 
 import java.util.Random;
 // tout est bon
 /**
  * le dernier wagon (dans notre représentation celui tout à gauche)
  */
-public class DernierWagon extends Extremite{
+public class DernierWagon extends Extremite {
     /**
      * intialise avec un nombre aleatoire de buttin entre 1 et 5
      * @param train

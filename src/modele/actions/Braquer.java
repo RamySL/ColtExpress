@@ -1,5 +1,10 @@
-package modele;
+package modele.actions;
 // !! Tout est bon
+
+import modele.personnages.Bandit;
+import modele.butins.Butin;
+import modele.trainEtComposantes.ComposanteTrain;
+
 /**
  * action de braquage de passager sur le train par les bandits
  */
