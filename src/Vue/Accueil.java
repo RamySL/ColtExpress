@@ -321,12 +321,12 @@ public class Accueil extends JPanel {
             String selection = this.jListNervositeNiveaux.getSelectedValue();
 
             if (selection == calme){
-                return 0.0;
+                return 0.2;
             }else{
                 if (selection == enerve) {
-                    return 0.6;
+                    return 0.4;
                 }else{
-                    return 1.0;
+                    return 0.7;
                 }
             }
 

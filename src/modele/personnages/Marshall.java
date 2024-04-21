@@ -8,7 +8,6 @@ import modele.actions.Action;
 import modele.actions.SeDeplacer;
 
 import java.util.Random;
-// rajouter une methode check des wagon pour savoir si un bandit est arrivé à son emplacement pour lui tirer dessun ce check se fait dans le controleur
 /**
  * marshall se deplace uniquement à l'interieur du train en essayant de chasser les bandits
  */
@@ -50,7 +49,7 @@ public class Marshall extends Personnage {
                     if (alea == 0){
                         a = new SeDeplacer(this, Direction.Gauche);
                     }else{
-                        a = new SeDeplacer(this, Direction.Gauche);
+                        a = new SeDeplacer(this, Direction.Droite);
                     }
                 }
             }

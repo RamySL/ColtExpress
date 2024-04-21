@@ -33,7 +33,7 @@ public class ControleuAccueil implements ActionListener {
      */
     public ControleuAccueil(Fenetre fenetre){
         misqueLancement = new JouerSon("src/assets/sons/lancement.wav");
-        //misqueLancement.jouer(true);
+        misqueLancement.jouer(true);
 
         this.fenetre = fenetre;
         this.accueil = this.fenetre.getAccueil();

@@ -63,7 +63,7 @@ public class CotroleurJeu implements ActionListener {
      * @param nbManches nombre de manche à jouer avant la fin du jeu
      */
     public void lancerJeu(int nbManches) {
-        //this.mapSonsJeu.get("jeuBack").jouer(true);
+        this.mapSonsJeu.get("jeuBack").jouer(true);
 
         int totaleActionsManche = this.nbAction * this.nBandits; // le nombre d'actions que planifie tous les joeurs en une manche
         int manche = 0;
@@ -176,17 +176,6 @@ public class CotroleurJeu implements ActionListener {
     private void executionAction(Marshall marshall) {
         this.mapSonsJeu.get("tir").arreter(); // pour que les sons se lance mm si on spam action
         this.mapSonsJeu.get("braquage").arreter();
-
-        //String feed =  marshall.seDeplacer(); // l'actions est executer et renvoi un feedback
-        //boolean marshallSestDeplace = feed != "";
-
-       // fuite des bandits si le marshall vient dans le mm emplacement qu'eux
-//        ArrayList<Bandit> lstBandit = marshall.getEmplacement().getBanditListSauf(marshall);
-//        while (!lstBandit.isEmpty()){
-//            System.out.println(lstBandit);
-//            lstBandit.get(0).fuir();
-//            lstBandit.remove(0);
-//        }
 
         this.joueurCourant = this.train.getBandits().get(this.nbActionExecute % this.nBandits);
         Action actionAExecuter = this.joueurCourant.getActions().peek();
