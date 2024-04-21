@@ -54,13 +54,35 @@ Mais lorsque c'est le bandit qui atteint la position du Marshall, il se fait tir
 - Les joueurs jouent toujours dans le même ordre
 - Lors de la phase de planification, chaque joueur à son tour donne tous ses ordres à la fois
 - Lors de la phase d’action, on effectue d’abord toutes les premières actions (dans l’ordre des joueurs), puis toutes les deuxièmes actions (dans le mêeme ordre), et ainsi de suite
-- 
+- Chaque tir utilise une balle. Chaque bandit possède un nombre de balles donné par le joueur lors du choix des paramètres.
+- Le compte-rendu textuel mentionne ces actions de tir et leurs conséquences
+
+### Expression libre 
+- arrière plan
+- page d'accueil
+- choix des paramètres
+- utilisation d'images pour les butins
+- choix d'icone et surnom pour les joueurs
+- raccourcis clavier pour les différentes commandes
+- son pour le jeu
+- afficher le ou les gagnants selon le score
+- XXX
 
 
 
 ## 2. Vos choix d’architectures.
+
+### Partage des rôles 
+Concernant le partage des rôles, nous avons créé un serveur sur discord dans lequel on echangeait sur les idées ou pour s'appeler afin de travailler ensemble
+lors de partage d'ecran. Nous nous sommes quelques fois vus à la bibliothèque ou lors de pause déjeuner. 
+Le partage du code s'est fait en manière de préférence c'est a dire selon l'envie. 
+
+### Détails des classes 
+Diagramme de classe : "https://lucid.app/lucidchart/13bc1b04-0832-41a9-b564-53e2586f50f3/edit?invitationId=inv_4a7964f2-4bec-43cf-9799-22bedca664ad&page=0_0#" 
 ## 3. Les problèmes qui sont présents et que vous n’avez pas pu éliminer.
+Aucun
 ## 4. Les morceaux de code écrits à plusieurs ou empruntés ailleurs.
+- Classe pour le Son XXX
    
 
 
