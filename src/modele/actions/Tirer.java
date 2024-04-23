@@ -159,9 +159,9 @@ public class Tirer extends Action {
                 return executeur.getSurnom() + " a tiré dans le vide à gauche sur le toit du dernier wagon";
             } else {
 
-                Toit toitCourant = (Toit) toit.getVoisin(Direction.Gauche); // on recup le toit de droite
+                Toit toitCourant = (Toit) toit.getVoisin(Direction.Gauche);
 
-                while (toitCourant.getBanditListSauf(executeur).isEmpty() && !(toitCourant.getCabine() instanceof Locomotive)) {
+                while (toitCourant.getBanditListSauf(executeur).isEmpty() && !(toitCourant.getCabine() instanceof DernierWagon)) {
                     toitCourant = (Toit) toitCourant.getVoisin(Direction.Gauche);
                 }
 

@@ -218,13 +218,6 @@ public class CotroleurJeu implements ActionListener {
         this.nbActionExecute++;
     }
 
-    /**
-     * test si le marshall est dans le mm emplacement que b
-     * @param b
-     * @param m
-     * @return
-     */
-
 
     /**
      * calcule le gagnant (ou les gagnants) de la partie et l'envoi à l'ecran de fin,
@@ -380,7 +373,7 @@ public class CotroleurJeu implements ActionListener {
             }
         };
 
-        // Lier les actions aux touches correspondantes
+
         vueJeu.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("RIGHT"), "deplacementDroite");
         vueJeu.getActionMap().put("deplacementDroite", deplacementDroite);
 

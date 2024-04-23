@@ -2,8 +2,8 @@
 
 
 ## 1.Les parties du sujet que vous avez traitées.
-- Pour les PDF de diagramme des classes mit, on a décidé de les séparer sinon c'était trop ilisible mais au lieu des fleches on a laissé la attributs qui pointaient vers les différentes
-  classes entre modele vue et controleur
+- Pour les PDF de diagramme des classes mit, on a décidé de les séparer sinon c'était trop illisible mais au lieu des fleches on a 
+laissé les attributs qui pointaient vers les différentes classes entre modele vue et controleur.
 
 ### Description générale du jeu
 Notre jeu se déroule bien à bord d'un train qui se compose d'une locomotive, de wagons et d'un dernier wagon. On y retrouve initialement
@@ -16,27 +16,38 @@ Le jeu se déroule en un nombre de manches et a la fin le gagnant est le bandit 
 
 ### Modèle-Vue-Contrôleur
 Le jeu est organisé selon l'architecture MVC. On a la partie modèle qui regroupe le code concernant la structure des objets constituant le jeu,le train et tout ce qui le compose,
-pour les bandit, le marshall, les différents buttins, les actions des bandit (braquer, se deplacer et tirer) sont aussi des classes.
+pour les bandits, le marshall, les différents buttins, les actions des bandits (braquer, se deplacer et tirer) sont aussi des classes.
 Pour la partie vue, on y retrouve la partie visuelle avec EcranFin, EcranLancement, Fenetre, la classe Jeu pour l'affichage, la classe Accueil et enfin la classe Bouttons pour les différents 
 bouttons présents dans le jeu. 
 Pour la partie controleur, on retrouve le ControleurAccueil, ControleurJeu, ControleuFinJeu et notamment la classe JouerSon pour les différents sons
-qui compose le jeu. 
+qui composent le jeu. 
 
 ### Modèle détailles
-- le tarain ayant composé par un nombre donné wagons.
+- le tarain étant composé par un nombre donné wagons.
 - l'hiearchie de classes a été choisi en essayant de composer un train de la maniere la plus naturelle et proche de réalité que possible (avec par exemple un wagon de train est relié à ses deux voisins) 
 ce qui a donné la structure d'une liste doublement chainée, on a decider de prendre la locomotive et le dernier wagon comme des objets eux aussi la locmotive se distinguant avec le marshall
 et le magot et le dernierWagon représenté son symetrique, les deux possedant qu'un seul voisin à la diference des Wagons nous conduit à les faire heriter d'une classe Extremite.
-- on a décidé aussi que le toit a le mérite d'etre un objet donc on a fait une classe pour, pour differencier le toit et les l'interieur du train on a introduit la classe Interieur dont herite
-Extremite et Wagon, un objet Interieur à sa cration est lié à son toit qui lui même pointe vers lui.
+- on a décidé aussi que le toit a le mérite d'etre un objet donc on a fait une classe pour, pour differencier le toit et l'interieur du train on a introduit la classe Interieur dont herite
+Extremite et Wagon, un objet Interieur à sa création est lié à son toit qui lui même pointe vers lui.
 Et dans le sommet de la hiearchie des composantes de train se trouve la classe abstraite ComposanteTrain qui permet par exemple de factoriser le fait que le toit et Interieur peuvent les deux avoir 
 des bandits et des butins etc.
 - naturellement les bijoux, magot et boursres sont tous des butins donc il heritent d'une classe abstrainte Butin
-- Bandit est Marshall herite par leur tours de Personnage
-- c'est la classe personnage qui etend Observable parceque tout les changement dans le modele passent par des action de la part des bandit ou du marshall 
+- Bandit est Marshall herite par leur tours de Personnage, qui factorise le surnom, leur position dans le train, marshall ayant une nervosité entre 0 et 1
+et le bandit possedant une liste de butins et une file d'actions
+- c'est la classe personnage qui etend Observable parceque tous les changements dans le modele passent par des actions de la part des bandits ou du marshall
+- Les actions des bandits étant : se déplacer, braquer, tirer héritent d'une classe abstraite qui les regroupe et leurs permets avec une
+méthode abstraite execute() que chacun donne sa propre implementation.
+- pour le tir et déplacement on a besoin d'une direction et chacune à un traitement spécifique, et pour tirer ça diffère aussi que l'on soit
+sur le toit ou à l'interieur, pour diviser les tâches et faciliter la lecture du code et le fatoriser on introduit des classes internes privées
+qui gere chacune l'action dans une direction.
+- Dans notre jeu un tir sur un toit traverse tout le train jusqu'a ce que la balle touche un bandit.
+- pour les dirctions on ue enumeration.
 
 ### Une belle vue
-Notre jeu se compose de plusieurs vues. Une première avec une page d'accueil dans laquelle on retrouve le titre du jeu, une seconde dans laquelle on retrouve toutes une liste de choix. On a le choix entre
+- Le point sur lequel on sait basé dans notre vue c'est qu'elle soit la plus stable et plus infallible que possible, càd si un utilisateur par hazard veut lancer une partie avec 50 wagons, 30 bandits
+  la vue répond présente et pour réussir ça on s'est appuyer sur swing et ses layouts, donc dans la vue de la partie tout est absolument positionné avec les layouts : BorderLayout (bouttons), FlowLayout
+  (panneau d'affichage), (BoxLayout : buttins, bandits..), GridLayout( informations des joueurs).
+- Et donc Notre jeu se compose de plusieurs vues. Une première avec une page d'accueil dans laquelle on retrouve le titre du jeu, une seconde dans laquelle on retrouve toutes une liste de choix. On a le choix entre
 l'icone du bandit et du surnom, nombre de balles pour les bandits, nombre de wagons, nombre d'actions, nombre de manche et enfin le choix pour la nervosite du Marshall entre calme, enervé et furieux. Le jeu se 
 lance officiellement à la troisième fenêtre avec tous les paramètres choisits précedemment, on y retrouve les différents éléments du train et les bandits à leur emplacement avec leur icone et leur surnom ainsi que les butins
 sous la forme de bijou ou de bouse et de magot dans la locomotive. 
@@ -46,6 +57,7 @@ La partie en haut à droite presente une petit partie pour les informations des 
 le compte rendu qui precise les differentes actions des joueurs, la phase dans laquelle on se situe et enfin la manche dans laquelle on est. 
 Pour terminer, on a une quatrième fenetre qui montre quel bandit a gagné avec son score et son icone, et un bouton "rejoué" pour les joueurs. 
 - c'est Jeu.Vue qui implemente Observer pour actualiser l'affichage pendant la partie
+
 
 ### Une poignée de dollars
 - On a l'intérieur de chaque wagon entre 1 et 4 butins de type bourse ou bijou aléatoire. Ils sont representés des images. Avant chaque action du bandir, le marshall se deplace avec une probabilité
@@ -72,9 +84,8 @@ les parametre saisie sont correcte.
 on a eu un probleme qui etait quand la boucle etait lancée dans ControleurAcuueil à partir de controleurJeu, l'écran freez et l'affichage n'est plus actualisé même si le jeu tournait 
 (on fait des print pour le verifier), en ayant deja fait des recherches sur les thread utilisé en swing en s'interressant à invokeLater() (qui son but est de rajouter un Runnable a la fin de la file d'attente 
 du thread) qui était dans conway (le jeu du prof), on a trouvé que c'était un probleme commun, et que ce qui se passé c'est que la boucle du jeu
-tournait sur l'EDT (Event Dispatch Thread) qui est responsable pour les mise à jour graphique et pour gerer les evenment, EDT etant bloqué par l'execution de la boucle qui tournait 
-dessus n'actualisé plus l'affichage
-et on recherchant on a trouvé deux solution une qui est intuitif c'est de séparer l'execution de la boucle du jeu sur un autre thread comme ça l'EDT n'est pas bloqué
+tournait sur l'EDT (Event Dispatch Thread) qui est responsable pour les mise à jour graphique et pour gerer les evenment en swing, EDT etant bloqué par l'execution de la boucle qui tournait 
+dessus n'actualisé plus l'affichage, et en recherchant on a trouvé deux solution une qui est intuitif c'est de séparer l'execution de la boucle du jeu sur un autre thread comme ça l'EDT n'est pas bloqué
 La deuxieme qui était de souvenir utilisé pour la boucle du jeu FeuFurieux du premier semestre et qui été donnée en squelette cette solution est d'utilise javax.swing.Timer, cette solution permet d'executer tout sur l'EDT 
 parceque elle permet de synchroniser l'execution de la boucle chaque intervalle de temps préciser, donc la boucle du jeu ne prend plus l'EDT pendant une période continue mais son execution est discontinu 
 et donc l'actualisation de l'affichage n'est pas bloquée. On a choisit l'option du thread séparé parceque c'est la plus simple en ayant deja initié la boucle du jeu sans penser au timer
@@ -83,7 +94,7 @@ et donc l'actualisation de l'affichage n'est pas bloquée. On a choisit l'option
 des boucles while qui leurs seul but été d'attendre les saisie utilisateur et prendant ce temps là le processeur souffre avec des calculs pas necessaire, donc on utilise Thread.sleep pour arreter
 les calculs une periode donnée en milliseconde comme ça on reduit les calculs. 
 Donc ControleurJeu possede la boucle pricnipale et c'est lui qui ecoute pour les evenement pendant le déroulement de la partie, à la fin 
-il calcule la liste des gagnant et l'envoi au ControleurFinJeu
+il calcule la liste des gagnants et l'envoi au ControleurFinJeu
 - ControleurFinJeu : il permet de relancer une partie si le boutton rejouer dans la vue EcranFinJeu est appuié
 
 
@@ -96,8 +107,6 @@ il calcule la liste des gagnant et l'envoi au ControleurFinJeu
 - différent son pour le jeu
 - afficher le ou les gagnants selon le score
 - affichage du feedback des actions dans le jeu au lieu de la console
-
-
 
 ### Partage des rôles 
 Concernant le partage des rôles, nous avons créé un serveur sur discord dans lequel on echangeait sur les idées ou pour s'appeler afin de travailler ensemble

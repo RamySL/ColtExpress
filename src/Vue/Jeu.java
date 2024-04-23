@@ -378,21 +378,8 @@ public class Jeu extends JPanel implements Observer {
 
                 return panel;
             }
-
-//            public class listeButtinBandit extends JPanel{
-//
-//                public listeButtinBandit(){
-//                    this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-//                    JPanel nbBijouPanel = new JPanel()
-//                }
-//
-//
-//            }
         }
     }
-
-
-
 
     /**
      * Va représenter graphiquement un wagon et son toit
@@ -408,24 +395,6 @@ public class Jeu extends JPanel implements Observer {
 
             JPanel cabinePanel = new JPanel(new BorderLayout());
             cabinePanel.setOpaque(false);
-            //cabinePanel.setBorder(new LineBorder(Color.WHITE,3));
-//            cabinePanel.setBorder(new Border() {
-//                @Override
-//                public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-//                    g.setColor(Color.WHITE);
-//                    g.drawImage(iconeWagon.getImage(), x-50, y-10, width+50, height+100, null);
-//                }
-//
-//                @Override
-//                public Insets getBorderInsets(Component c) {
-//                    return new Insets(0,0,0,0);
-//                }
-//
-//                @Override
-//                public boolean isBorderOpaque() {
-//                    return false;
-//                }
-//            });
 
             cabinePanel.setBorder(new LineBorder(Color.WHITE,5));
 

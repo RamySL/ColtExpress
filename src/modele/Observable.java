@@ -1,5 +1,7 @@
 package modele;
 
+import Vue.Observer;
+
 import java.util.ArrayList;
 /**
  * code empreinté de conway
