@@ -52,7 +52,6 @@ public class CotroleurJeu implements ActionListener {
         this.nbAction = nbAction;
         this.nBandits = this.train.getBandits().size();
 
-        this.vueJeu.liaisonCommandesControleur(this);
         jeuBindingKeys ();
 
     }
@@ -138,35 +137,6 @@ public class CotroleurJeu implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        Marshall marshall = this.train.getMarshall();
-        if( (e.getSource() instanceof Bouttons.BouttonAction) && actionPhase) {
-            executionAction(marshall);
-
-        }if (planPhase) {
-            Action a;
-
-            if (e.getSource() instanceof Bouttons.BouttonDeplacement) {
-                a = new SeDeplacer(this.joueurCourant, ((Bouttons.BouttonDeplacement) e.getSource()).getDirection());
-                this.joueurCourant.ajouterAction(a);
-                this.vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
-            }
-
-            if (e.getSource() instanceof Bouttons.BouttonBraquage){
-                a = new Braquer(this.joueurCourant);
-                this.joueurCourant.ajouterAction(a);
-                this.vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
-            }
-
-
-            if (e.getSource() instanceof Bouttons.BouttonTir){
-                a = new Tirer(this.joueurCourant, ((Bouttons.BouttonTir) e.getSource()).getDirection());
-                this.joueurCourant.ajouterAction(a);
-                this.vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
-            }
-
-
-        }
-
     }
 
     /**

@@ -67,9 +67,6 @@ public class Jeu extends JPanel implements Observer {
 
     }
 
-    public void liaisonCommandesControleur(CotroleurJeu controleur){
-        this.cmdPanel.liaisonBouttonsControleur(controleur);
-    }
     public void dessineTrain(){
         this.trainPanel.removeAll();
         this.cmdPanel.getPanneauBandit().removeAll();
@@ -104,10 +101,6 @@ public class Jeu extends JPanel implements Observer {
      * Le Paneau d'affichage qui contient les bouttons et l'etat des bandit et le fille d'actions
      */
     public class CommandePanel extends JPanel {
-
-        private Bouttons.BouttonAction action;
-        private Bouttons.BouttonBraquage braquage;
-        private ArrayList<Bouttons> bouttonsCommande = new ArrayList<>();
         private PanneauBandits panneauBandits;
         private PhaseFeedPanel phaseFeedPanel;
 
@@ -117,32 +110,13 @@ public class Jeu extends JPanel implements Observer {
             //this.setBorder(new LineBorder(Color.GREEN,2));
 
             this.setLayout(new FlowLayout(FlowLayout.LEFT,8,0));
-            DeplacementPanel  d = new DeplacementPanel();
-            TirPanel t = new TirPanel();
             this.panneauBandits = new PanneauBandits();
             phaseFeedPanel = new PhaseFeedPanel();
 
-            this.action = new Bouttons.BouttonAction("Action");
-            this.braquage = new Bouttons.BouttonBraquage("Braquer");
-            this.bouttonsCommande.add(this.action);
-            this.bouttonsCommande.add(this.braquage);
-
-
-            this.add(d);
-            this.add(this.braquage);
-            this.add(t);
-            this.add(this.action);
             this.add(panneauBandits);
             this.add(phaseFeedPanel);
             //this.add(e);
 
-        }
-
-        public void liaisonBouttonsControleur(CotroleurJeu controleur){
-            for(Bouttons b : this.bouttonsCommande){
-                b.addActionListener(controleur);
-
-            }
         }
 
         public PanneauBandits getPanneauBandit (){ return this.panneauBandits;}
@@ -158,59 +132,8 @@ public class Jeu extends JPanel implements Observer {
             return phaseFeedPanel;
         }
 
-        class DeplacementPanel extends JPanel{
-            private Bouttons.BouttonDeplacement gaucheDep,droiteDep,hautDep,basDep;
-            public DeplacementPanel(){
-                this.setLayout(new BorderLayout());
 
-                JLabel tirLabel = new JLabel("Move");
-                tirLabel.setPreferredSize(new Dimension(40,30));
-                tirLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-                gaucheDep = new Bouttons.BouttonDeplacement(Direction.Gauche,"<");
-                droiteDep = new Bouttons.BouttonDeplacement(Direction.Droite,">");
-                hautDep =new Bouttons.BouttonDeplacement(Direction.Haut,"^");
-                basDep = new Bouttons.BouttonDeplacement(Direction.Bas,"v");
-                CommandePanel.this.bouttonsCommande.add(gaucheDep);
-                CommandePanel.this.bouttonsCommande.add(droiteDep);
-                CommandePanel.this.bouttonsCommande.add(basDep);
-                CommandePanel.this.bouttonsCommande.add(hautDep);
-
-                this.add(tirLabel, BorderLayout.CENTER);
-                this.add(gaucheDep, BorderLayout.WEST);
-                this.add(droiteDep, BorderLayout.EAST);
-                this.add(basDep, BorderLayout.SOUTH);
-                this.add(hautDep, BorderLayout.NORTH);
-            }
-
-        }
-
-        class TirPanel extends JPanel{
-
-            private Bouttons.BouttonTir tirGauche, tirDroit,tirHaut,tirBas;
-            public TirPanel(){
-                this.setLayout(new BorderLayout());
-
-                JLabel tirLabel = new JLabel("Tir");
-                tirLabel.setPreferredSize(new Dimension(40,30));
-                tirLabel.setHorizontalAlignment(SwingConstants.CENTER);
-                tirGauche = new Bouttons.BouttonTir(Direction.Gauche,"<");
-                tirDroit = new Bouttons.BouttonTir(Direction.Droite,">");
-                tirBas = new Bouttons.BouttonTir(Direction.Bas,"v");
-                tirHaut = new Bouttons.BouttonTir(Direction.Haut,"^");
-                CommandePanel.this.bouttonsCommande.add(tirGauche);
-                CommandePanel.this.bouttonsCommande.add(tirDroit);
-                CommandePanel.this.bouttonsCommande.add(tirBas);
-                CommandePanel.this.bouttonsCommande.add(tirHaut);
-
-                this.add(tirLabel, BorderLayout.CENTER);
-                this.add(tirGauche, BorderLayout.WEST);
-                this.add(tirDroit, BorderLayout.EAST);
-                this.add(tirBas, BorderLayout.SOUTH);
-                this.add(tirHaut, BorderLayout.NORTH);
-            }
-
-        }
 
         /**
          * le panel qui va montrer c'est quelle phase, les feedback sur les actions ..
