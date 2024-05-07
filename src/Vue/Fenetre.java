@@ -20,7 +20,7 @@ public class Fenetre extends JFrame {
 
         this.ecranLancement = new EcranLancement(this);
         this.accueil = new Accueil( this);
-        this.ecranTpe = new EcranType();
+        this.ecranTpe = new EcranType(this);
 
         this.jeuId = "jeu";
         this.lancementId = "lancement";
