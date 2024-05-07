@@ -50,7 +50,7 @@ public class EcranLancement extends JPanel  {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == 10)
-                    EcranLancement.this.fenetre.changerVue(EcranLancement.this.fenetre.getAccueilId());
+                    EcranLancement.this.fenetre.changerVue(EcranLancement.this.fenetre.getTypeId());
             }
 
             @Override

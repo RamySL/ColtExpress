@@ -1,6 +1,7 @@
 package controleur;
 
 import Vue.Accueil;
+import Vue.EcranType;
 import Vue.Fenetre;
 import Vue.Jeu;
 import modele.personnages.Personnage;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class ControleuAccueil implements ActionListener {
 
     private Accueil accueil;
+    private EcranType ecranType;
     private Fenetre fenetre;
     // accumulation de classes internes
     private ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJouers = new ArrayList<>();
@@ -37,7 +39,9 @@ public class ControleuAccueil implements ActionListener {
 
         this.fenetre = fenetre;
         this.accueil = this.fenetre.getAccueil();
+        this.ecranType = this.fenetre.getEcranTpe();
         this.accueil.liaisonAvecControleur(this);
+        this.ecranType.liaisonAvecControleur(new ControleurTypePartie(this.fenetre, this.fenetre.getEcranTpe()));
 
     }
 
