@@ -3,6 +3,8 @@ package controleur;
 import Vue.EcranType;
 import Vue.Fenetre;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -21,5 +23,10 @@ public class ControleurTypePartie implements ActionListener {
         if (e.getSource() == this.ecranType.getBouttonHorsLigne()){
             this.fenetre.changerVue(this.fenetre.getAccueilId());
         }
+
+        if (e.getSource() == this.ecranType.getBouttonMultiJouer()){
+            this.ecranType.displayAttente();
+        }
+
     }
 }

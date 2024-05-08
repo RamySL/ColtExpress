@@ -13,8 +13,12 @@ public class EcranType extends JPanel {
     private Image imageFond;
     private Fenetre fenetre;
 
+    private AttenteMulti att;
+
     public EcranType(Fenetre fenetre){
         this.fenetre = fenetre;
+        this.att = new AttenteMulti();
+
 
         this.bouttonHorsLigne = new Bouttons.BouttonHorsJeu("Hors Ligne");
         this.bouttonHorsLigne.setBackground(Color.WHITE);
@@ -35,6 +39,11 @@ public class EcranType extends JPanel {
         this.bouttonMultiJouer.addActionListener(c);
     }
 
+    public void displayAttente(){
+        this.add(this.att);
+        this.revalidate();
+    }
+
     public Bouttons.BouttonHorsJeu getBouttonHorsLigne() {
         return bouttonHorsLigne;
     }
@@ -47,5 +56,15 @@ public class EcranType extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponents(g);
         g.drawImage(this.imageFond,0,-20,this.fenetre.getWidth(),this.fenetre.getHeight(),this);
+    }
+
+    private class AttenteMulti extends JPanel {
+        public AttenteMulti(){
+            JLabel msg = new JLabel("Le multiJouer est en cours de development");
+            msg.setFont(new Font("MV Boli", Font.BOLD, 20));
+            msg.setForeground(Color.BLACK);
+
+            this.add(msg);
+        }
     }
 }
