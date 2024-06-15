@@ -11,22 +11,25 @@ public class Fenetre extends JFrame {
     private JPanel ecranLancement;
     private Accueil accueil;
     private EcranType ecranTpe;
+    private OnLineSettigs olSettings;
     private Jeu jeu;
     private EcranFin ecranFin;
     private JPanel cards;
-    private String jeuId, lancementId, accueilId, ecranFinId, typeID;
+    private String jeuId, lancementId, accueilId, ecranFinId, typeID, olSettingsId;
     public Fenetre(){
 
 
         this.ecranLancement = new EcranLancement(this);
         this.accueil = new Accueil( this);
         this.ecranTpe = new EcranType(this);
+        this.olSettings = new OnLineSettigs();
 
         this.jeuId = "jeu";
         this.lancementId = "lancement";
         this.accueilId = "accueil";
         this.ecranFinId = "ecranFin";
         this.typeID = "ecranType";
+        this.olSettingsId = "olSettings";
 
 
         this.setTitle("ColtExpress");
@@ -41,6 +44,8 @@ public class Fenetre extends JFrame {
         cards.add(this.ecranLancement, this.lancementId);
         cards.add(this.accueil, this.accueilId);
         cards.add(this.ecranTpe, this.typeID);
+        cards.add(this.olSettings, this.olSettingsId);
+
 
         cardLayout.show(cards, this.lancementId);
 
@@ -79,9 +84,15 @@ public class Fenetre extends JFrame {
     public Accueil getAccueil (){return this.accueil;}
     public String getTypeId (){ return this.typeID;}
 
+    public String getOlSettingsId() {
+        return olSettingsId;
+    }
+
     public EcranType getEcranTpe() {
         return ecranTpe;
     }
+
+    public OnLineSettigs getOlSettings(){return  this.olSettings;}
 
     public Jeu getJeuPanel (){return this.jeu;}
 
