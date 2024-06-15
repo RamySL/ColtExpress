@@ -22,11 +22,14 @@ public class Server {
     private final List<ClientHandler> players;
     private final ExecutorService pool;
 
+    private int nbJoueurConnecte;
+
     public Server(int port, int maxPlayers) {
         this.port = port;
         this.maxPlayers = maxPlayers;
         this.players = new ArrayList<>();
         this.pool = Executors.newFixedThreadPool(maxPlayers);
+        this.nbJoueurConnecte = 0;
     }
 
     public void start() {
@@ -38,6 +41,7 @@ public class Server {
                 System.out.println("Waiting for players to connect...");
                 Socket client = listener.accept();
                 System.out.println("Player connected!");
+                this.nbJoueurConnecte ++;
                 ClientHandler player = new ClientHandler(client);
                 players.add(player);
                 // player est runnable et execute() execute son run
@@ -64,6 +68,14 @@ public class Server {
         for (ClientHandler player : players) {
             player.sendMessage(movement);
         }
+    }
+
+    public int getNbJoueurConnecte() {
+        return nbJoueurConnecte;
+    }
+
+    public int getMaxPlayers() {
+        return maxPlayers;
     }
 
     private class ClientHandler implements Runnable {
