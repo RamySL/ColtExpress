@@ -1,8 +1,8 @@
 package controleur;
 
 import Vue.OnLineSettigs;
-import client.Client;
-import server.Server;
+import network.client.Client;
+import network.server.Server;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -29,6 +29,11 @@ public class ControleurServerClient implements ActionListener {
         });
     }
 
+    public void updateNbJoueurConnecte (int n){
+        this.olSettings.getAttenteJoueurLabel().setText("En attente de la connexion de tous les joueurs ( restant " + (n) + ")");
+
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.olSettings.getLunchButton()){
@@ -48,7 +53,7 @@ public class ControleurServerClient implements ActionListener {
             new Thread(() -> {
                 String serverAddress =this.olSettings.getIpServerClient(); // Server address
                 int serverPort = Integer.parseInt(this.olSettings.getPortServerClient()); // Server port
-                Client client = new Client(serverAddress, serverPort);
+                Client client = new Client(serverAddress, serverPort, this);
                 client.start();
             }).start();
             this.olSettings.getJoinButton().setEnabled(false);

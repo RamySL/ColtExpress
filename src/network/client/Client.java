@@ -1,4 +1,7 @@
-package client;
+package network.client;
+
+import controleur.ControleurServerClient;
+import network.PaquetNbJoeurConnecte;
 
 import java.io.*;
 import java.net.*;
@@ -10,20 +13,23 @@ public class Client {
     private final String serverAddress;
     private final int serverPort;
     private Socket socket;
-    private PrintWriter out;
-    private BufferedReader in;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
     private BufferedReader userInput;
 
-    public Client(String serverAddress, int serverPort) {
+    private ControleurServerClient cntrlServerClient;
+
+    public Client(String serverAddress, int serverPort, ControleurServerClient ctrlServerClient) {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
+        this.cntrlServerClient = ctrlServerClient;
     }
 
     public void start() {
         try {
             socket = new Socket(serverAddress, serverPort);
-            out = new PrintWriter(socket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
             userInput = new BufferedReader(new InputStreamReader(System.in));
 
             System.out.println("Connected to the game server.");
@@ -36,7 +42,7 @@ public class Client {
             String movement;
             while ((movement = userInput.readLine()) != null) {
                 if (isValidMovement(movement)) {
-                    out.println(movement);
+                    //out.println(movement);
                 } else {
                     System.out.println("Invalid movement command. Use: up, down, left, right");
                 }
@@ -70,11 +76,15 @@ public class Client {
         @Override
         public void run() {
             try {
-                String serverMessage;
-                while ((serverMessage = in.readLine()) != null) {
-                    System.out.println("Server: " + serverMessage);
+                Object serverMessage;
+                while ((serverMessage = in.readObject()) != null) {
+                    if (serverMessage instanceof PaquetNbJoeurConnecte) {
+                        PaquetNbJoeurConnecte p = (PaquetNbJoeurConnecte) serverMessage;
+                        cntrlServerClient.updateNbJoueurConnecte(p.getNbJoueurRestants());
+                    }
+                    //System.out.println("Server: " + serverMessage);
                 }
-            } catch (IOException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             } finally {
                 closeConnections();
