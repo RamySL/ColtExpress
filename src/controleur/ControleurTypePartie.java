@@ -25,7 +25,7 @@ public class ControleurTypePartie implements ActionListener {
         }
 
         if (e.getSource() == this.ecranType.getBouttonMultiJouer()){
-            this.fenetre.getOlSettings().liaisonAvecControleur(new ControleurServerClient(this.fenetre.getOlSettings()));
+            this.fenetre.getOlSettings().liaisonAvecControleur(new ControleurServerClient(this.fenetre.getOlSettings(), this.fenetre));
             this.fenetre.changerVue(this.fenetre.getOlSettingsId());
         }
 

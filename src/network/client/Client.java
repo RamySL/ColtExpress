@@ -1,7 +1,9 @@
 package network.client;
 
 import controleur.ControleurServerClient;
+import network.PaquetChoixJrHost;
 import network.PaquetNbJoeurConnecte;
+import network.server.PaquetChoixJrClient;
 
 import java.io.*;
 import java.net.*;
@@ -16,8 +18,9 @@ public class Client {
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private BufferedReader userInput;
-
     private ControleurServerClient cntrlServerClient;
+
+    boolean host = false;
 
     public Client(String serverAddress, int serverPort, ControleurServerClient ctrlServerClient) {
         this.serverAddress = serverAddress;
@@ -81,8 +84,18 @@ public class Client {
                     if (serverMessage instanceof PaquetNbJoeurConnecte) {
                         PaquetNbJoeurConnecte p = (PaquetNbJoeurConnecte) serverMessage;
                         cntrlServerClient.updateNbJoueurConnecte(p.getNbJoueurRestants());
+
+                    }else if (serverMessage instanceof PaquetChoixJrClient){
+                        // vue sans param ( un extend ?)
+                        cntrlServerClient.vueClient();
+                    }else if (serverMessage instanceof PaquetChoixJrHost){
+                        host = true;
+                        // copier coller de la vue des param
+                        cntrlServerClient.vueHost();
                     }
-                    //System.out.println("Server: " + serverMessage);
+
+
+
                 }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();

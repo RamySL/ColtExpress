@@ -6,6 +6,12 @@ package network.server;
  * liste, la communication avec chaque un des clients se fait par l'intermediaire d'un thread (multi threading)
  */
 
+/**
+ * - Quand tous les joueurs sont connectés, les clients vont etre transmit vers la page où ils choisissent leur personnage, et le hot
+ * - va etre dirigié vers une page ou en plus du personnage il choisit les paramètres du jeu
+ * - le jeu se lance quand le hot lance (un message d'attente est affiché pour les clients */
+
+import network.PaquetChoixJrHost;
 import network.PaquetNbJoeurConnecte;
 
 import java.io.*;
@@ -36,15 +42,22 @@ public class Server {
 
     public void start() {
         System.out.println("Game server starting...");
+
         // the 0 for backlog sets the limit to default
         // le 0.0.0.0 ip lie le serveur à tous les ip local de la machine
         try (ServerSocket listener = new ServerSocket(port, 0, InetAddress.getByName("0.0.0.0"))) {
             while (players.size() < maxPlayers) {
-                System.out.println("Waiting for players to connect...");
                 Socket client = listener.accept();
-                System.out.println("Player connected!");
+                InetAddress clientIP = client.getInetAddress();
+
                 this.nbJoueurConnecte ++;
-                ClientHandler player = new ClientHandler(client);
+                ClientHandler player;
+
+                if (clientIP.equals("127.0.0.1")){
+                    player = new Host(client);
+                }else{
+                    player = new ClientHandler(client);
+                }
 
                 players.add(player);
                 // player est runnable et execute() execute son run
@@ -63,13 +76,16 @@ public class Server {
         }
     }
 
-    private void startGame() {
-        // Notify all players that the game is starting
+    /**
+     * on redirige les clients vers la page ou il choisissent et nomme leur perso
+     */
+    private void startGame() throws IOException {
+        // deux paquet (le hot et les clients ont des actios différentes)
         for (ClientHandler player : players) {
-            //player.sendMessage("Game is starting!");
+            player.choixPerso();
 
         }
-        // Implement the game logic and loop here
+
     }
 
 //    private void broadcastMovement(String movement) {
@@ -86,10 +102,13 @@ public class Server {
         return maxPlayers;
     }
 
+    /**
+     * permet aux serveur d'interagir avec les clients
+     */
     private class ClientHandler implements Runnable {
-        private final Socket client;
-        private ObjectOutputStream out;
-        private ObjectInputStream in;
+        protected final Socket client;
+        protected ObjectOutputStream out;
+        protected ObjectInputStream in;
 
         public ClientHandler(Socket clientSocket) throws IOException {
 
@@ -124,6 +143,28 @@ public class Server {
         public void updateNbPlayerConnected () throws IOException {
             if (out != null) {
                 out.writeObject(new PaquetNbJoeurConnecte(maxPlayers - nbJoueurConnecte));
+            }
+        }
+
+        public void choixPerso () throws IOException {
+            if (out != null) {
+                out.writeObject(new PaquetChoixJrClient());
+            }
+        }
+    }
+
+    /**
+     * un client spécial celui qui a lancé le serveur
+     */
+    class Host extends ClientHandler {
+        public Host(Socket s) throws IOException {
+            super(s);
+        }
+
+        @Override
+        public void choixPerso() throws IOException {
+            if (out != null) {
+                out.writeObject(new PaquetChoixJrHost());
             }
         }
     }

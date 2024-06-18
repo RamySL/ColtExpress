@@ -1,5 +1,6 @@
 package controleur;
 
+import Vue.Fenetre;
 import Vue.OnLineSettigs;
 import network.client.Client;
 import network.server.Server;
@@ -18,15 +19,12 @@ import java.awt.event.ActionListener;
 public class ControleurServerClient implements ActionListener {
     private OnLineSettigs olSettings;
 
-    public ControleurServerClient(OnLineSettigs olSettings){
+    Fenetre fenetre;
+
+    public ControleurServerClient(OnLineSettigs olSettings, Fenetre fenetre){
 
         this.olSettings = olSettings;
-        Timer timer = new Timer(800, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
+        this.fenetre = fenetre;
     }
 
     public void updateNbJoueurConnecte (int n){
@@ -34,10 +32,19 @@ public class ControleurServerClient implements ActionListener {
 
     }
 
+    public void vueClient(){
+        this.fenetre.changerVue(this.fenetre.getAccueilClientId());
+    }
+
+    public void vueHost (){
+        this.fenetre.changerVue(this.fenetre.getAccueilId());
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
+        Server server;
         if (e.getSource() == this.olSettings.getLunchButton()){
-            final Server server;
+
             int port = Integer.parseInt(this.olSettings.getPortServer()); // Port to listen on
             int maxPlayers = Integer.parseInt(this.olSettings.getNbJoueur()); // Number of players needed to start the game
             server = new Server(port, maxPlayers);
@@ -57,6 +64,8 @@ public class ControleurServerClient implements ActionListener {
                 client.start();
             }).start();
             this.olSettings.getJoinButton().setEnabled(false);
+
+
         }
 
     }

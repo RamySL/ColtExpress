@@ -14,7 +14,7 @@ public class Accueil extends JPanel {
     private Fenetre fenetre;
     private Image imageFond;
 
-    private OptionsJeu optionsJeu;
+    protected OptionsJeu optionsJeu;
 
     public Accueil(Fenetre fenetre){
         this.setLayout(new BorderLayout());
@@ -65,10 +65,10 @@ public class Accueil extends JPanel {
     public  class OptionsJeu extends JPanel{
 
         private Bouttons lancerJeu;
-        private JTextField saisieNbWagon, saisieNbActions, saisieNbBalles, saisieNbManches;
+        protected JTextField saisieNbWagon, saisieNbActions, saisieNbBalles, saisieNbManches;
 
         private SelectionPersonnages slectPersoPanel;
-        private SlectionNervositeMarshall selectNervositePanel;
+        protected SlectionNervositeMarshall selectNervositePanel;
 
         public OptionsJeu(){
 
