@@ -7,7 +7,7 @@ public class AccueilClient extends Accueil{
         this.optionsJeu.saisieNbBalles.setEnabled((false));
         this.optionsJeu.saisieNbManches.setEnabled((false));
         this.optionsJeu.saisieNbWagon.setEnabled((false));
-        this.optionsJeu.selectNervositePanel.setEnabled(false);
+        this.optionsJeu.selectNervositePanel.jListNervositeNiveaux.setEnabled(false);
     }
 
 }

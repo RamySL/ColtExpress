@@ -104,6 +104,10 @@ public class Fenetre extends JFrame {
     public String getAccueilClientId() {
         return accueilClientId;
     }
+
+    public AccueilClient getAccueilClient() {
+        return accueilClient;
+    }
 }
 
 

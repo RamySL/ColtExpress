@@ -40,6 +40,10 @@ public class ControleurServerClient implements ActionListener {
         this.fenetre.changerVue(this.fenetre.getAccueilId());
     }
 
+    public void setControleurAccueilClient() {
+        this.fenetre.getAccueil().liaisonAvecControleur(new ControleuAccueilClient(this.fenetre));
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         Server server;

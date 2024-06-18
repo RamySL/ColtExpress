@@ -15,25 +15,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Le controleur qui va gerer les événenement qui proviennent de l'initialisation du jeu avec la fenetre d'accueil
- * et le choix des parametres du jeu, il doit ensuite intialiser le controleur du jeu avec le modele (train)
- */
-public class ControleuAccueil implements ActionListener {
-
-    private Accueil accueil;
-    private EcranType ecranType;
-    private Fenetre fenetre;
+public class ControleurAccueil implements ActionListener {
+    protected Accueil accueil;
+    protected EcranType ecranType;
+    protected Fenetre fenetre;
     // accumulation de classes internes
-    private ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJouers = new ArrayList<>();
-
+    protected ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJouers = new ArrayList<>();
     JouerSon misqueLancement;
-
-    /**
-     * Intialise le controleur et fait la liason avec les composantes d'accueil dont il va ecouter les evenements
-     * @param fenetre du jeu qui contient tous les différentes vu du jeu
-     */
-    public ControleuAccueil(Fenetre fenetre){
+    public ControleurAccueil(Fenetre fenetre)  {
         misqueLancement = new JouerSon("src/assets/sons/lancement.wav");
         //misqueLancement.jouer(true);
 
@@ -42,7 +31,6 @@ public class ControleuAccueil implements ActionListener {
         this.ecranType = this.fenetre.getEcranTpe();
         this.accueil.liaisonAvecControleur(this);
         this.ecranType.liaisonAvecControleur(new ControleurTypePartie(this.fenetre, this.fenetre.getEcranTpe()));
-
     }
 
     /**
@@ -59,7 +47,7 @@ public class ControleuAccueil implements ActionListener {
             Double nervositeMarshall = this.accueil.getOptionsJeu().getNervosite();
             String nbWagons = this.accueil.getOptionsJeu().getSaisieNbWagon().getText();
             String nbActions = this.accueil.getOptionsJeu().getSaisieNbActions().getText();
-            String nbManches = ControleuAccueil.this.accueil.getOptionsJeu().getSaisieNbManches().getText();
+            String nbManches = this.accueil.getOptionsJeu().getSaisieNbManches().getText();
 
             if (checkInfoSaisieValide(nbBallesBandits,nbWagons,nbActions,nbManches)){
                 this.misqueLancement.arreter();
@@ -139,7 +127,7 @@ public class ControleuAccueil implements ActionListener {
          */
         @Override
         protected Void doInBackground() {
-            controleur.lancerJeu(Integer.parseInt(ControleuAccueil.this.accueil.getOptionsJeu().getSaisieNbManches().getText()));
+            controleur.lancerJeu(Integer.parseInt(ControleurAccueil.this.accueil.getOptionsJeu().getSaisieNbManches().getText()));
             return null;
         }
 
@@ -153,9 +141,12 @@ public class ControleuAccueil implements ActionListener {
         this.fenetre.setVisible(true);
     }
 
+}
+
+class Main {
     public static void main(String[] args) {
         Fenetre fenetre = new Fenetre();
-        ControleuAccueil controleuAccueil = new ControleuAccueil(fenetre);
+        ControleurAccueil controleuAccueil = new ControleurAccueil(fenetre);
         controleuAccueil.lancer();
     }
 }

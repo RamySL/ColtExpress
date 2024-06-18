@@ -2,11 +2,9 @@ package network.client;
 
 import controleur.ControleurServerClient;
 import network.PaquetChoixJrHost;
+import network.PaquetControleurAccueilClient;
 import network.PaquetNbJoeurConnecte;
-import network.server.PaquetChoixJrClient;
-
-import java.io.*;
-import java.net.*;
+import network.PaquetChoixJrClient;
 
 import java.io.*;
 import java.net.*;
@@ -41,7 +39,6 @@ public class Client {
             Thread listenerThread = new Thread(new ServerListener());
             listenerThread.start();
 
-            // Main loop to send player movements to the server
             String movement;
             while ((movement = userInput.readLine()) != null) {
                 if (isValidMovement(movement)) {
@@ -86,12 +83,14 @@ public class Client {
                         cntrlServerClient.updateNbJoueurConnecte(p.getNbJoueurRestants());
 
                     }else if (serverMessage instanceof PaquetChoixJrClient){
-                        // vue sans param ( un extend ?)
+                        // vue sans param
                         cntrlServerClient.vueClient();
                     }else if (serverMessage instanceof PaquetChoixJrHost){
                         host = true;
                         // copier coller de la vue des param
                         cntrlServerClient.vueHost();
+                    }else if(serverMessage instanceof PaquetControleurAccueilClient){
+                        cntrlServerClient.setControleurAccueilClient();
                     }
 
 

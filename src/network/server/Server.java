@@ -11,7 +11,9 @@ package network.server;
  * - va etre dirigié vers une page ou en plus du personnage il choisit les paramètres du jeu
  * - le jeu se lance quand le hot lance (un message d'attente est affiché pour les clients */
 
+import network.PaquetChoixJrClient;
 import network.PaquetChoixJrHost;
+import network.PaquetControleurAccueilClient;
 import network.PaquetNbJoeurConnecte;
 
 import java.io.*;
@@ -53,7 +55,7 @@ public class Server {
                 this.nbJoueurConnecte ++;
                 ClientHandler player;
 
-                if (clientIP.equals("127.0.0.1")){
+                if (clientIP.getHostAddress().equals("127.0.0.1")){
                     player = new Host(client);
                 }else{
                     player = new ClientHandler(client);
@@ -83,6 +85,7 @@ public class Server {
         // deux paquet (le hot et les clients ont des actios différentes)
         for (ClientHandler player : players) {
             player.choixPerso();
+            if (!(player instanceof Host)) player.setControleurAccueil();
 
         }
 
@@ -151,6 +154,12 @@ public class Server {
                 out.writeObject(new PaquetChoixJrClient());
             }
         }
+
+        private void setControleurAccueil () throws IOException {
+            if (out != null) {
+                out.writeObject(new PaquetControleurAccueilClient());
+            }
+        }
     }
 
     /**
@@ -167,5 +176,6 @@ public class Server {
                 out.writeObject(new PaquetChoixJrHost());
             }
         }
+
     }
 }

@@ -1,11 +1,13 @@
 package Vue;
 
 import Vue.Bouttons.Bouttons;
-import controleur.ControleuAccueil;
+import controleur.ControleuAccueilClient;
+import controleur.ControleurAccueil;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 /**
  * L'ecran où l'utilisateur chosit les options du jeu et créé les bandits
@@ -54,7 +56,16 @@ public class Accueil extends JPanel {
     }
     public OptionsJeu getOptionsJeu(){return  this.optionsJeu;}
 
-    public void liaisonAvecControleur(ControleuAccueil controleur){
+    public void liaisonAvecControleur(ControleurAccueil controleur){
+
+        for (ActionListener al : this.optionsJeu.lancerJeu.getActionListeners()) {
+            this.optionsJeu.lancerJeu.removeActionListener(al);
+        }
+
+        for (ActionListener al : this.optionsJeu.getSlectionPersoPanel().bouttonCreationBandit.getActionListeners()) {
+            this.optionsJeu.getSlectionPersoPanel().bouttonCreationBandit.removeActionListener(al);
+        }
+
         this.optionsJeu.lancerJeu.addActionListener(controleur);
         this.optionsJeu.getSlectionPersoPanel().bouttonCreationBandit.addActionListener(controleur);
     }
@@ -287,7 +298,7 @@ public class Accueil extends JPanel {
      * Jliste avec 3 nervosité differente pour le marshall 0.3,0.6 et 0.9
      */
     public class SlectionNervositeMarshall extends JPanel{
-        private JList<String> jListNervositeNiveaux;
+        protected JList<String> jListNervositeNiveaux;
         String calme, enerve,furieux;
 
         public SlectionNervositeMarshall(){
