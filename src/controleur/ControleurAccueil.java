@@ -59,7 +59,6 @@ public class ControleurAccueil implements ActionListener {
                 // invariant qui garde ça correcte c'est que le premier elt  de this.creationsJouers va corresependre au
                 // premier Personnage dans la liste du train et le deuxieme au deuxieme etc
                 for (Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infos : this.creationsJouers){
-
                     train.ajouterBandit(infos.getSurnom(),Integer.parseInt(nbBallesBandits));
                     mapPersonnageIcone.put(train.getBandits().getLast(),infos.getIcone());
                 }
@@ -139,6 +138,11 @@ public class ControleurAccueil implements ActionListener {
      */
     public void lancer(){
         this.fenetre.setVisible(true);
+    }
+
+    @Override
+    public String toString() {
+        return "Accueil normal";
     }
 
 }

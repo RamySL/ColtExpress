@@ -1,7 +1,7 @@
 package Vue;
 
 import Vue.Bouttons.Bouttons;
-import controleur.ControleuAccueilClient;
+import controleur.ControleurAccueilClient;
 import controleur.ControleurAccueil;
 
 import javax.swing.*;
@@ -57,7 +57,11 @@ public class Accueil extends JPanel {
     public OptionsJeu getOptionsJeu(){return  this.optionsJeu;}
 
     public void liaisonAvecControleur(ControleurAccueil controleur){
+        this.optionsJeu.lancerJeu.addActionListener(controleur);
+        this.optionsJeu.getSlectionPersoPanel().bouttonCreationBandit.addActionListener(controleur);
+    }
 
+    public void liaisonAvecControleurClient(ControleurAccueilClient controleur){
         for (ActionListener al : this.optionsJeu.lancerJeu.getActionListeners()) {
             this.optionsJeu.lancerJeu.removeActionListener(al);
         }

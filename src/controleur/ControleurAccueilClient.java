@@ -1,35 +1,33 @@
 package controleur;
 
-import Vue.Accueil;
-import Vue.EcranType;
-import Vue.Fenetre;
-import Vue.Jeu;
-import modele.personnages.Personnage;
-import modele.trainEtComposantes.Train;
+import Vue.*;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Le controleur qui va gerer les événenement qui proviennent de l'initialisation du jeu avec la fenetre d'accueil
  * et le choix des parametres du jeu, il doit ensuite intialiser le controleur du jeu avec le modele (train)
  */
-public class ControleuAccueilClient extends ControleurAccueil {
+public class ControleurAccueilClient implements ActionListener {
 
-
+    protected AccueilClient accueil;
+    protected Fenetre fenetre;
+    // accumulation de classes internes
+    protected ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJouers = new ArrayList<>();
 
     /**
      * Intialise le controleur et fait la liason avec les composantes d'accueil dont il va ecouter les evenements
      * @param fenetre du jeu qui contient tous les différentes vu du jeu
      */
-    public ControleuAccueilClient(Fenetre fenetre){
-        super (fenetre);
-        this.accueil.liaisonAvecControleur(this);
+    public ControleurAccueilClient(Fenetre fenetre){
+
+        this.fenetre = fenetre;
+        this.accueil = this.fenetre.getAccueilClient();
+        this.accueil.liaisonAvecControleurClient(this);
+
     }
 
     /**
@@ -43,7 +41,6 @@ public class ControleuAccueilClient extends ControleurAccueil {
         JButton bouttonLancement = this.accueil.getOptionsJeu().getLancerJeu();
         if (e.getSource() == this.accueil.getOptionsJeu().getLancerJeu()) {
 
-//
 //                this.misqueLancement.arreter();
 //                Map<Personnage, ImageIcon> mapPersonnageIcone = new HashMap<>();
 //
@@ -70,21 +67,18 @@ public class ControleuAccueilClient extends ControleurAccueil {
 //                bouttonLancement.setBackground(Color.RED);
 //                bouttonLancement.setText("Invalide !");
 //            }
-
-
-            if (e.getSource() == this.accueil.getOptionsJeu().getSlectionPersoPanel().getBouttonCreationBandit()) {
-                System.out.println("controleur des clients");
-                bouttonLancement.setEnabled(true);
-                ImageIcon iconePerso = this.accueil.getOptionsJeu().getSlectionPersoPanel().getPersoSlectionneIcone();
-                String surnom = this.accueil.getOptionsJeu().getSlectionPersoPanel().getBanditSurnom();
-                this.creationsJouers.add(new Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation(iconePerso, surnom));  // on recup le perso choisie sur la liste et le nomb saisie
-            }
-
         }
-
+        if (e.getSource() == this.accueil.getOptionsJeu().getSlectionPersoPanel().getBouttonCreationBandit()) {
+            bouttonLancement.setEnabled(true);
+            ImageIcon iconePerso = this.accueil.getOptionsJeu().getSlectionPersoPanel().getPersoSlectionneIcone();
+            String surnom = this.accueil.getOptionsJeu().getSlectionPersoPanel().getBanditSurnom();
+            this.creationsJouers.add(new Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation(iconePerso, surnom));  // on recup le perso choisie sur la liste et le nomb saisie
+        }
 
     }
 
-
-
+    @Override
+    public String toString() {
+        return "Accueil Client";
+    }
 }

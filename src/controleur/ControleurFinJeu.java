@@ -24,8 +24,8 @@ public class ControleurFinJeu implements ActionListener {
             this.ecranFin.getFenetre().dispose(); // ferme l'ancienne fenetre
             Fenetre fenetre = new Fenetre();
             fenetre.changerVue(fenetre.getAccueilId());
-            ControleuAccueilClient controleuAccueilClient = new ControleuAccueilClient(fenetre);
-            controleuAccueilClient.lancer();
+            ControleurAccueilClient controleurAccueilClient = new ControleurAccueilClient(fenetre);
+            //controleuAccueilClient.lancer(); à rectiver pour rejouer
 
         }
     }

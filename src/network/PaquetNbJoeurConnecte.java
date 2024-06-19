@@ -1,8 +1,11 @@
 package network;
 
+import java.io.Serial;
+
 public class PaquetNbJoeurConnecte extends Paquet{
+    @Serial
+    private static final long serialVersionUID  = 11L; //1.1
     private int nbJoueurRestants;
-    public static final long serialVersionUid = 1L;
 
     public PaquetNbJoeurConnecte(int nbJoueurRestants){
         this.nbJoueurRestants = nbJoueurRestants;

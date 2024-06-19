@@ -11,10 +11,8 @@ package network.server;
  * - va etre dirigié vers une page ou en plus du personnage il choisit les paramètres du jeu
  * - le jeu se lance quand le hot lance (un message d'attente est affiché pour les clients */
 
-import network.PaquetChoixJrClient;
-import network.PaquetChoixJrHost;
-import network.PaquetControleurAccueilClient;
-import network.PaquetNbJoeurConnecte;
+import Vue.Accueil;
+import network.*;
 
 import java.io.*;
 import java.net.*;
@@ -34,12 +32,15 @@ public class Server {
 
     private int nbJoueurConnecte;
 
+    private Map<ClientHandler, Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> mapClientPerso;
+
     public Server(int port, int maxPlayers) {
         this.port = port;
         this.maxPlayers = maxPlayers;
         this.players = new ArrayList<>();
         this.pool = Executors.newFixedThreadPool(maxPlayers);
         this.nbJoueurConnecte = 0;
+        this.mapClientPerso = new HashMap<>();
     }
 
     public void start() {
@@ -91,7 +92,7 @@ public class Server {
 
     }
 
-//    private void broadcastMovement(String movement) {
+//    private void broadcast(Object o) {
 //        for (ClientHandler player : players) {
 //            player.sendMessage(movement);
 //        }
@@ -103,6 +104,10 @@ public class Server {
 
     public int getMaxPlayers() {
         return maxPlayers;
+    }
+
+    public Map<ClientHandler, Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> getMapClientPerso() {
+        return mapClientPerso;
     }
 
     /**
@@ -125,15 +130,16 @@ public class Server {
         @Override
         public void run() {
             try {
-
-                String message;
-                while ((message = in.readLine()) != null) {
-                    System.out.println("Received movement: " + message);
-
-                    //broadcastMovement(message); // Broadcast the movement to all players
+                Object paquetClient;
+                while ((paquetClient = in.readObject()) != null) {
+                    if (paquetClient instanceof PaquetLancementClient){
+                        Server.this.mapClientPerso.put(this,((PaquetLancementClient) paquetClient).getInfos());
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             } finally {
                 try {
                     client.close();

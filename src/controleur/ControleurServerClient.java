@@ -5,7 +5,6 @@ import Vue.OnLineSettigs;
 import network.client.Client;
 import network.server.Server;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -41,7 +40,7 @@ public class ControleurServerClient implements ActionListener {
     }
 
     public void setControleurAccueilClient() {
-        this.fenetre.getAccueil().liaisonAvecControleur(new ControleuAccueilClient(this.fenetre));
+         new ControleurAccueilClient(this.fenetre);
     }
 
     @Override
