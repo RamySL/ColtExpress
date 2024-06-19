@@ -92,6 +92,7 @@ public class Server {
         // nouveau thread pour la partie
         new Thread(() -> {
             while ((!this.lancerPartie) && this.mapClientPerso.size() != this.maxPlayers){
+
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
@@ -101,7 +102,7 @@ public class Server {
             }
             for (ClientHandler player : players) {
                 try {
-                    player.sendPersoList( this.mapClientPerso.values());
+                    player.sendPersoList(new ArrayList<>(this.mapClientPerso.values()));
                     player.sendParamJeu(this.paquetParametrePartie);
 
                 } catch (IOException e) {
@@ -113,8 +114,9 @@ public class Server {
 
         } ).start();
 
-
     }
+
+
 
     public int getNbJoueurConnecte() {
         return nbJoueurConnecte;
@@ -190,7 +192,7 @@ public class Server {
             }
         }
 
-        public void sendPersoList(Collection <Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> infosListe) throws IOException {
+        public void sendPersoList(ArrayList <Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> infosListe) throws IOException {
             out.writeObject(new PaquetListePersoClient(infosListe));
         }
 
@@ -218,7 +220,7 @@ public class Server {
         }
 
         @Override
-        public void sendPersoList(Collection <Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> infosListe) throws IOException {
+        public void sendPersoList(ArrayList <Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> infosListe) throws IOException {
             out.writeObject(new PaquetListePersoHost(infosListe));
         }
 

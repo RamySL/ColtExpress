@@ -8,6 +8,8 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * L'ecran où l'utilisateur chosit les options du jeu et créé les bandits
@@ -281,7 +283,10 @@ public class Accueil extends JPanel {
              * structure pour stocker les infos necessaire pour créer la vue du personnage avec son icone
              * et son surnom saisie dans la fenetre d'option
              */
-            public static class JoueurInfoCreation{
+            public static class JoueurInfoCreation implements Serializable {
+
+                @Serial
+                private static final long serialVersionUID = 1L;
                 private ImageIcon icone;
                 private String surnom;
                 public JoueurInfoCreation (ImageIcon icone, String surnom){

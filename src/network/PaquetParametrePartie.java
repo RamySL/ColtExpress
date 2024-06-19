@@ -3,7 +3,7 @@ package network;
 /**
  * envoyé par la hote aux restes des clients pour initialiser leurs parties
  */
-public class PaquetParametrePartie {
+public class PaquetParametrePartie extends Paquet {
     private String nbBallesBandits,nbWagons,nbActions,nbManches;
     private Double nervositeMarshall;
 

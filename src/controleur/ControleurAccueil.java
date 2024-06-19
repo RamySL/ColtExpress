@@ -61,6 +61,7 @@ public class ControleurAccueil implements ActionListener {
 
             if (checkInfoSaisieValide(nbBallesBandits,nbWagons,nbActions,nbManches)){
                 try {
+                    this.client.sendChoixPerso(this.creationsJouers.get(0));
                     this.client.sendParamJeu(nbBallesBandits,nbWagons,nbActions,nbManches,nervositeMarshall);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
@@ -117,7 +118,7 @@ public class ControleurAccueil implements ActionListener {
         this.fenetre.changerVue(this.fenetre.getJeuId());
         CotroleurJeu cotroleurJeu = new CotroleurJeu(train,this.fenetre,Integer.parseInt(paquetParametrePartie.getNbActions()) );
 
-        BoucleJeu boucleJeu = new BoucleJeu(cotroleurJeu);
+        BoucleJeu boucleJeu = new BoucleJeu(cotroleurJeu, Integer.parseInt(paquetParametrePartie.getNbManches()) );
         boucleJeu.execute();
     }
 
@@ -132,9 +133,12 @@ public class ControleurAccueil implements ActionListener {
     private class BoucleJeu extends SwingWorker<Void, Void>{
 
         private CotroleurJeu controleur;
+        private int nbManches;
 
-        public BoucleJeu(CotroleurJeu controleur) {
+        public BoucleJeu(CotroleurJeu controleur, int nbManches) {
+
             this.controleur = controleur;
+            this.nbManches = nbManches;
         }
 
         /**
@@ -143,7 +147,7 @@ public class ControleurAccueil implements ActionListener {
          */
         @Override
         protected Void doInBackground() {
-            controleur.lancerJeu(Integer.parseInt(ControleurAccueil.this.accueil.getOptionsJeu().getSaisieNbManches().getText()));
+            controleur.lancerJeu(this.nbManches);
             return null;
         }
 

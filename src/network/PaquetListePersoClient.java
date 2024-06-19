@@ -3,6 +3,7 @@ package network;
 import Vue.Accueil;
 
 import java.io.Serial;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -12,8 +13,8 @@ public class PaquetListePersoClient extends Paquet {
     @Serial
     private static final long serialVersionUID = 17L;
 
-    Collection <Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> listeInfos;
-    public PaquetListePersoClient(Collection <Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> listeInfos){
+    ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> listeInfos;
+    public PaquetListePersoClient(ArrayList <Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> listeInfos){
         this.listeInfos = listeInfos;
     }
 

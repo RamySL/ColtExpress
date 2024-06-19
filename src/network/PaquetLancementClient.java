@@ -7,7 +7,7 @@ import java.io.Serial;
 /**
  * Paquet envoyé par le client qui contient les information du personnage créer au moment d'appuyer sur lancer
  */
-public class PaquetLancementClient {
+public class PaquetLancementClient extends Paquet {
     @Serial
     private static final long serialVersionUID  = 15L;
     private Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infos;
