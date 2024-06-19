@@ -29,10 +29,10 @@ public class Server {
     private final int maxPlayers;
     private final List<ClientHandler> players;
     private final ExecutorService pool;
-
     private int nbJoueurConnecte;
-
     private Map<ClientHandler, Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> mapClientPerso;
+    private boolean lancerPartie = false; // quand le host appui sur lancer devient true
+    private PaquetParametrePartie paquetParametrePartie;
 
     public Server(int port, int maxPlayers) {
         this.port = port;
@@ -87,16 +87,34 @@ public class Server {
         for (ClientHandler player : players) {
             player.choixPerso();
             if (!(player instanceof Host)) player.setControleurAccueil();
-
         }
 
-    }
+        // nouveau thread pour la partie
+        new Thread(() -> {
+            while ((!this.lancerPartie) && this.mapClientPerso.size() != this.maxPlayers){
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-//    private void broadcast(Object o) {
-//        for (ClientHandler player : players) {
-//            player.sendMessage(movement);
-//        }
-//    }
+            }
+            for (ClientHandler player : players) {
+                try {
+                    player.sendPersoList( this.mapClientPerso.values());
+                    player.sendParamJeu(this.paquetParametrePartie);
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+
+
+        } ).start();
+
+
+    }
 
     public int getNbJoueurConnecte() {
         return nbJoueurConnecte;
@@ -134,6 +152,11 @@ public class Server {
                 while ((paquetClient = in.readObject()) != null) {
                     if (paquetClient instanceof PaquetLancementClient){
                         Server.this.mapClientPerso.put(this,((PaquetLancementClient) paquetClient).getInfos());
+                    }else if (paquetClient instanceof PaquetLancementHost){
+                        Server.this.lancerPartie = true;
+                        Server.this.mapClientPerso.put(this,((PaquetLancementHost) paquetClient).getInfos());
+                    }else if (paquetClient instanceof PaquetParametrePartie){
+                        Server.this.paquetParametrePartie = (PaquetParametrePartie) paquetClient;
                     }
                 }
             } catch (IOException e) {
@@ -166,6 +189,17 @@ public class Server {
                 out.writeObject(new PaquetControleurAccueilClient());
             }
         }
+
+        public void sendPersoList(Collection <Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> infosListe) throws IOException {
+            out.writeObject(new PaquetListePersoClient(infosListe));
+        }
+
+        public void sendParamJeu(PaquetParametrePartie paquetParametrePartie) throws IOException {
+            out.writeObject(paquetParametrePartie);
+        }
+
+
+
     }
 
     /**
@@ -183,5 +217,12 @@ public class Server {
             }
         }
 
+        @Override
+        public void sendPersoList(Collection <Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> infosListe) throws IOException {
+            out.writeObject(new PaquetListePersoHost(infosListe));
+        }
+
     }
+
+
 }

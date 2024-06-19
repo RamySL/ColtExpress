@@ -1,11 +1,22 @@
 package controleur;
 
 import Vue.*;
+import modele.personnages.Personnage;
+import modele.trainEtComposantes.*;
+import network.PaquetListePersoClient;
+import network.PaquetParametrePartie;
+import network.client.Client;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+import modele.*;
 
 /**
  * Le controleur qui va gerer les événenement qui proviennent de l'initialisation du jeu avec la fenetre d'accueil
@@ -17,23 +28,24 @@ public class ControleurAccueilClient implements ActionListener {
     protected Fenetre fenetre;
     // accumulation de classes internes
     protected ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJouers = new ArrayList<>();
+    private Client client;
 
     /**
      * Intialise le controleur et fait la liason avec les composantes d'accueil dont il va ecouter les evenements
      * @param fenetre du jeu qui contient tous les différentes vu du jeu
      */
-    public ControleurAccueilClient(Fenetre fenetre){
+    public ControleurAccueilClient(Fenetre fenetre, Client client){
 
         this.fenetre = fenetre;
         this.accueil = this.fenetre.getAccueilClient();
         this.accueil.liaisonAvecControleurClient(this);
+        this.client = client;
+        this.client.setControleurAccueilClient(this);
 
     }
 
     /**
-     * lance le jeu en recuperant tous les parmetre saisie si le boutton de lancer le jeu et appuié (et vérifie que les parametres sont valides)
-     * récupere l'icone et le surnom choisie si le boutton bouttonCreationBandit est appuyé et permet de lier ensuite cette icone
-     * à l'objet Bandit correspendant quand le boutton de lancer le jeu est appuyé
+     * Envoi le choix du personnage et le surnom à la classe client pour qu'elle l'envoi au serveur quand LancerJeu est appuyé
      * @param e
      */
     @Override
@@ -41,32 +53,13 @@ public class ControleurAccueilClient implements ActionListener {
         JButton bouttonLancement = this.accueil.getOptionsJeu().getLancerJeu();
         if (e.getSource() == this.accueil.getOptionsJeu().getLancerJeu()) {
 
-//                this.misqueLancement.arreter();
-//                Map<Personnage, ImageIcon> mapPersonnageIcone = new HashMap<>();
-//
-//                Train train = new Train (Integer.parseInt(nbWagons) );
-//                train.ajouterMarshall(nervositeMarshall);
-//
-//                // invariant qui garde ça correcte c'est que le premier elt  de this.creationsJouers va corresependre au
-//                // premier Personnage dans la liste du train et le deuxieme au deuxieme etc
-//                for (Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infos : this.creationsJouers){
-//
-//                    train.ajouterBandit(infos.getSurnom(),Integer.parseInt(nbBallesBandits));
-//                    mapPersonnageIcone.put(train.getBandits().getLast(),infos.getIcone());
-//                }
-//                mapPersonnageIcone.put(train.getMarshall(),new ImageIcon("src/assets/images/sherif.png"));
-//                Jeu jeu = new Jeu(train, this.fenetre, mapPersonnageIcone);
-//
-//                this.fenetre.ajouterFenetreJeu(jeu);
-//                this.fenetre.changerVue(this.fenetre.getJeuId());
-//                CotroleurJeu cotroleurJeu = new CotroleurJeu(train,this.fenetre,Integer.parseInt(nbActions) );
-//
-//                ControleurAccueilHost.BoucleJeu boucleJeu = new ControleurAccueilHost.BoucleJeu(cotroleurJeu);
-//                boucleJeu.execute();
-//            }else {
-//                bouttonLancement.setBackground(Color.RED);
-//                bouttonLancement.setText("Invalide !");
-//            }
+            try {
+                this.client.sendChoixPerso(this.creationsJouers.get(0));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
+
         }
         if (e.getSource() == this.accueil.getOptionsJeu().getSlectionPersoPanel().getBouttonCreationBandit()) {
             bouttonLancement.setEnabled(true);
@@ -77,8 +70,46 @@ public class ControleurAccueilClient implements ActionListener {
 
     }
 
-    @Override
-    public String toString() {
-        return "Accueil Client";
+    public void lancerPartie(PaquetListePersoClient paquetListePersoInfo, PaquetParametrePartie paquetParametrePartie){
+        Map<Personnage, ImageIcon> mapPersonnageIcone = new HashMap<>();
+
+        Train train = new Train (Integer.parseInt(paquetParametrePartie.getNbWagons()) );
+        train.ajouterMarshall(paquetParametrePartie.getNervositeMarshall());
+        // invariant qui garde ça correcte c'est que le premier elt  de this.creationsJouers va corresependre au
+        // premier Personnage dans la liste du train et le deuxieme au deuxieme etc
+        for (Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infos : paquetListePersoInfo.getListeInfos()){
+            train.ajouterBandit(infos.getSurnom(),Integer.parseInt(paquetParametrePartie.getNbBallesBandits()));
+            mapPersonnageIcone.put(train.getBandits().getLast(),infos.getIcone());
+        }
+        mapPersonnageIcone.put(train.getMarshall(),new ImageIcon("src/assets/images/sherif.png"));
+        Jeu jeu = new Jeu(train, this.fenetre, mapPersonnageIcone);
+        this.fenetre.ajouterFenetreJeu(jeu);
+        this.fenetre.changerVue(this.fenetre.getJeuId());
+        CotroleurJeu cotroleurJeu = new CotroleurJeu(train,this.fenetre,Integer.parseInt(paquetParametrePartie.getNbActions()) );
+
+        BoucleJeu boucleJeu = new BoucleJeu(cotroleurJeu);
+        boucleJeu.execute();
     }
+
+    private class BoucleJeu extends SwingWorker<Void, Void>{
+
+        private CotroleurJeu controleur;
+
+        public BoucleJeu(CotroleurJeu controleur) {
+            this.controleur = controleur;
+        }
+
+        /**
+         * on lance la boucle en arriere plans
+         * @return
+         */
+        @Override
+        protected Void doInBackground() {
+            controleur.lancerJeu(Integer.parseInt(ControleurAccueilClient.this.accueil.getOptionsJeu().getSaisieNbManches().getText()));
+            return null;
+        }
+
+
+    }
+
 }

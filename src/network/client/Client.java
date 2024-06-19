@@ -1,10 +1,10 @@
 package network.client;
 
+import Vue.Accueil;
+import controleur.ControleurAccueil;
+import controleur.ControleurAccueilClient;
 import controleur.ControleurServerClient;
-import network.PaquetChoixJrHost;
-import network.PaquetControleurAccueilClient;
-import network.PaquetNbJoeurConnecte;
-import network.PaquetChoixJrClient;
+import network.*;
 
 import java.io.*;
 import java.net.*;
@@ -17,6 +17,10 @@ public class Client {
     private ObjectInputStream in;
     private BufferedReader userInput;
     private ControleurServerClient cntrlServerClient;
+    private ControleurAccueilClient controleurAccueilClient;
+    private ControleurAccueil controleurAccueil;
+    private PaquetListePersoClient paquetListePersoClient;
+    private PaquetListePersoHost paquetListePersoHost;
 
     boolean host = false;
 
@@ -24,6 +28,8 @@ public class Client {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
         this.cntrlServerClient = ctrlServerClient;
+        this.controleurAccueil = this.cntrlServerClient.getControleurAccueil();
+        this.controleurAccueil.setClient(this);
     }
 
     public void start() {
@@ -52,6 +58,29 @@ public class Client {
         } finally {
             closeConnections();
         }
+    }
+
+    /**
+     * envoi au serveur le perso et le surnom
+     */
+    public void sendChoixPerso(Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infos) throws IOException {
+        if (host){
+            this.out.writeObject(new PaquetLancementHost(infos));
+        }else{
+            this.out.writeObject(new PaquetLancementClient(infos));
+        }
+
+    }
+
+    public void sendParamJeu(String nbBallesBandits,String nbWagons,String nbActions,String nbManches, Double nervositeMarshall) throws IOException {
+        if (host){
+            this.out.writeObject(new PaquetParametrePartie( nbBallesBandits, nbWagons, nbActions, nbManches,  nervositeMarshall));
+        }
+
+    }
+
+    public void setControleurAccueilClient(ControleurAccueilClient controleurAccueilClient) {
+        this.controleurAccueilClient = controleurAccueilClient;
     }
 
     private boolean isValidMovement(String movement) {
@@ -91,6 +120,18 @@ public class Client {
                         cntrlServerClient.vueHost();
                     }else if(serverMessage instanceof PaquetControleurAccueilClient){
                         cntrlServerClient.setControleurAccueilClient();
+                        //les prochains paquets vont arriver après que tout le monde ait appuyé sur lancer Partie
+                    }else if(serverMessage instanceof PaquetListePersoClient){
+                        Client.this.paquetListePersoClient = (PaquetListePersoClient) serverMessage;
+
+                    }else if(serverMessage instanceof PaquetListePersoHost){
+                        Client.this.paquetListePersoHost = (PaquetListePersoHost) serverMessage;
+                    }else if (serverMessage instanceof PaquetParametrePartie){
+                        if (!host){
+                            Client.this.controleurAccueilClient.lancerPartie(paquetListePersoClient,(PaquetParametrePartie)serverMessage) ;
+                        }else {
+                            Client.this.controleurAccueil.lancerPartie(paquetListePersoHost,(PaquetParametrePartie)serverMessage) ;
+                        }
                     }
 
 

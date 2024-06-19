@@ -6,12 +6,17 @@ import Vue.Fenetre;
 import Vue.Jeu;
 import modele.personnages.Personnage;
 import modele.trainEtComposantes.Train;
+import network.PaquetListePersoHost;
+import network.PaquetParametrePartie;
+import network.client.Client;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +26,8 @@ public class ControleurAccueil implements ActionListener {
     protected Fenetre fenetre;
     // accumulation de classes internes
     protected ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJouers = new ArrayList<>();
-    JouerSon misqueLancement;
+    private JouerSon misqueLancement;
+    private Client client;
     public ControleurAccueil(Fenetre fenetre)  {
         misqueLancement = new JouerSon("src/assets/sons/lancement.wav");
         //misqueLancement.jouer(true);
@@ -30,7 +36,11 @@ public class ControleurAccueil implements ActionListener {
         this.accueil = this.fenetre.getAccueil();
         this.ecranType = this.fenetre.getEcranTpe();
         this.accueil.liaisonAvecControleur(this);
-        this.ecranType.liaisonAvecControleur(new ControleurTypePartie(this.fenetre, this.fenetre.getEcranTpe()));
+        this.ecranType.liaisonAvecControleur(new ControleurTypePartie(this.fenetre, this.fenetre.getEcranTpe(),this));
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     /**
@@ -50,27 +60,11 @@ public class ControleurAccueil implements ActionListener {
             String nbManches = this.accueil.getOptionsJeu().getSaisieNbManches().getText();
 
             if (checkInfoSaisieValide(nbBallesBandits,nbWagons,nbActions,nbManches)){
-                this.misqueLancement.arreter();
-                Map<Personnage, ImageIcon> mapPersonnageIcone = new HashMap<>();
-
-                Train train = new Train (Integer.parseInt(nbWagons) );
-                train.ajouterMarshall(nervositeMarshall);
-
-                // invariant qui garde ça correcte c'est que le premier elt  de this.creationsJouers va corresependre au
-                // premier Personnage dans la liste du train et le deuxieme au deuxieme etc
-                for (Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infos : this.creationsJouers){
-                    train.ajouterBandit(infos.getSurnom(),Integer.parseInt(nbBallesBandits));
-                    mapPersonnageIcone.put(train.getBandits().getLast(),infos.getIcone());
+                try {
+                    this.client.sendParamJeu(nbBallesBandits,nbWagons,nbActions,nbManches,nervositeMarshall);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
-                mapPersonnageIcone.put(train.getMarshall(),new ImageIcon("src/assets/images/sherif.png"));
-                Jeu jeu = new Jeu(train, this.fenetre, mapPersonnageIcone);
-
-                this.fenetre.ajouterFenetreJeu(jeu);
-                this.fenetre.changerVue(this.fenetre.getJeuId());
-                CotroleurJeu cotroleurJeu = new CotroleurJeu(train,this.fenetre,Integer.parseInt(nbActions) );
-
-                BoucleJeu boucleJeu = new BoucleJeu(cotroleurJeu);
-                boucleJeu.execute();
             }else {
                 bouttonLancement.setBackground(Color.RED);
                 bouttonLancement.setText("Invalide !");
@@ -106,13 +100,36 @@ public class ControleurAccueil implements ActionListener {
         }
     }
 
+    public void lancerPartie(PaquetListePersoHost paquetListePersoInfo, PaquetParametrePartie paquetParametrePartie){
+        Map<Personnage, ImageIcon> mapPersonnageIcone = new HashMap<>();
+
+        Train train = new Train (Integer.parseInt(paquetParametrePartie.getNbWagons()) );
+        train.ajouterMarshall(paquetParametrePartie.getNervositeMarshall());
+        // invariant qui garde ça correcte c'est que le premier elt  de this.creationsJouers va corresependre au
+        // premier Personnage dans la liste du train et le deuxieme au deuxieme etc
+        for (Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infos : paquetListePersoInfo.getListeInfos()){
+            train.ajouterBandit(infos.getSurnom(),Integer.parseInt(paquetParametrePartie.getNbBallesBandits()));
+            mapPersonnageIcone.put(train.getBandits().getLast(),infos.getIcone());
+        }
+        mapPersonnageIcone.put(train.getMarshall(),new ImageIcon("src/assets/images/sherif.png"));
+        Jeu jeu = new Jeu(train, this.fenetre, mapPersonnageIcone);
+        this.fenetre.ajouterFenetreJeu(jeu);
+        this.fenetre.changerVue(this.fenetre.getJeuId());
+        CotroleurJeu cotroleurJeu = new CotroleurJeu(train,this.fenetre,Integer.parseInt(paquetParametrePartie.getNbActions()) );
+
+        BoucleJeu boucleJeu = new BoucleJeu(cotroleurJeu);
+        boucleJeu.execute();
+    }
+
+
+
     /**
      * Boucle principale de notre jeu va tourner sur un thread différent que EDT  en arriere plans pour garder la reactivité de
      * l'affichage avec la boucle du jeu et ne pas bloquer l'EDT
      * Void : premier void pour préciser que ça retourne rien à la fin de l'execution, le deuxieme c'est pour dire ça publi rien
      * pendant l'execution
      */
-    class BoucleJeu extends SwingWorker<Void, Void>{
+    private class BoucleJeu extends SwingWorker<Void, Void>{
 
         private CotroleurJeu controleur;
 

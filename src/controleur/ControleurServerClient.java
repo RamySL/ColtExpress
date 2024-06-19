@@ -17,13 +17,15 @@ import java.awt.event.ActionListener;
 
 public class ControleurServerClient implements ActionListener {
     private OnLineSettigs olSettings;
+    private Fenetre fenetre;
+    private  Client client;
+    private ControleurAccueil controleurAccueil;
 
-    Fenetre fenetre;
-
-    public ControleurServerClient(OnLineSettigs olSettings, Fenetre fenetre){
+    public ControleurServerClient(OnLineSettigs olSettings, Fenetre fenetre,ControleurAccueil controleurAccueil){
 
         this.olSettings = olSettings;
         this.fenetre = fenetre;
+        this.controleurAccueil = controleurAccueil;
     }
 
     public void updateNbJoueurConnecte (int n){
@@ -39,8 +41,22 @@ public class ControleurServerClient implements ActionListener {
         this.fenetre.changerVue(this.fenetre.getAccueilId());
     }
 
+    /**
+     * le set se fait quand tout le monde est connectés
+     */
     public void setControleurAccueilClient() {
-         new ControleurAccueilClient(this.fenetre);
+         if (this.client != null){
+             new ControleurAccueilClient(this.fenetre,this.client);
+         }
+    }
+
+
+    public Client getClient() {
+        return client;
+    }
+
+    public ControleurAccueil getControleurAccueil() {
+        return controleurAccueil;
     }
 
     @Override
@@ -63,8 +79,8 @@ public class ControleurServerClient implements ActionListener {
             new Thread(() -> {
                 String serverAddress =this.olSettings.getIpServerClient(); // Server address
                 int serverPort = Integer.parseInt(this.olSettings.getPortServerClient()); // Server port
-                Client client = new Client(serverAddress, serverPort, this);
-                client.start();
+                this.client = new Client(serverAddress, serverPort, this);
+                this.client.start();
             }).start();
             this.olSettings.getJoinButton().setEnabled(false);
 

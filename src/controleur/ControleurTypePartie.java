@@ -13,9 +13,12 @@ public class ControleurTypePartie implements ActionListener {
     public EcranType ecranType;
     private Fenetre fenetre;
 
-    public ControleurTypePartie(Fenetre fenetre, EcranType ecranType){
+    ControleurAccueil controleurAccueil;
+
+    public ControleurTypePartie(Fenetre fenetre, EcranType ecranType,ControleurAccueil controleurAccueil){
         this.fenetre = fenetre;
         this.ecranType = ecranType;
+        this.controleurAccueil = controleurAccueil;
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -25,7 +28,7 @@ public class ControleurTypePartie implements ActionListener {
         }
 
         if (e.getSource() == this.ecranType.getBouttonMultiJouer()){
-            this.fenetre.getOlSettings().liaisonAvecControleur(new ControleurServerClient(this.fenetre.getOlSettings(), this.fenetre));
+            this.fenetre.getOlSettings().liaisonAvecControleur(new ControleurServerClient(this.fenetre.getOlSettings(), this.fenetre,this.controleurAccueil));
             this.fenetre.changerVue(this.fenetre.getOlSettingsId());
         }
 
