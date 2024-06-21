@@ -167,10 +167,3 @@ public class ControleurAccueilHost implements ActionListener {
 
 }
 
-class Main {
-    public static void main(String[] args) {
-        Fenetre fenetre = new Fenetre();
-        ControleurAccueilHost controleuAccueil = new ControleurAccueilHost(fenetre);
-        controleuAccueil.lancer();
-    }
-}

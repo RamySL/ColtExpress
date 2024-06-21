@@ -98,7 +98,7 @@ public class EcranFin extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponents(g);
+        super.paintComponent(g);
         g.drawImage(this.imageFond,0,0,this.getWidth(),this.getHeight(),this);
     }
 
