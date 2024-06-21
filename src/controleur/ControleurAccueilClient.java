@@ -3,8 +3,8 @@ package controleur;
 import Vue.*;
 import modele.personnages.Personnage;
 import modele.trainEtComposantes.*;
-import network.PaquetListePersoClient;
-import network.PaquetParametrePartie;
+import network.Paquets.PaquetListePersoClient;
+import network.Paquets.PaquetParametrePartie;
 import network.client.Client;
 
 import javax.swing.*;
@@ -12,11 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import modele.*;
 
 /**
  * Le controleur qui va gerer les événenement qui proviennent de l'initialisation du jeu avec la fenetre d'accueil

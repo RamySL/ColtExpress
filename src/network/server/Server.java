@@ -12,7 +12,7 @@ package network.server;
  * - le jeu se lance quand le hot lance (un message d'attente est affiché pour les clients */
 
 import Vue.Accueil;
-import network.*;
+import network.Paquets.*;
 
 import java.io.*;
 import java.net.*;
@@ -83,7 +83,6 @@ public class Server {
         // deux paquet (le hot et les clients ont des actios différentes)
         for (ClientHandler player : players) {
             player.choixPerso();
-            if (!(player instanceof Host)) player.setControleurAccueil();
         }
 
         // nouveau thread pour la partie
@@ -177,12 +176,6 @@ public class Server {
         public void choixPerso () throws IOException {
             if (out != null) {
                 out.writeObject(new PaquetChoixJrClient());
-            }
-        }
-
-        private void setControleurAccueil () throws IOException {
-            if (out != null) {
-                out.writeObject(new PaquetControleurAccueilClient());
             }
         }
 

@@ -1,4 +1,4 @@
-package network;
+package network.Paquets;
 
 /**
  * envoyé par la hote aux restes des clients pour initialiser leurs parties

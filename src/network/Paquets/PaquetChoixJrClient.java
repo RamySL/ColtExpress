@@ -1,11 +1,9 @@
-package network;
-
-import network.Paquet;
+package network.Paquets;
 
 import java.io.Serial;
 
 /**
- *  LE paquet qui sera envoyé aux clients quand tous les joueurs se seront connectés
+ *  Le paquet qui sera envoyé aux clients quand tous les joueurs se seront connectés
  */
 public class PaquetChoixJrClient extends Paquet {
     @Serial

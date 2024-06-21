@@ -4,7 +4,7 @@ import Vue.Accueil;
 import controleur.ControleurAccueilHost;
 import controleur.ControleurAccueilClient;
 import controleur.ControleurServerClient;
-import network.*;
+import network.Paquets.*;
 
 import java.io.*;
 import java.net.*;
@@ -110,15 +110,15 @@ public class Client {
                         cntrlServerClient.updateNbJoueurConnecte(p.getNbJoueurRestants());
                     }else if (serverMessage instanceof PaquetChoixJrClient){
                         // vue sans param
+                        cntrlServerClient.setControleurAccueilClient();
                         cntrlServerClient.vueClient();
                     }else if (serverMessage instanceof PaquetChoixJrHost){
                         host = true;
                         // copier coller de la vue des param
                         cntrlServerClient.vueHost();
-                    }else if(serverMessage instanceof PaquetControleurAccueilClient){
-                        cntrlServerClient.setControleurAccueilClient();
-                        //les prochains paquets vont arriver après que tout le monde ait appuyé sur lancer Partie
-                    }else if(serverMessage instanceof PaquetListePersoClient){
+                    }
+                    //les prochains paquets vont arriver après que tout le monde ait appuyé sur lancer Partie
+                    else if(serverMessage instanceof PaquetListePersoClient){
                         Client.this.paquetListePersoClient = (PaquetListePersoClient) serverMessage;
 
                     }else if(serverMessage instanceof PaquetListePersoHost){

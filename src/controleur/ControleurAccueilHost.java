@@ -6,8 +6,8 @@ import Vue.Fenetre;
 import Vue.Jeu;
 import modele.personnages.Personnage;
 import modele.trainEtComposantes.Train;
-import network.PaquetListePersoHost;
-import network.PaquetParametrePartie;
+import network.Paquets.PaquetListePersoHost;
+import network.Paquets.PaquetParametrePartie;
 import network.client.Client;
 
 import javax.swing.*;

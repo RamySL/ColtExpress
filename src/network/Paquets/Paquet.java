@@ -1,4 +1,4 @@
-package network;
+package network.Paquets;
 
 import java.io.Serial;
 import java.io.Serializable;
