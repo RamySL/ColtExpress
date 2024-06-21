@@ -12,13 +12,11 @@ import java.util.Collection;
 public class PaquetListePersoHost extends Paquet {
     @Serial
     private static final long serialVersionUID = 17L;
-
     ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> listeInfos;
     public PaquetListePersoHost(ArrayList <Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> listeInfos){
         this.listeInfos = listeInfos;
     }
-
-    public Collection<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> getListeInfos() {
+    public ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> getListeInfos() {
         return listeInfos;
     }
 }

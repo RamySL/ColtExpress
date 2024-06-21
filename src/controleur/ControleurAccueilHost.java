@@ -16,11 +16,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ControleurAccueil implements ActionListener {
+public class ControleurAccueilHost implements ActionListener {
     protected Accueil accueil;
     protected EcranType ecranType;
     protected Fenetre fenetre;
@@ -28,7 +27,7 @@ public class ControleurAccueil implements ActionListener {
     protected ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJouers = new ArrayList<>();
     private JouerSon misqueLancement;
     private Client client;
-    public ControleurAccueil(Fenetre fenetre)  {
+    public ControleurAccueilHost(Fenetre fenetre)  {
         misqueLancement = new JouerSon("src/assets/sons/lancement.wav");
         //misqueLancement.jouer(true);
 
@@ -171,7 +170,7 @@ public class ControleurAccueil implements ActionListener {
 class Main {
     public static void main(String[] args) {
         Fenetre fenetre = new Fenetre();
-        ControleurAccueil controleuAccueil = new ControleurAccueil(fenetre);
+        ControleurAccueilHost controleuAccueil = new ControleurAccueilHost(fenetre);
         controleuAccueil.lancer();
     }
 }

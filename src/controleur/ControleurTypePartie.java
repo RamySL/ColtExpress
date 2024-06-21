@@ -3,8 +3,6 @@ package controleur;
 import Vue.EcranType;
 import Vue.Fenetre;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,12 +11,12 @@ public class ControleurTypePartie implements ActionListener {
     public EcranType ecranType;
     private Fenetre fenetre;
 
-    ControleurAccueil controleurAccueil;
+    ControleurAccueilHost controleurAccueilHost;
 
-    public ControleurTypePartie(Fenetre fenetre, EcranType ecranType,ControleurAccueil controleurAccueil){
+    public ControleurTypePartie(Fenetre fenetre, EcranType ecranType, ControleurAccueilHost controleurAccueilHost){
         this.fenetre = fenetre;
         this.ecranType = ecranType;
-        this.controleurAccueil = controleurAccueil;
+        this.controleurAccueilHost = controleurAccueilHost;
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -28,7 +26,7 @@ public class ControleurTypePartie implements ActionListener {
         }
 
         if (e.getSource() == this.ecranType.getBouttonMultiJouer()){
-            this.fenetre.getOlSettings().liaisonAvecControleur(new ControleurServerClient(this.fenetre.getOlSettings(), this.fenetre,this.controleurAccueil));
+            this.fenetre.getOlSettings().liaisonAvecControleur(new ControleurServerClient(this.fenetre.getOlSettings(), this.fenetre,this.controleurAccueilHost));
             this.fenetre.changerVue(this.fenetre.getOlSettingsId());
         }
 

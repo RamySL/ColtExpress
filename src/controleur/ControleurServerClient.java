@@ -19,13 +19,13 @@ public class ControleurServerClient implements ActionListener {
     private OnLineSettigs olSettings;
     private Fenetre fenetre;
     private  Client client;
-    private ControleurAccueil controleurAccueil;
+    private ControleurAccueilHost controleurAccueilHost;
 
-    public ControleurServerClient(OnLineSettigs olSettings, Fenetre fenetre,ControleurAccueil controleurAccueil){
+    public ControleurServerClient(OnLineSettigs olSettings, Fenetre fenetre, ControleurAccueilHost controleurAccueilHost){
 
         this.olSettings = olSettings;
         this.fenetre = fenetre;
-        this.controleurAccueil = controleurAccueil;
+        this.controleurAccueilHost = controleurAccueilHost;
     }
 
     public void updateNbJoueurConnecte (int n){
@@ -55,8 +55,8 @@ public class ControleurServerClient implements ActionListener {
         return client;
     }
 
-    public ControleurAccueil getControleurAccueil() {
-        return controleurAccueil;
+    public ControleurAccueilHost getControleurAccueil() {
+        return controleurAccueilHost;
     }
 
     @Override

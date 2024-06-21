@@ -44,8 +44,6 @@ public class Server {
     }
 
     public void start() {
-        System.out.println("Game server starting...");
-
         // the 0 for backlog sets the limit to default
         // le 0.0.0.0 ip lie le serveur à tous les ip local de la machine
         try (ServerSocket listener = new ServerSocket(port, 0, InetAddress.getByName("0.0.0.0"))) {
@@ -70,7 +68,6 @@ public class Server {
                     p.updateNbPlayerConnected();
                 }
             }
-            System.out.println("All players connected. Starting the game...");
             startGame();
         } catch (IOException e) {
             e.printStackTrace();
@@ -91,7 +88,7 @@ public class Server {
 
         // nouveau thread pour la partie
         new Thread(() -> {
-            while ((!this.lancerPartie) && this.mapClientPerso.size() != this.maxPlayers){
+            while ((!this.lancerPartie) || this.mapClientPerso.size() < this.maxPlayers){
 
                 try {
                     Thread.sleep(10);
@@ -115,9 +112,6 @@ public class Server {
         } ).start();
 
     }
-
-
-
     public int getNbJoueurConnecte() {
         return nbJoueurConnecte;
     }
@@ -199,8 +193,6 @@ public class Server {
         public void sendParamJeu(PaquetParametrePartie paquetParametrePartie) throws IOException {
             out.writeObject(paquetParametrePartie);
         }
-
-
 
     }
 

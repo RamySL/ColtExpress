@@ -1,7 +1,7 @@
 package network.client;
 
 import Vue.Accueil;
-import controleur.ControleurAccueil;
+import controleur.ControleurAccueilHost;
 import controleur.ControleurAccueilClient;
 import controleur.ControleurServerClient;
 import network.*;
@@ -18,7 +18,7 @@ public class Client {
     private BufferedReader userInput;
     private ControleurServerClient cntrlServerClient;
     private ControleurAccueilClient controleurAccueilClient;
-    private ControleurAccueil controleurAccueil;
+    private ControleurAccueilHost controleurAccueilHost;
     private PaquetListePersoClient paquetListePersoClient;
     private PaquetListePersoHost paquetListePersoHost;
 
@@ -28,8 +28,8 @@ public class Client {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
         this.cntrlServerClient = ctrlServerClient;
-        this.controleurAccueil = this.cntrlServerClient.getControleurAccueil();
-        this.controleurAccueil.setClient(this);
+        this.controleurAccueilHost = this.cntrlServerClient.getControleurAccueil();
+        this.controleurAccueilHost.setClient(this);
     }
 
     public void start() {
@@ -38,8 +38,6 @@ public class Client {
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
             userInput = new BufferedReader(new InputStreamReader(System.in));
-
-            System.out.println("Connected to the game server.");
 
             // Create a thread to listen for messages from the server
             Thread listenerThread = new Thread(new ServerListener());
@@ -130,12 +128,9 @@ public class Client {
                         if (!host){
                             Client.this.controleurAccueilClient.lancerPartie(paquetListePersoClient,(PaquetParametrePartie)serverMessage) ;
                         }else {
-                            Client.this.controleurAccueil.lancerPartie(paquetListePersoHost,(PaquetParametrePartie)serverMessage) ;
+                            Client.this.controleurAccueilHost.lancerPartie(paquetListePersoHost,(PaquetParametrePartie)serverMessage) ;
                         }
                     }
-
-
-
                 }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();

@@ -2,7 +2,7 @@ package Vue;
 
 import Vue.Bouttons.Bouttons;
 import controleur.ControleurAccueilClient;
-import controleur.ControleurAccueil;
+import controleur.ControleurAccueilHost;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -58,7 +58,7 @@ public class Accueil extends JPanel {
     }
     public OptionsJeu getOptionsJeu(){return  this.optionsJeu;}
 
-    public void liaisonAvecControleur(ControleurAccueil controleur){
+    public void liaisonAvecControleur(ControleurAccueilHost controleur){
         this.optionsJeu.lancerJeu.addActionListener(controleur);
         this.optionsJeu.getSlectionPersoPanel().bouttonCreationBandit.addActionListener(controleur);
     }
