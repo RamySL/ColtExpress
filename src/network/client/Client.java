@@ -108,7 +108,6 @@ public class Client {
                     if (serverMessage instanceof PaquetNbJoeurConnecte) {
                         PaquetNbJoeurConnecte p = (PaquetNbJoeurConnecte) serverMessage;
                         cntrlServerClient.updateNbJoueurConnecte(p.getNbJoueurRestants());
-
                     }else if (serverMessage instanceof PaquetChoixJrClient){
                         // vue sans param
                         cntrlServerClient.vueClient();
