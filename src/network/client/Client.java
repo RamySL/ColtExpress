@@ -73,7 +73,7 @@ public class Client {
 
     public void sendParamJeu(String nbBallesBandits,String nbWagons,String nbActions,String nbManches, Double nervositeMarshall) throws IOException {
         if (host){
-            this.out.writeObject(new PaquetParametrePartie( nbBallesBandits, nbWagons, nbActions, nbManches,  nervositeMarshall));
+            this.out.writeObject(new PaquetInitialisationPartie( nbBallesBandits, nbWagons, nbActions, nbManches,  nervositeMarshall));
         }
 
     }
@@ -124,20 +124,14 @@ public class Client {
 
                         case PaquetListePersoHost listePersoHost -> Client.this.paquetListePersoHost = listePersoHost;
 
-                        case PaquetParametrePartie paquetParametrePartie -> {
+                        case PaquetInitialisationPartie paquetInitialisationPartie -> {
+
                             if (!host) {
-                                Client.this.controleurAccueilClient.lancerPartie(paquetListePersoClient, (PaquetParametrePartie) serverMessage);
+                                Client.this.controleurAccueilClient.lancerPartie(paquetListePersoClient,paquetInitialisationPartie ,paquetInitialisationPartie.getTrain());
                             } else {
-                                Client.this.controleurAccueilHost.lancerPartie(paquetListePersoHost, (PaquetParametrePartie) serverMessage);
+                                Client.this.controleurAccueilHost.lancerPartie(paquetListePersoHost, paquetInitialisationPartie, paquetInitialisationPartie.getTrain());
                             }
                         }
-
-                        case PaquetDemandeFenetre p -> {
-                            Client.this.out.writeObject(new PaquetFenetre(Client.this.cntrlServerClient.getFenetre()));
-                            System.out.println("Client : Paquet de la fenetre envoyé au serveur");
-                        }
-
-
                         case null, default -> {
                         }
                     }

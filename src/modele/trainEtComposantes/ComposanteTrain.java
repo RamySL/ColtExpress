@@ -5,6 +5,7 @@ import modele.butins.Butin;
 import modele.personnages.Bandit;
 import modele.personnages.Personnage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 // Tout est bon !
@@ -12,7 +13,7 @@ import java.util.Random;
  * La classe la plus haute dans la hiearchie des classes composant le train regroupe tout ce qui
  * constitue le train, peut possedée un nombre de buttins et de Personnage
  */
-public abstract class ComposanteTrain {
+public abstract class ComposanteTrain implements Serializable {
     private Train train;
     protected ArrayList<Personnage> persoList = new ArrayList<>();
     protected ArrayList<Butin> butins = new ArrayList<>();

@@ -3,10 +3,12 @@ package modele.actions;
 
 import modele.personnages.Personnage;
 
+import java.io.Serializable;
+
 /**
  * Regroupe les actions possibles pour les personnages du jeu (deplacement, tir, braquage ..)
  */
-public abstract class Action {
+public abstract class Action implements Serializable {
     protected Personnage executeur;
 
     /**

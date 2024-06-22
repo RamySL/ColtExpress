@@ -3,11 +3,13 @@ package modele.personnages;
 import modele.trainEtComposantes.ComposanteTrain;
 import modele.Observable;
 
+import java.io.Serializable;
+
 /**
  * regroupe les objets qui interviennent pendant le déroulement de la partie (Marshall et Bandits pour l'instant)
  * étend observable parce que sa methode executer modifie le modèle
  */
-public abstract class Personnage extends Observable {
+public abstract class Personnage extends Observable implements Serializable {
     protected ComposanteTrain emplacement;
     protected String surnom;
 

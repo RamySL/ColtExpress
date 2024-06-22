@@ -12,7 +12,6 @@ package network.server;
  * - le jeu se lance quand le hot lance (un message d'attente est affiché pour les clients */
 
 import Vue.Accueil;
-import Vue.Fenetre;
 import network.Paquets.PaquetsClients.*;
 import network.Paquets.PaquetsServeur.*;
 
@@ -34,7 +33,7 @@ public class Server {
     private int nbJoueurConnecte;
     private Map<ClientHandler, Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> mapClientPerso;
     private boolean lancerPartie = false; // quand le host appui sur lancer devient true
-    private PaquetParametrePartie paquetParametrePartie;
+    private PaquetInitialisationPartie paquetInitialisationPartie;
 
     public Server(int port, int maxPlayers) {
         this.port = port;
@@ -98,14 +97,12 @@ public class Server {
                 }
 
             }
+            ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> infos = new ArrayList<>(this.mapClientPerso.values());
             for (ClientHandler player : players) {
                 try {
-//                    player.sendPersoList(new ArrayList<>(this.mapClientPerso.values()));
-//                    player.sendParamJeu(this.paquetParametrePartie);
-                    // plus besoin de deux paquets pour la liste des perso et les param partie contient tout
-                    Partie partie = new Partie(this.paquetParametrePartie, this.mapClientPerso,player.getFenetre());
-
-
+                    player.sendPersoList(infos);
+                    this.paquetInitialisationPartie.initTrain(infos);
+                    player.sendInitPartie(this.paquetInitialisationPartie);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -136,8 +133,6 @@ public class Server {
         protected ObjectOutputStream out;
         protected ObjectInputStream in;
 
-        protected Fenetre fenetre;
-
         public ClientHandler(Socket clientSocket) throws IOException {
 
             this.client = clientSocket;
@@ -157,10 +152,8 @@ public class Server {
                     }else if (paquetClient instanceof PaquetLancementHost){
                         Server.this.lancerPartie = true;
                         Server.this.mapClientPerso.put(this,((PaquetLancementHost) paquetClient).getInfos());
-                    }else if (paquetClient instanceof PaquetParametrePartie){
-                        Server.this.paquetParametrePartie = (PaquetParametrePartie) paquetClient;
-                    }else if(paquetClient instanceof PaquetFenetre){
-                        this.fenetre = ((PaquetFenetre)paquetClient).getFenetre();
+                    }else if (paquetClient instanceof PaquetInitialisationPartie){
+                        Server.this.paquetInitialisationPartie = (PaquetInitialisationPartie) paquetClient;
                     }
                 }
             } catch (IOException e) {
@@ -192,26 +185,10 @@ public class Server {
             out.writeObject(new PaquetListePersoClient(infosListe));
         }
 
-        public void sendParamJeu(PaquetParametrePartie paquetParametrePartie) throws IOException {
-            out.writeObject(paquetParametrePartie);
+        public void sendInitPartie(PaquetInitialisationPartie paquetInitialisationPartie) throws IOException {
+            out.writeObject(paquetInitialisationPartie);
         }
 
-        public void requestFenetre() throws IOException {
-            this.out.writeObject(new PaquetDemandeFenetre());
-        }
-
-        public Fenetre getFenetre() throws IOException {
-            this.requestFenetre();
-            // on lance sur un autre thread que celui qui reçoit les paquets de part des clients
-            new Thread(() -> {
-                while (this.fenetre == null){
-                    System.out.println("waiting for fenetre ");
-                }
-            }).start();
-
-            return this.fenetre;
-
-        }
     }
 
     /**

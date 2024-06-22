@@ -6,8 +6,9 @@ import Vue.Fenetre;
 import Vue.Jeu;
 import modele.personnages.Personnage;
 import modele.trainEtComposantes.Train;
+import network.Paquets.PaquetsServeur.PaquetListePersoClient;
 import network.Paquets.PaquetsServeur.PaquetListePersoHost;
-import network.Paquets.PaquetsServeur.PaquetParametrePartie;
+import network.Paquets.PaquetsServeur.PaquetInitialisationPartie;
 import network.client.Client;
 
 import javax.swing.*;
@@ -100,24 +101,26 @@ public class ControleurAccueilHost implements ActionListener {
         }
     }
 
-    public void lancerPartie(PaquetListePersoHost paquetListePersoInfo, PaquetParametrePartie paquetParametrePartie){
+    public void lancerPartie(PaquetListePersoHost paquetListePersoInfo, PaquetInitialisationPartie paquetInitialisationPartie, Train train){
         Map<Personnage, ImageIcon> mapPersonnageIcone = new HashMap<>();
 
-        Train train = new Train (Integer.parseInt(paquetParametrePartie.getNbWagons()) );
-        train.ajouterMarshall(paquetParametrePartie.getNervositeMarshall());
+        //Train train = new Train (Integer.parseInt(paquetParametrePartie.getNbWagons()) );
+        //train.ajouterMarshall(paquetInitialisationPartie.getNervositeMarshall());
         // invariant qui garde ça correcte c'est que le premier elt  de this.creationsJouers va corresependre au
         // premier Personnage dans la liste du train et le deuxieme au deuxieme etc
+        int i = 0;
         for (Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infos : paquetListePersoInfo.getListeInfos()){
-            train.ajouterBandit(infos.getSurnom(),Integer.parseInt(paquetParametrePartie.getNbBallesBandits()));
-            mapPersonnageIcone.put(train.getBandits().getLast(),infos.getIcone());
+            //train.ajouterBandit(infos.getSurnom(),Integer.parseInt(paquetInitialisationPartie.getNbBallesBandits()));
+            mapPersonnageIcone.put(train.getBandits().get(i),infos.getIcone());
+            i++;
         }
         mapPersonnageIcone.put(train.getMarshall(),new ImageIcon("src/assets/images/sherif.png"));
         Jeu jeu = new Jeu(train, this.fenetre, mapPersonnageIcone);
         this.fenetre.ajouterFenetreJeu(jeu);
         this.fenetre.changerVue(this.fenetre.getJeuId());
-        CotroleurJeu cotroleurJeu = new CotroleurJeu(train,this.fenetre,Integer.parseInt(paquetParametrePartie.getNbActions()) );
+        CotroleurJeu cotroleurJeu = new CotroleurJeu(train,this.fenetre,Integer.parseInt(paquetInitialisationPartie.getNbActions()) );
 
-        BoucleJeu boucleJeu = new BoucleJeu(cotroleurJeu, Integer.parseInt(paquetParametrePartie.getNbManches()) );
+        BoucleJeu boucleJeu = new BoucleJeu(cotroleurJeu,Integer.parseInt(paquetInitialisationPartie.getNbManches()) );
         boucleJeu.execute();
     }
 

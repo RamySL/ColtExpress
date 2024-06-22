@@ -3,7 +3,10 @@ package modele.trainEtComposantes;
 import modele.*;
 import modele.personnages.Bandit;
 import modele.personnages.Marshall;
+import network.server.Server;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -14,8 +17,13 @@ import java.util.Random;
  * c'est l'élément pricipale du modèle de l'application il stock les bandits, marshall qu'il contient
  * en attribut. étant itérable une boucle for each sur les wagons est possible, iterable sur l'interieur du train
  */
-public class Train implements Iterable <Interieur>{
 
+class TrainSerialisable implements Serializable{
+
+}
+public class Train extends TrainSerialisable implements Iterable <Interieur>{
+    @Serial
+    private static final long serialVersionUID  = 1L;
     private  int nWagons;
     private DernierWagon last;
     private Locomotive first;
