@@ -202,9 +202,13 @@ public class Server {
 
         public Fenetre getFenetre() throws IOException {
             this.requestFenetre();
-            while (this.fenetre == null){
-                System.out.println("waiting for fenetre ");
-            }
+            // on lance sur un autre thread que celui qui reçoit les paquets de part des clients
+            new Thread(() -> {
+                while (this.fenetre == null){
+                    System.out.println("waiting for fenetre ");
+                }
+            }).start();
+
             return this.fenetre;
 
         }
