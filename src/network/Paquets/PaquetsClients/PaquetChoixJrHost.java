@@ -1,10 +1,12 @@
-package network.Paquets;
+package network.Paquets.PaquetsClients;
+import network.Paquets.Paquet;
+
 import java.io.Serial;
 /**
  * Le paquet qui sera envoyé aù hôte quand tous les joueurs se seront connectés
  * pour qu'il passe aux choix des paramètres de la partie
  */
-public class PaquetChoixJrHost extends Paquet{
+public class PaquetChoixJrHost extends Paquet {
     @Serial
     private static final long serialVersionUID  = 13L;
 }

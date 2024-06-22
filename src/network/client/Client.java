@@ -4,7 +4,8 @@ import Vue.Accueil;
 import controleur.ControleurAccueilHost;
 import controleur.ControleurAccueilClient;
 import controleur.ControleurServerClient;
-import network.Paquets.*;
+import network.Paquets.PaquetsClients.*;
+import network.Paquets.PaquetsServeur.*;
 
 import java.io.*;
 import java.net.*;
@@ -105,29 +106,39 @@ public class Client {
             try {
                 Object serverMessage;
                 while ((serverMessage = in.readObject()) != null) {
-                    if (serverMessage instanceof PaquetNbJoeurConnecte) {
-                        PaquetNbJoeurConnecte p = (PaquetNbJoeurConnecte) serverMessage;
-                        cntrlServerClient.updateNbJoueurConnecte(p.getNbJoueurRestants());
-                    }else if (serverMessage instanceof PaquetChoixJrClient){
-                        // vue sans param
-                        cntrlServerClient.setControleurAccueilClient();
-                        cntrlServerClient.vueClient();
-                    }else if (serverMessage instanceof PaquetChoixJrHost){
-                        host = true;
-                        // copier coller de la vue des param
-                        cntrlServerClient.vueHost();
-                    }
-                    //les prochains paquets vont arriver après que tout le monde ait appuyé sur lancer Partie
-                    else if(serverMessage instanceof PaquetListePersoClient){
-                        Client.this.paquetListePersoClient = (PaquetListePersoClient) serverMessage;
 
-                    }else if(serverMessage instanceof PaquetListePersoHost){
-                        Client.this.paquetListePersoHost = (PaquetListePersoHost) serverMessage;
-                    }else if (serverMessage instanceof PaquetParametrePartie){
-                        if (!host){
-                            Client.this.controleurAccueilClient.lancerPartie(paquetListePersoClient,(PaquetParametrePartie)serverMessage) ;
-                        }else {
-                            Client.this.controleurAccueilHost.lancerPartie(paquetListePersoHost,(PaquetParametrePartie)serverMessage) ;
+                    switch (serverMessage) {
+                        case PaquetNbJoeurConnecte p -> cntrlServerClient.updateNbJoueurConnecte(p.getNbJoueurRestants());
+
+                        case PaquetChoixJrClient paquetChoixJrClient -> {
+                            // vue sans param
+                            cntrlServerClient.setControleurAccueilClient();
+                            cntrlServerClient.vueClient();
+                        }
+                        case PaquetChoixJrHost paquetChoixJrHost -> {
+                            host = true;
+                            cntrlServerClient.vueHost();
+                        }
+                        //les prochains paquets vont arriver après que tout le monde ait appuyé sur lancer Partie
+                        case PaquetListePersoClient listePersoClient -> Client.this.paquetListePersoClient = listePersoClient;
+
+                        case PaquetListePersoHost listePersoHost -> Client.this.paquetListePersoHost = listePersoHost;
+
+                        case PaquetParametrePartie paquetParametrePartie -> {
+                            if (!host) {
+                                Client.this.controleurAccueilClient.lancerPartie(paquetListePersoClient, (PaquetParametrePartie) serverMessage);
+                            } else {
+                                Client.this.controleurAccueilHost.lancerPartie(paquetListePersoHost, (PaquetParametrePartie) serverMessage);
+                            }
+                        }
+
+                        case PaquetDemandeFenetre p -> {
+                            Client.this.out.writeObject(new PaquetFenetre(Client.this.cntrlServerClient.getFenetre()));
+                            System.out.println("Client : Paquet de la fenetre envoyé au serveur");
+                        }
+
+
+                        case null, default -> {
                         }
                     }
                 }

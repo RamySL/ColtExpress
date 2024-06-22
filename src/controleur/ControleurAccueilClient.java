@@ -3,8 +3,8 @@ package controleur;
 import Vue.*;
 import modele.personnages.Personnage;
 import modele.trainEtComposantes.*;
-import network.Paquets.PaquetListePersoClient;
-import network.Paquets.PaquetParametrePartie;
+import network.Paquets.PaquetsServeur.PaquetListePersoClient;
+import network.Paquets.PaquetsServeur.PaquetParametrePartie;
 import network.client.Client;
 
 import javax.swing.*;
@@ -87,6 +87,15 @@ public class ControleurAccueilClient implements ActionListener {
         BoucleJeu boucleJeu = new BoucleJeu(cotroleurJeu,Integer.parseInt(paquetParametrePartie.getNbManches()) );
         boucleJeu.execute();
     }
+//    public void lancerPartie(BoucleJeu boucleJeu){
+//
+//        this.fenetre.ajouterFenetreJeu(jeu);
+//        this.fenetre.changerVue(this.fenetre.getJeuId());
+//        CotroleurJeu cotroleurJeu = new CotroleurJeu(train,this.fenetre,Integer.parseInt(paquetParametrePartie.getNbActions()) );
+//
+//        BoucleJeu boucleJeu = new BoucleJeu(cotroleurJeu,Integer.parseInt(paquetParametrePartie.getNbManches()) );
+//        boucleJeu.execute();
+//    }
 
     private class BoucleJeu extends SwingWorker<Void, Void>{
 

@@ -1,4 +1,6 @@
-package network.Paquets;
+package network.Paquets.PaquetsClients;
+
+import network.Paquets.Paquet;
 
 import java.io.Serial;
 

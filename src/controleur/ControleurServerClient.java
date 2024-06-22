@@ -55,6 +55,10 @@ public class ControleurServerClient implements ActionListener {
         return client;
     }
 
+    public Fenetre getFenetre() {
+        return fenetre;
+    }
+
     public ControleurAccueilHost getControleurAccueil() {
         return controleurAccueilHost;
     }

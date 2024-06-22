@@ -1,4 +1,4 @@
-package network.Paquets;
+package network.Paquets.PaquetsClients;
 
 import Vue.Accueil;
 

@@ -12,7 +12,9 @@ package network.server;
  * - le jeu se lance quand le hot lance (un message d'attente est affiché pour les clients */
 
 import Vue.Accueil;
-import network.Paquets.*;
+import Vue.Fenetre;
+import network.Paquets.PaquetsClients.*;
+import network.Paquets.PaquetsServeur.*;
 
 import java.io.*;
 import java.net.*;
@@ -98,8 +100,11 @@ public class Server {
             }
             for (ClientHandler player : players) {
                 try {
-                    player.sendPersoList(new ArrayList<>(this.mapClientPerso.values()));
-                    player.sendParamJeu(this.paquetParametrePartie);
+//                    player.sendPersoList(new ArrayList<>(this.mapClientPerso.values()));
+//                    player.sendParamJeu(this.paquetParametrePartie);
+                    // plus besoin de deux paquets pour la liste des perso et les param partie contient tout
+                    Partie partie = new Partie(this.paquetParametrePartie, this.mapClientPerso,player.getFenetre());
+
 
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -126,10 +131,12 @@ public class Server {
     /**
      * permet aux serveur d'interagir avec les clients
      */
-    private class ClientHandler implements Runnable {
+    protected class ClientHandler implements Runnable {
         protected final Socket client;
         protected ObjectOutputStream out;
         protected ObjectInputStream in;
+
+        protected Fenetre fenetre;
 
         public ClientHandler(Socket clientSocket) throws IOException {
 
@@ -152,6 +159,8 @@ public class Server {
                         Server.this.mapClientPerso.put(this,((PaquetLancementHost) paquetClient).getInfos());
                     }else if (paquetClient instanceof PaquetParametrePartie){
                         Server.this.paquetParametrePartie = (PaquetParametrePartie) paquetClient;
+                    }else if(paquetClient instanceof PaquetFenetre){
+                        this.fenetre = ((PaquetFenetre)paquetClient).getFenetre();
                     }
                 }
             } catch (IOException e) {
@@ -187,6 +196,18 @@ public class Server {
             out.writeObject(paquetParametrePartie);
         }
 
+        public void requestFenetre() throws IOException {
+            this.out.writeObject(new PaquetDemandeFenetre());
+        }
+
+        public Fenetre getFenetre() throws IOException {
+            this.requestFenetre();
+            while (this.fenetre == null){
+                System.out.println("waiting for fenetre ");
+            }
+            return this.fenetre;
+
+        }
     }
 
     /**

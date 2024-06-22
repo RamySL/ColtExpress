@@ -1,9 +1,15 @@
-package network.Paquets;
+package network.Paquets.PaquetsServeur;
+
+import network.Paquets.Paquet;
+
+import java.io.Serial;
 
 /**
- * envoyé par la hote aux restes des clients pour initialiser leurs parties
+ * envoyé par la hote aux restes des clients pour initialiser et lancer la partie
  */
 public class PaquetParametrePartie extends Paquet {
+    @Serial
+    private static final long serialVersionUID  = 19L; //1.1
     private String nbBallesBandits,nbWagons,nbActions,nbManches;
     private Double nervositeMarshall;
 
