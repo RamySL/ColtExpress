@@ -98,10 +98,10 @@ public class Server {
 
             }
             ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> infos = new ArrayList<>(this.mapClientPerso.values());
+            this.paquetInitialisationPartie.initTrain(infos);
             for (ClientHandler player : players) {
                 try {
                     player.sendPersoList(infos);
-                    this.paquetInitialisationPartie.initTrain(infos);
                     player.sendInitPartie(this.paquetInitialisationPartie);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
