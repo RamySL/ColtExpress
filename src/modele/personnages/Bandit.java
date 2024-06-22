@@ -6,6 +6,7 @@ import modele.Direction;
 import modele.actions.Action;
 import modele.actions.SeDeplacer;
 
+import java.io.Serial;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
@@ -15,7 +16,8 @@ import java.util.Random;
  * Un bandit se déplace dans tout le train en essayant de voler le maximum de butins
  */
 public class Bandit extends Personnage {
-
+    @Serial
+    private static final long serialVersionUID  = 12L;
     private ArrayList<Butin> butins = new ArrayList<>();
     private Queue<Action> actions = new ArrayDeque<>();
     private int nbBalles;

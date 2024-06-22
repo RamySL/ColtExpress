@@ -3,6 +3,7 @@ package modele.personnages;
 import modele.trainEtComposantes.ComposanteTrain;
 import modele.Observable;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -10,6 +11,9 @@ import java.io.Serializable;
  * étend observable parce que sa methode executer modifie le modèle
  */
 public abstract class Personnage extends Observable implements Serializable {
+    @Serial
+    private static final long serialVersionUID  = 1L;
+
     protected ComposanteTrain emplacement;
     protected String surnom;
 

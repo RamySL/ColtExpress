@@ -32,6 +32,8 @@ public class Server {
     private final ExecutorService pool;
     private int nbJoueurConnecte;
     private Map<ClientHandler, Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> mapClientPerso;
+
+    ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJoueur = new ArrayList<>();
     private boolean lancerPartie = false; // quand le host appui sur lancer devient true
     private PaquetInitialisationPartie paquetInitialisationPartie;
 
@@ -97,11 +99,11 @@ public class Server {
                 }
 
             }
-            ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> infos = new ArrayList<>(this.mapClientPerso.values());
-            this.paquetInitialisationPartie.initTrain(infos);
+//            ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> infos = new ArrayList<>(this.mapClientPerso.values());
+            this.paquetInitialisationPartie.initTrain(this.creationsJoueur);
             for (ClientHandler player : players) {
                 try {
-                    player.sendPersoList(infos);
+                    player.sendPersoList(this.creationsJoueur);
                     player.sendInitPartie(this.paquetInitialisationPartie);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -151,6 +153,7 @@ public class Server {
                         Server.this.mapClientPerso.put(this,((PaquetLancementClient) paquetClient).getInfos());
                     }else if (paquetClient instanceof PaquetLancementHost){
                         Server.this.lancerPartie = true;
+                        Server.this.creationsJoueur.add(((PaquetLancementHost) paquetClient).getInfos());
                         Server.this.mapClientPerso.put(this,((PaquetLancementHost) paquetClient).getInfos());
                     }else if (paquetClient instanceof PaquetInitialisationPartie){
                         Server.this.paquetInitialisationPartie = (PaquetInitialisationPartie) paquetClient;

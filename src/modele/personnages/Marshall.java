@@ -7,11 +7,14 @@ import modele.trainEtComposantes.Locomotive;
 import modele.actions.Action;
 import modele.actions.SeDeplacer;
 
+import java.io.Serial;
 import java.util.Random;
 /**
  * marshall se deplace uniquement à l'interieur du train en essayant de chasser les bandits
  */
 public class Marshall extends Personnage {
+    @Serial
+    private static final long serialVersionUID  = 12L;
     private final double nervosite;
 
     /**

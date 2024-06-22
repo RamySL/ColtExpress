@@ -30,7 +30,6 @@ public class CotroleurJeu implements ActionListener {
     boolean actionPhase=false,planPhase=true;
     Bandit joueurCourant;
     Map<String, JouerSon> mapSonsJeu = new HashMap<>();
-
     int nbActionExecute;
 
     /**
@@ -62,7 +61,7 @@ public class CotroleurJeu implements ActionListener {
      * @param nbManches nombre de manche à jouer avant la fin du jeu
      */
     public void lancerJeu(int nbManches) {
-        this.mapSonsJeu.get("jeuBack").jouer(true);
+        //this.mapSonsJeu.get("jeuBack").jouer(true);
 
         int totaleActionsManche = this.nbAction * this.nBandits; // le nombre d'actions que planifie tous les joeurs en une manche
         int manche = 0;
