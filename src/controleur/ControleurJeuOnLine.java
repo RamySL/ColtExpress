@@ -50,19 +50,6 @@ public class ControleurJeuOnLine extends ControleurJeu {
     public ControleurJeuOnLine(Train train, Fenetre fenetre, int nbAction,Client client) {
         super(train, fenetre, nbAction);
         this.client = client;
-        Object notifieur = this.client.getNotifieurInitBandits();
-
-        synchronized (notifieur){
-            try{
-                while (this.client.getBandit() == null || this.client.getInfosBanditCourant() == null){
-                    notifieur.wait();
-                }
-
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
         this.bandit = this.client.getBandit();
         this.infosBanditCourant = this.client.getInfosBanditCourant();
     }

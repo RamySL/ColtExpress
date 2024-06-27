@@ -23,6 +23,7 @@ public class Client {
     private ControleurAccueilHost controleurAccueilHost;
     private PaquetListePersoClient paquetListePersoClient;
     private PaquetListePersoHost paquetListePersoHost;
+    private PaquetInitialisationPartie paquetInitialisationPartie;
     private Bandit bandit;
     private Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infosBanditCourant;
 
@@ -150,22 +151,21 @@ public class Client {
                         case PaquetListePersoHost listePersoHost -> Client.this.paquetListePersoHost = listePersoHost;
 
                         case PaquetInitialisationPartie paquetInitialisationPartie -> {
+                            Client.this.paquetInitialisationPartie = paquetInitialisationPartie;
+                            Client.this.requestBandit();
+                        }
 
+                        case PaquetBandit p -> {
                             if (!host) {
                                 Client.this.controleurAccueilClient.lancerPartie(paquetListePersoClient,paquetInitialisationPartie ,paquetInitialisationPartie.getTrain());
                             } else {
                                 Client.this.controleurAccueilHost.lancerPartie(paquetListePersoHost, paquetInitialisationPartie, paquetInitialisationPartie.getTrain());
                             }
-                            Client.this.requestBandit();
-                        }
 
-                        case PaquetBandit p -> {
-                            synchronized (notifieurInitBandits){
-                                Client.this.bandit = p.getBandit();
-                                Client.this.infosBanditCourant = p.getInfosBanditCourant();
-                                notifieurInitBandits.notifyAll();
-                                System.out.println("Bandit reçu");
-                            }
+                            Client.this.bandit = p.getBandit();
+                            Client.this.infosBanditCourant = p.getInfosBanditCourant();
+                            System.out.println("Bandit reçu");
+
 
                         }
                         case null, default -> {
