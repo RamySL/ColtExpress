@@ -32,10 +32,11 @@ public class Server {
     private final ExecutorService pool;
     private int nbJoueurConnecte;
     private Map<ClientHandler, Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> mapClientPerso;
-
-    ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJoueur = new ArrayList<>();
+    private ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJoueur = new ArrayList<>(); // parrait comme une duplication de values du hashMap mais c pour assurer
+                                                                                                                        // l'ordononcement chose que ne fait une hashMap
     private boolean lancerPartie = false; // quand le host appui sur lancer devient true
     private PaquetInitialisationPartie paquetInitialisationPartie;
+    private static final Object notifieurInitialisationPartie = new Object();
 
     public Server(int port, int maxPlayers) {
         this.port = port;
@@ -89,7 +90,7 @@ public class Server {
         }
 
         // nouveau thread pour la partie
-        new Thread(() -> {
+         new Thread(() -> {
             while ((!this.lancerPartie) || this.mapClientPerso.size() < this.maxPlayers){
 
                 try {
@@ -99,9 +100,19 @@ public class Server {
                 }
 
             }
-//            ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> infos = new ArrayList<>(this.mapClientPerso.values());
-            this.paquetInitialisationPartie.initTrain(this.creationsJoueur);
-            for (ClientHandler player : players) {
+
+             synchronized (notifieurInitialisationPartie){
+                 try {
+                     while (this.paquetInitialisationPartie == null){
+                         notifieurInitialisationPartie.wait();
+                     }
+                     this.paquetInitialisationPartie.initTrain(this.creationsJoueur);
+                 } catch (InterruptedException e) {
+                     throw new RuntimeException(e);
+                 }
+             }
+
+             for (ClientHandler player : players) {
                 try {
                     player.sendPersoList(this.creationsJoueur);
                     player.sendInitPartie(this.paquetInitialisationPartie);
@@ -156,7 +167,12 @@ public class Server {
                         Server.this.creationsJoueur.add(((PaquetLancementHost) paquetClient).getInfos());
                         Server.this.mapClientPerso.put(this,((PaquetLancementHost) paquetClient).getInfos());
                     }else if (paquetClient instanceof PaquetInitialisationPartie){
-                        Server.this.paquetInitialisationPartie = (PaquetInitialisationPartie) paquetClient;
+//                        System.out.println("Le run de client handler tourne sur le thread " + Thread.currentThread());
+                        synchronized (notifieurInitialisationPartie){
+                            Server.this.paquetInitialisationPartie = (PaquetInitialisationPartie) paquetClient;
+                            notifieurInitialisationPartie.notifyAll();
+                        }
+
                     }
                 }
             } catch (IOException e) {
