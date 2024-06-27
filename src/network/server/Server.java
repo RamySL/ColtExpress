@@ -138,7 +138,13 @@ public class Server {
             }
 
 
+
+
         } ).start();
+
+    }
+
+    public void partie (){
 
     }
     public int getNbJoueurConnecte() {
@@ -197,7 +203,7 @@ public class Server {
                             }
                         }
                         case PaquetRequestBandit paquetRequestBandit -> {
-                            this.out.writeObject(new PaquetBandit(Server.this.getMapClientBandit().get(this), Server.this.creationsJoueur.getFirst()));
+                            this.out.writeObject(new PaquetBandit(Server.this.getMapClientBandit().get(this), Server.this.paquetInitialisationPartie.getTrain().getBandits().getFirst()));
                         }
 
 

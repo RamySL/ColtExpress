@@ -7,20 +7,20 @@ import network.Paquets.Paquet;
 import java.io.Serial;
 
 public class PaquetBandit extends Paquet {
-    private Bandit bandit;
-    private Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infosBanditCourant;
+    private Bandit bandit,banditCourant;
     @Serial
     private static final long serialVersionUID  = 155L;
 
-    public PaquetBandit(Bandit bandit , Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infosBanditCourant){
+    public PaquetBandit(Bandit bandit , Bandit infosBanditCourant){
         this.bandit = bandit;
-        this.infosBanditCourant = infosBanditCourant;
+        this.banditCourant = infosBanditCourant;
     }
 
     public Bandit getBandit() {
         return bandit;
     }
-    public Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation getInfosBanditCourant() {
-        return infosBanditCourant;
+
+    public Bandit getBanditCourant() {
+        return banditCourant;
     }
 }

@@ -24,8 +24,7 @@ public class Client {
     private PaquetListePersoClient paquetListePersoClient;
     private PaquetListePersoHost paquetListePersoHost;
     private PaquetInitialisationPartie paquetInitialisationPartie;
-    private Bandit bandit;
-    private Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infosBanditCourant;
+    private Bandit bandit, banditCourant;
 
 
     private Object notifieurInitBandits = new Object();
@@ -100,8 +99,8 @@ public class Client {
         return bandit;
     }
 
-    public Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation getInfosBanditCourant() {
-        return infosBanditCourant;
+    public Bandit getBanditCourant() {
+        return banditCourant;
     }
 
     public Object getNotifieurInitBandits() {
@@ -163,7 +162,7 @@ public class Client {
                             }
 
                             Client.this.bandit = p.getBandit();
-                            Client.this.infosBanditCourant = p.getInfosBanditCourant();
+                            Client.this.banditCourant = p.getBanditCourant();
                             System.out.println("Bandit reçu");
 
 
