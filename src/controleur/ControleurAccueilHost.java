@@ -20,19 +20,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ControleurAccueilHost implements ActionListener {
+public class ControleurAccueilHost extends ControleurAccueil {
     protected Accueil accueil;
     protected EcranType ecranType;
-    protected Fenetre fenetre;
     // accumulation de classes internes
-    protected ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJouers = new ArrayList<>();
     private JouerSon misqueLancement;
-    private Client client;
     public ControleurAccueilHost(Fenetre fenetre)  {
+        super(fenetre);
         misqueLancement = new JouerSon("src/assets/sons/lancement.wav");
         //misqueLancement.jouer(true);
-
-        this.fenetre = fenetre;
         this.accueil = this.fenetre.getAccueil();
         this.ecranType = this.fenetre.getEcranTpe();
         this.accueil.liaisonAvecControleur(this);
@@ -101,60 +97,6 @@ public class ControleurAccueilHost implements ActionListener {
         }
     }
 
-    public void lancerPartie(PaquetListePersoHost paquetListePersoInfo, PaquetInitialisationPartie paquetInitialisationPartie, Train train){
-        Map<Personnage, ImageIcon> mapPersonnageIcone = new HashMap<>();
-
-        //Train train = new Train (Integer.parseInt(paquetParametrePartie.getNbWagons()) );
-        //train.ajouterMarshall(paquetInitialisationPartie.getNervositeMarshall());
-        // invariant qui garde ça correcte c'est que le premier elt  de this.creationsJouers va corresependre au
-        // premier Personnage dans la liste du train et le deuxieme au deuxieme etc
-        int i = 0;
-        for (Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infos : paquetListePersoInfo.getListeInfos()){
-            //train.ajouterBandit(infos.getSurnom(),Integer.parseInt(paquetInitialisationPartie.getNbBallesBandits()));
-            mapPersonnageIcone.put(train.getBandits().get(i),infos.getIcone());
-            i++;
-        }
-        mapPersonnageIcone.put(train.getMarshall(),new ImageIcon("src/assets/images/sherif.png"));
-        Jeu jeu = new Jeu(train, this.fenetre, mapPersonnageIcone);
-        this.fenetre.ajouterFenetreJeu(jeu);
-        this.fenetre.changerVue(this.fenetre.getJeuId());
-        CotroleurJeu cotroleurJeu = new CotroleurJeu(train,this.fenetre,Integer.parseInt(paquetInitialisationPartie.getNbActions()) );
-
-        BoucleJeu boucleJeu = new BoucleJeu(cotroleurJeu,Integer.parseInt(paquetInitialisationPartie.getNbManches()) );
-        boucleJeu.execute();
-    }
-
-
-
-    /**
-     * Boucle principale de notre jeu va tourner sur un thread différent que EDT  en arriere plans pour garder la reactivité de
-     * l'affichage avec la boucle du jeu et ne pas bloquer l'EDT
-     * Void : premier void pour préciser que ça retourne rien à la fin de l'execution, le deuxieme c'est pour dire ça publi rien
-     * pendant l'execution
-     */
-    private class BoucleJeu extends SwingWorker<Void, Void>{
-
-        private CotroleurJeu controleur;
-        private int nbManches;
-
-        public BoucleJeu(CotroleurJeu controleur, int nbManches) {
-
-            this.controleur = controleur;
-            this.nbManches = nbManches;
-        }
-
-        /**
-         * on lance la boucle en arriere plans
-         * @return
-         */
-        @Override
-        protected Void doInBackground() {
-            controleur.lancerJeu(this.nbManches);
-            return null;
-        }
-
-
-    }
 
     /**
      * Affcihe la fenetre du jeu

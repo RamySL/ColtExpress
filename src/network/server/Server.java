@@ -162,6 +162,7 @@ public class Server {
                 while ((paquetClient = in.readObject()) != null) {
                     if (paquetClient instanceof PaquetLancementClient){
                         Server.this.mapClientPerso.put(this,((PaquetLancementClient) paquetClient).getInfos());
+                        Server.this.creationsJoueur.add(((PaquetLancementClient) paquetClient).getInfos());
                     }else if (paquetClient instanceof PaquetLancementHost){
                         Server.this.lancerPartie = true;
                         Server.this.creationsJoueur.add(((PaquetLancementHost) paquetClient).getInfos());

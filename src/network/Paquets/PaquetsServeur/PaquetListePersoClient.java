@@ -9,14 +9,12 @@ import java.util.ArrayList;
 /**
  * quand les clients reçoivent ils initialisent leur jeu en locale et le lance
  */
-public class PaquetListePersoClient extends Paquet {
+public class PaquetListePersoClient extends PaquetListePerso {
     @Serial
     private static final long serialVersionUID = 17L;
     ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> listeInfos;
     public PaquetListePersoClient(ArrayList <Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> listeInfos){
-        this.listeInfos = listeInfos;
+        super(listeInfos);
     }
-    public ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> getListeInfos() {
-        return listeInfos;
-    }
+
 }

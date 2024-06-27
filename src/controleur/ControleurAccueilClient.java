@@ -19,21 +19,17 @@ import java.util.Map;
  * Le controleur qui va gerer les événenement qui proviennent de l'initialisation du jeu avec la fenetre d'accueil
  * et le choix des parametres du jeu, il doit ensuite intialiser le controleur du jeu avec le modele (train)
  */
-public class ControleurAccueilClient implements ActionListener {
+public class ControleurAccueilClient extends ControleurAccueil {
 
     protected AccueilClient accueil;
-    protected Fenetre fenetre;
     // accumulation de classes internes
-    protected ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJouers = new ArrayList<>();
-    private Client client;
 
     /**
      * Intialise le controleur et fait la liason avec les composantes d'accueil dont il va ecouter les evenements
      * @param fenetre du jeu qui contient tous les différentes vu du jeu
      */
     public ControleurAccueilClient(Fenetre fenetre, Client client){
-
-        this.fenetre = fenetre;
+        super(fenetre);
         this.accueil = this.fenetre.getAccueilClient();
         this.accueil.liaisonAvecControleurClient(this);
         this.client = client;
@@ -67,52 +63,7 @@ public class ControleurAccueilClient implements ActionListener {
 
     }
 
-    public void lancerPartie(PaquetListePersoClient paquetListePersoInfo, PaquetInitialisationPartie paquetInitialisationPartie, Train train){
-        Map<Personnage, ImageIcon> mapPersonnageIcone = new HashMap<>();
 
-        //Train train = new Train (Integer.parseInt(paquetParametrePartie.getNbWagons()) );
-        //train.ajouterMarshall(paquetInitialisationPartie.getNervositeMarshall());
-        // invariant qui garde ça correcte c'est que le premier elt  de this.creationsJouers va corresependre au
-        // premier Personnage dans la liste du train et le deuxieme au deuxieme etc
-        int i = 0;
-        for (Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infos : paquetListePersoInfo.getListeInfos()){
-            //train.ajouterBandit(infos.getSurnom(),Integer.parseInt(paquetInitialisationPartie.getNbBallesBandits()));
-            mapPersonnageIcone.put(train.getBandits().get(i),infos.getIcone());
-            i++;
-        }
-        mapPersonnageIcone.put(train.getMarshall(),new ImageIcon("src/assets/images/sherif.png"));
-        Jeu jeu = new Jeu(train, this.fenetre, mapPersonnageIcone);
-        this.fenetre.ajouterFenetreJeu(jeu);
-        this.fenetre.changerVue(this.fenetre.getJeuId());
-        CotroleurJeu cotroleurJeu = new CotroleurJeu(train,this.fenetre,Integer.parseInt(paquetInitialisationPartie.getNbActions()) );
-
-        BoucleJeu boucleJeu = new BoucleJeu(cotroleurJeu,Integer.parseInt(paquetInitialisationPartie.getNbManches()) );
-        boucleJeu.execute();
-    }
-
-    private class BoucleJeu extends SwingWorker<Void, Void>{
-
-        private CotroleurJeu controleur;
-        private int nbManches;
-
-        public BoucleJeu(CotroleurJeu controleur, int nbManches) {
-
-            this.controleur = controleur;
-            this.nbManches = nbManches;
-        }
-
-        /**
-         * on lance la boucle en arriere plans
-         * @return
-         */
-        @Override
-        protected Void doInBackground() {
-            controleur.lancerJeu(this.nbManches);
-            return null;
-        }
-
-
-    }
 
 
 }
