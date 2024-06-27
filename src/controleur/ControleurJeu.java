@@ -1,7 +1,6 @@
 package controleur;
 
 import Vue.*;
-import Vue.Bouttons.Bouttons;
 import modele.*;
 import modele.actions.Action;
 import modele.actions.Braquer;
@@ -9,7 +8,6 @@ import modele.actions.SeDeplacer;
 import modele.actions.Tirer;
 import modele.personnages.Bandit;
 import modele.personnages.Marshall;
-import modele.personnages.Personnage;
 import modele.trainEtComposantes.Train;
 
 import javax.swing.*;
@@ -22,7 +20,7 @@ import java.util.Map;
 /**
  * Controle tous les evenements pendant le deroulement de la partie
  */
-public class CotroleurJeu implements ActionListener {
+public abstract class ControleurJeu implements ActionListener {
     Train train;
     Jeu vueJeu;
     Fenetre fenetre;
@@ -39,7 +37,7 @@ public class CotroleurJeu implements ActionListener {
      * @param fenetre fenetre du jeu qui stock les identifiants de toutes les vues
      * @param nbAction nombre d'actions à planifier pour chaque bandit pendant la phase de planification
      */
-    public CotroleurJeu(Train train, Fenetre fenetre, int nbAction){
+    public ControleurJeu(Train train, Fenetre fenetre, int nbAction){
 
         mapSonsJeu.put("tir", new JouerSon("src/assets/sons/gun-shot.wav"));
         mapSonsJeu.put("braquage", new JouerSon("src/assets/sons/braquage.wav"));

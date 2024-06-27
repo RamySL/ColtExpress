@@ -7,7 +7,6 @@ import modele.personnages.Personnage;
 import modele.trainEtComposantes.Train;
 import network.Paquets.PaquetsServeur.PaquetInitialisationPartie;
 import network.Paquets.PaquetsServeur.PaquetListePerso;
-import network.Paquets.PaquetsServeur.PaquetListePersoClient;
 import network.client.Client;
 
 import javax.swing.*;
@@ -43,7 +42,7 @@ public abstract class ControleurAccueil implements ActionListener {
         Jeu jeu = new Jeu(train, this.fenetre, mapPersonnageIcone);
         this.fenetre.ajouterFenetreJeu(jeu);
         this.fenetre.changerVue(this.fenetre.getJeuId());
-        CotroleurJeu cotroleurJeu = new CotroleurJeu(train,this.fenetre,Integer.parseInt(paquetInitialisationPartie.getNbActions()) );
+        ControleurJeu cotroleurJeu = new ControleurJeuOnLine(train,this.fenetre,Integer.parseInt(paquetInitialisationPartie.getNbActions()), this.client);
 
         BoucleJeu boucleJeu = new BoucleJeu(cotroleurJeu,Integer.parseInt(paquetInitialisationPartie.getNbManches()) );
         boucleJeu.execute();
@@ -51,10 +50,10 @@ public abstract class ControleurAccueil implements ActionListener {
 
     protected class BoucleJeu extends SwingWorker<Void, Void>{
 
-        private CotroleurJeu controleur;
+        private ControleurJeu controleur;
         private int nbManches;
 
-        public BoucleJeu(CotroleurJeu controleur, int nbManches) {
+        public BoucleJeu(ControleurJeu controleur, int nbManches) {
 
             this.controleur = controleur;
             this.nbManches = nbManches;

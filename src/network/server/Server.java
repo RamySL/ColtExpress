@@ -12,6 +12,7 @@ package network.server;
  * - le jeu se lance quand le hot lance (un message d'attente est affiché pour les clients */
 
 import Vue.Accueil;
+import modele.personnages.Bandit;
 import network.Paquets.PaquetsClients.*;
 import network.Paquets.PaquetsServeur.*;
 
@@ -31,9 +32,10 @@ public class Server {
     private final List<ClientHandler> players;
     private final ExecutorService pool;
     private int nbJoueurConnecte;
-    private Map<ClientHandler, Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> mapClientPerso;
+    private Map< Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation, ClientHandler> mapPersoInfoClient;
     private ArrayList<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> creationsJoueur = new ArrayList<>(); // parrait comme une duplication de values du hashMap mais c pour assurer
                                                                                                                         // l'ordononcement chose que ne fait une hashMap
+    private Map<ClientHandler,Bandit> mapClientBandit = new HashMap<>();
     private boolean lancerPartie = false; // quand le host appui sur lancer devient true
     private PaquetInitialisationPartie paquetInitialisationPartie;
     private static final Object notifieurInitialisationPartie = new Object();
@@ -44,7 +46,19 @@ public class Server {
         this.players = new ArrayList<>();
         this.pool = Executors.newFixedThreadPool(maxPlayers);
         this.nbJoueurConnecte = 0;
-        this.mapClientPerso = new HashMap<>();
+        this.mapPersoInfoClient = new HashMap<>();
+    }
+
+    /**
+     * il ya une correspendance entre la liste de bandit dans Train et celle de creation joueur
+     * celui à l'indice i de l'un correspend à celui de l'indice i de l'autre
+     */
+    private void  setMapBanditClientHand (){
+        int i = 0;
+        for (Bandit bandit : this.paquetInitialisationPartie.getTrain().getBandits()){
+            this.mapClientBandit.put( mapPersoInfoClient.get(this.creationsJoueur.get(i)), bandit);
+            i++;
+        }
     }
 
     public void start() {
@@ -91,7 +105,7 @@ public class Server {
 
         // nouveau thread pour la partie
          new Thread(() -> {
-            while ((!this.lancerPartie) || this.mapClientPerso.size() < this.maxPlayers){
+            while ((!this.lancerPartie) || this.mapPersoInfoClient.size() < this.maxPlayers){
 
                 try {
                     Thread.sleep(10);
@@ -107,6 +121,7 @@ public class Server {
                          notifieurInitialisationPartie.wait();
                      }
                      this.paquetInitialisationPartie.initTrain(this.creationsJoueur);
+                     this.setMapBanditClientHand();
                  } catch (InterruptedException e) {
                      throw new RuntimeException(e);
                  }
@@ -134,8 +149,12 @@ public class Server {
         return maxPlayers;
     }
 
-    public Map<ClientHandler, Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> getMapClientPerso() {
-        return mapClientPerso;
+    public Map<Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation, ClientHandler> getMapPersoInfoClient() {
+        return mapPersoInfoClient;
+    }
+
+    public Map<ClientHandler, Bandit> getMapClientBandit() {
+        return mapClientBandit;
     }
 
     /**
@@ -160,20 +179,30 @@ public class Server {
             try {
                 Object paquetClient;
                 while ((paquetClient = in.readObject()) != null) {
-                    if (paquetClient instanceof PaquetLancementClient){
-                        Server.this.mapClientPerso.put(this,((PaquetLancementClient) paquetClient).getInfos());
-                        Server.this.creationsJoueur.add(((PaquetLancementClient) paquetClient).getInfos());
-                    }else if (paquetClient instanceof PaquetLancementHost){
-                        Server.this.lancerPartie = true;
-                        Server.this.creationsJoueur.add(((PaquetLancementHost) paquetClient).getInfos());
-                        Server.this.mapClientPerso.put(this,((PaquetLancementHost) paquetClient).getInfos());
-                    }else if (paquetClient instanceof PaquetInitialisationPartie){
+                    switch (paquetClient) {
+                        case PaquetLancementClient paquetLancementClient -> {
+                            Server.this.mapPersoInfoClient.put(paquetLancementClient.getInfos(), this);
+                            Server.this.creationsJoueur.add(paquetLancementClient.getInfos());
+                        }
+                        case PaquetLancementHost paquetLancementHost -> {
+                            Server.this.lancerPartie = true;
+                            Server.this.creationsJoueur.add(paquetLancementHost.getInfos());
+                            Server.this.mapPersoInfoClient.put(paquetLancementHost.getInfos(), this);
+                        }
+                        case PaquetInitialisationPartie initialisationPartie -> {
 //                        System.out.println("Le run de client handler tourne sur le thread " + Thread.currentThread());
-                        synchronized (notifieurInitialisationPartie){
-                            Server.this.paquetInitialisationPartie = (PaquetInitialisationPartie) paquetClient;
-                            notifieurInitialisationPartie.notifyAll();
+                            synchronized (notifieurInitialisationPartie) {
+                                Server.this.paquetInitialisationPartie = initialisationPartie;
+                                notifieurInitialisationPartie.notifyAll();
+                            }
+                        }
+                        case PaquetRequestBandit paquetRequestBandit -> {
+                            this.out.writeObject(new PaquetBandit(Server.this.getMapClientBandit().get(this), Server.this.creationsJoueur.getFirst()));
                         }
 
+
+                        case null, default -> {
+                        }
                     }
                 }
             } catch (IOException e) {
@@ -208,6 +237,8 @@ public class Server {
         public void sendInitPartie(PaquetInitialisationPartie paquetInitialisationPartie) throws IOException {
             out.writeObject(paquetInitialisationPartie);
         }
+
+
 
     }
 

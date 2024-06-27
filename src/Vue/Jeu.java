@@ -1,8 +1,5 @@
 package Vue;
 
-import Vue.Bouttons.Bouttons;
-import controleur.CotroleurJeu;
-import modele.*;
 import modele.butins.Butin;
 import modele.personnages.Bandit;
 import modele.personnages.Marshall;

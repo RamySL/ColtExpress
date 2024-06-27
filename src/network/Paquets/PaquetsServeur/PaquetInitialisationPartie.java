@@ -1,6 +1,7 @@
 package network.Paquets.PaquetsServeur;
 
 import Vue.Accueil;
+import modele.personnages.Bandit;
 import modele.trainEtComposantes.Train;
 import network.Paquets.Paquet;
 
@@ -16,6 +17,8 @@ public class PaquetInitialisationPartie extends Paquet {
     private String nbBallesBandits,nbWagons,nbActions,nbManches;
     private Double nervositeMarshall;
     private Train train;
+    private Bandit joueurCourant;
+
 
     public PaquetInitialisationPartie(String nbBallesBandits, String nbWagons, String nbActions, String nbManches, Double nervositeMarshall){
         this.nbActions = nbActions;
@@ -54,10 +57,15 @@ public class PaquetInitialisationPartie extends Paquet {
             train.ajouterBandit(info.getSurnom(),Integer.parseInt(this.nbBallesBandits));
         }
 
+        this.joueurCourant = this.train.getBandits().getFirst();
 
     }
 
     public Train getTrain() {
         return train;
+    }
+
+    public Bandit getJoueurCourant() {
+        return joueurCourant;
     }
 }

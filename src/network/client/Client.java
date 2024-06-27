@@ -4,6 +4,7 @@ import Vue.Accueil;
 import controleur.ControleurAccueilHost;
 import controleur.ControleurAccueilClient;
 import controleur.ControleurServerClient;
+import modele.personnages.Bandit;
 import network.Paquets.PaquetsClients.*;
 import network.Paquets.PaquetsServeur.*;
 
@@ -22,6 +23,11 @@ public class Client {
     private ControleurAccueilHost controleurAccueilHost;
     private PaquetListePersoClient paquetListePersoClient;
     private PaquetListePersoHost paquetListePersoHost;
+    private Bandit bandit;
+    private Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation infosBanditCourant;
+
+
+    private Object notifieurInitBandits = new Object();
 
     boolean host = false;
 
@@ -78,8 +84,27 @@ public class Client {
 
     }
 
+    /**
+     * quand la partie se lance chaque client demande au serveur l'objet (Bandit) qui lui correspond
+     */
+    public void requestBandit() throws IOException {
+        this.out.writeObject(new PaquetRequestBandit());
+    }
+
     public void setControleurAccueilClient(ControleurAccueilClient controleurAccueilClient) {
         this.controleurAccueilClient = controleurAccueilClient;
+    }
+
+    public Bandit getBandit() {
+        return bandit;
+    }
+
+    public Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation getInfosBanditCourant() {
+        return infosBanditCourant;
+    }
+
+    public Object getNotifieurInitBandits() {
+        return notifieurInitBandits;
     }
 
     private boolean isValidMovement(String movement) {
@@ -131,6 +156,17 @@ public class Client {
                             } else {
                                 Client.this.controleurAccueilHost.lancerPartie(paquetListePersoHost, paquetInitialisationPartie, paquetInitialisationPartie.getTrain());
                             }
+                            Client.this.requestBandit();
+                        }
+
+                        case PaquetBandit p -> {
+                            synchronized (notifieurInitBandits){
+                                Client.this.bandit = p.getBandit();
+                                Client.this.infosBanditCourant = p.getInfosBanditCourant();
+                                notifieurInitBandits.notifyAll();
+                                System.out.println("Bandit reçu");
+                            }
+
                         }
                         case null, default -> {
                         }
