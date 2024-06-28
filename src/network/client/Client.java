@@ -3,13 +3,17 @@ package network.client;
 import Vue.Accueil;
 import controleur.ControleurAccueilHost;
 import controleur.ControleurAccueilClient;
+import controleur.ControleurJeuOnLine;
 import controleur.ControleurServerClient;
+import modele.actions.Action;
 import modele.personnages.Bandit;
 import network.Paquets.PaquetsClients.*;
 import network.Paquets.PaquetsServeur.*;
+import network.Paquets.PaquetsServeur.PaquetAction;
 
 import java.io.*;
 import java.net.*;
+import java.util.Queue;
 
 public class Client {
     private final String serverAddress;
@@ -21,14 +25,11 @@ public class Client {
     private ControleurServerClient cntrlServerClient;
     private ControleurAccueilClient controleurAccueilClient;
     private ControleurAccueilHost controleurAccueilHost;
+    private ControleurJeuOnLine controleurJeu;
     private PaquetListePersoClient paquetListePersoClient;
     private PaquetListePersoHost paquetListePersoHost;
     private PaquetInitialisationPartie paquetInitialisationPartie;
     private Bandit bandit, banditCourant;
-
-
-    private Object notifieurInitBandits = new Object();
-
     boolean host = false;
 
     public Client(String serverAddress, int serverPort, ControleurServerClient ctrlServerClient) {
@@ -37,6 +38,10 @@ public class Client {
         this.cntrlServerClient = ctrlServerClient;
         this.controleurAccueilHost = this.cntrlServerClient.getControleurAccueil();
         this.controleurAccueilHost.setClient(this);
+    }
+
+    public void setControleurJeu(ControleurJeuOnLine controleurJeu){
+        this.controleurJeu = controleurJeu;
     }
 
     public void start() {
@@ -95,16 +100,20 @@ public class Client {
         this.controleurAccueilClient = controleurAccueilClient;
     }
 
+    public void sendListePlanififcation(Queue<Action> actions) throws IOException {
+        this.out.writeObject(new PaquetListePlanififcation(actions));
+    }
+
+    public void actionExecute() throws IOException {
+        this.out.writeObject(new network.Paquets.PaquetsClients.PaquetAction());
+    }
+
     public Bandit getBandit() {
         return bandit;
     }
 
     public Bandit getBanditCourant() {
         return banditCourant;
-    }
-
-    public Object getNotifieurInitBandits() {
-        return notifieurInitBandits;
     }
 
     private boolean isValidMovement(String movement) {
@@ -155,17 +164,37 @@ public class Client {
                         }
 
                         case PaquetBandit p -> {
+                            Client.this.bandit = p.getBandit();
+                            Client.this.banditCourant = p.getBanditCourant();
+
                             if (!host) {
                                 Client.this.controleurAccueilClient.lancerPartie(paquetListePersoClient,paquetInitialisationPartie ,paquetInitialisationPartie.getTrain());
                             } else {
                                 Client.this.controleurAccueilHost.lancerPartie(paquetListePersoHost, paquetInitialisationPartie, paquetInitialisationPartie.getTrain());
                             }
+                        }
 
-                            Client.this.bandit = p.getBandit();
-                            Client.this.banditCourant = p.getBanditCourant();
-                            System.out.println("Bandit reçu");
+                        case PaquetPlanification paquetPlanification -> {
+                            Client.this.controleurJeu.setPlanPhase();
+                        }
 
+                        case PaquetAction paquetAction -> {
+                            System.out.println("Client : reçu action");
+                            Client.this.controleurJeu.setActionPhase();
+                        }
 
+                        case PaquetNextPlanification paquetNextPlanification ->{
+                            Client.this.controleurJeu.nextBandit();
+
+                        }
+                        case PaquetNextAction paquetNextAction -> {
+                            Client.this.controleurJeu.nextBandit();
+
+                        }
+
+                        case PaquetTrain paquetTrain ->{
+                            System.out.println("Client : reçu train");
+                            Client.this.controleurJeu.actualiserTrain(paquetTrain.getTrain());
                         }
                         case null, default -> {
                         }

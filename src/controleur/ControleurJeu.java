@@ -230,7 +230,7 @@ public abstract class ControleurJeu implements ActionListener {
                     Action a;
                     a = new SeDeplacer(banditCourant, Direction.Droite);
                     banditCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };
@@ -242,7 +242,7 @@ public abstract class ControleurJeu implements ActionListener {
                     Action a;
                     a = new SeDeplacer(banditCourant, Direction.Haut);
                     banditCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };
@@ -254,7 +254,7 @@ public abstract class ControleurJeu implements ActionListener {
                     Action a;
                     a = new SeDeplacer(banditCourant, Direction.Bas);
                     banditCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };
@@ -266,7 +266,7 @@ public abstract class ControleurJeu implements ActionListener {
                     Action a;
                     a = new SeDeplacer(banditCourant, Direction.Gauche);
                     banditCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };
@@ -278,7 +278,7 @@ public abstract class ControleurJeu implements ActionListener {
                     Action a;
                     a = new Braquer(banditCourant);
                     banditCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };
@@ -290,7 +290,7 @@ public abstract class ControleurJeu implements ActionListener {
                     Action a;
                     a = new Tirer(banditCourant, Direction.Droite);
                     banditCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };
@@ -302,7 +302,7 @@ public abstract class ControleurJeu implements ActionListener {
                     Action a;
                     a = new Tirer(banditCourant, Direction.Haut);
                     banditCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };
@@ -314,7 +314,7 @@ public abstract class ControleurJeu implements ActionListener {
                     Action a;
                     a = new Tirer(banditCourant, Direction.Bas);
                     banditCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };
@@ -326,7 +326,7 @@ public abstract class ControleurJeu implements ActionListener {
                     Action a;
                     a = new Tirer(banditCourant, Direction.Gauche);
                     banditCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };

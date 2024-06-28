@@ -169,7 +169,7 @@ public class Server {
 
     private void broadCastPaquet (Paquet p) throws IOException {
         for (ClientHandler player : Server.this.players){
-            player.out.writeObject(new PaquetAction());
+            player.out.writeObject(p);
         }
     }
 
@@ -196,7 +196,7 @@ public class Server {
         public void run() {
             try {
                 Object paquetClient;
-                while ((paquetClient = in.readObject()) != null) {
+                while ((paquetClient = in.readObject()) != null) { // le probleme vient peut etre de banditCourant de controleurJeu
                     switch (paquetClient) {
                         case PaquetLancementClient paquetLancementClient -> {
                             Server.this.mapPersoInfoClient.put(paquetLancementClient.getInfos(), this);
@@ -218,11 +218,12 @@ public class Server {
                             this.out.writeObject(new PaquetBandit(Server.this.getMapClientBandit().get(this), Server.this.paquetInitialisationPartie.getTrain().getBandits().getFirst()));
                         }
 
-                        /*case PaquetListePlanififcation paquetListePlanififcation -> {
+                        case PaquetListePlanififcation paquetListePlanififcation -> {
+                            System.out.println("Server : reçu liste de planif");
                             for (Action action : paquetListePlanififcation.getListeAction()){
                                 Server.this.mapClientBandit.get(this).ajouterAction(action);
                             }
-                            if (partie.indiceBanditCourant < partie.nbBandits){
+                            if ((partie.indiceBanditCourant+1) < partie.nbBandits){
                                 Server.this.broadCastPaquet(new PaquetNextPlanification());
                                 partie.indiceBanditCourant ++;
                             }else {
@@ -233,6 +234,7 @@ public class Server {
                         }
 
                         case PaquetAction paquetAction -> {
+                            System.out.println("Server : reçu actionexecute de la part de client");
                             // !! deplacement du marshall
                             // La partie doit changer pour les clients
                             Server.this.mapClientBandit.get(this).executer();
@@ -252,7 +254,7 @@ public class Server {
                                     Server.this.broadCastPaquet(new PaquetBanditsGagnant(partie.getBanditsGagnant()));
                                 }
                             }
-                        }*/
+                        }
 
                         case null, default -> {
                         }

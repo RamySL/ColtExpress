@@ -11,7 +11,9 @@ import modele.personnages.Marshall;
 import modele.trainEtComposantes.Train;
 import network.client.Client;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -31,8 +33,13 @@ import java.util.Map;
  */
 public class ControleurJeuOnLine extends ControleurJeu {
     private Client client;
-    private Bandit bandit, banditCourant;
+    private Bandit bandit;
+
+    private int indiceBanditCourant = 0;
     private boolean finPartie = false, planPhase = true, actionPhase = false; // change par serveur
+
+    private final int totaleActionsManche = this.nbAction * this.nBandits; // le nombre d'actions que planifie tous les joeurs en une manche
+    private int manche = 0;
 
 
     /**
@@ -45,93 +52,109 @@ public class ControleurJeuOnLine extends ControleurJeu {
     public ControleurJeuOnLine(Train train, Fenetre fenetre, int nbAction,Client client) {
         super(train, fenetre, nbAction);
         this.client = client;
+        this.client.setControleurJeu(this);
         this.bandit = this.client.getBandit();
         this.banditCourant = this.client.getBanditCourant();
-        if (!this.banditCourant.equals(this.bandit)){
+
+        if (this.banditCourant != this.bandit){
             vueJeu.getActionMap().clear();
         }
+
+        AbstractAction action = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (actionPhase) {
+                    bandit.executer();
+                }
+            }
+        };
+
+        vueJeu.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"), "action");
+        vueJeu.getActionMap().put("action", action);
+
+
     }
+
+    public void setActionPhase() {
+        this.actionPhase = true;
+        this.planPhase = false;
+    }
+
+    public void setFinPartie() {
+        this.finPartie = true;
+    }
+
+    public void prochaineManche() {
+        this.manche++;
+    }
+
+    public void setPlanPhase() {
+        this.actionPhase = false;
+        this.planPhase = true;
+    }
+
+    public void nextBandit(){
+        this.indiceBanditCourant++;
+    }
+
+    public void sendListePlanififcation() throws IOException {
+       this.client.sendListePlanififcation (this.bandit.getActions());
+    }
+
+    public void actualiserTrain(Train train){
+        this.train = train;
+    }
+
+
 
     /**
      *  possede la boucle principale du jeu, alterne pour chaque manche entre la phase de planification quand les bandits auronts choisit toutes leurs actions
      * et la phase d'action quand toutes leurs actions ont été executées. quand la boucle est finis elle lance l'ecran de fin.
      * @param nbManches nombre de manche à jouer avant la fin du jeu
      */
+    @Override
     public void lancerJeu(int nbManches) {
-        //this.mapSonsJeu.get("jeuBack").jouer(true);
 
-        int totaleActionsManche = this.nbAction * this.nBandits; // le nombre d'actions que planifie tous les joeurs en une manche
-        int manche = 0;
-
-        while (!finPartie) {
-            //planification
-
-            this.vueJeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase de palinification pour la manche " + (manche+1) + "/" + nbManches);
-            this.vueJeu.getCmdPanel().getPhaseFeedPanel().setPlanfication(this.banditCourant);
-            // concurrentmodifError avec for each
-//            for (int i = 0; i <this.nBandits; i++){
-//
-//                if(i != 0){
-//                    this.vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualiserPlanificateur(this.banditCourant);
-//                }
-//
-//                while (this.banditCourant.lenAction() < this.nbAction) {
-//                    try {
-//                        Thread.sleep(10);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                }
-//
-//
-//            }
-
-            while (planPhase) {
-                while(!this.banditCourant.equals(this.bandit)){
+        while (!finPartie){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (this.banditCourant == this.bandit) {
+                if (planPhase) {
+                    while (this.bandit.getActions().size() < this.nbAction) {
+                        // affichage des actions à celui qui planfie
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        this.sendListePlanififcation();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                } else if (actionPhase) {
+                    int nbActionBandit = this.bandit.getActions().size();
+                    while (true) {
+                        System.out.println("while");
+                        if (this.bandit.getActions().size() < nbActionBandit) {
+                            break;
+                        }
+                    }
+                    try {
+                        this.client.actionExecute();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
                 }
-                jeuBindingKeys();
-            }
-            // action
-            this.vueJeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase d'action pour la manche " + (manche+1) + "/" + nbManches);
-            this.vueJeu.getCmdPanel().getPhaseFeedPanel().setAction();
-
-            this.nbActionExecute = 0;
-            this.banditCourant = this.train.getBandits().get(0);
-
-            planPhase = false;
-            actionPhase = true;
-
-            Marshall marshall = this.train.getMarshall();
-            String feed =  marshall.seDeplacer();
-            this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
-
-            // fuite des bandits si le marshall vient dans le mm emplacement qu'eux
-            ArrayList<Bandit> lstBandit = this.train.getMarshall().getEmplacement().getBanditListSauf(marshall);
-            while (!lstBandit.isEmpty()){
-                lstBandit.get(0).fuir();
-                this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(lstBandit.get(0).getSurnom() + " Vient de fuir vers le toit ");
-                lstBandit.remove(0);
-
             }
 
-            while (this.nbActionExecute < totaleActionsManche) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            manche++;
         }
-        // fin jeu
-        this.versFinJeu();
+
 
     }
 

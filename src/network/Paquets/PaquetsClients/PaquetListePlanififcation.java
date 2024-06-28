@@ -5,6 +5,7 @@ import network.Paquets.Paquet;
 
 import java.io.Serial;
 import java.util.ArrayList;
+import java.util.Queue;
 
 /**
  * la liste des actions planifiées
@@ -12,12 +13,12 @@ import java.util.ArrayList;
 public class PaquetListePlanififcation extends Paquet {
     @Serial
     private static final long serialVersionUID  = 16L;
-    private ArrayList<Action> listeAction;
-    public PaquetListePlanififcation (ArrayList<Action> listeAction){
+    private Queue<Action> listeAction;
+    public PaquetListePlanififcation (Queue<Action> listeAction){
         this.listeAction = listeAction;
     }
 
-    public ArrayList<Action> getListeAction() {
+    public Queue<Action> getListeAction() {
         return listeAction;
     }
 }
