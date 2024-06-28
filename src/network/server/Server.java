@@ -12,8 +12,12 @@ package network.server;
  * - le jeu se lance quand le hot lance (un message d'attente est affiché pour les clients */
 
 import Vue.Accueil;
+import modele.actions.Action;
 import modele.personnages.Bandit;
+import modele.trainEtComposantes.Train;
+import network.Paquets.Paquet;
 import network.Paquets.PaquetsClients.*;
+import network.Paquets.PaquetsClients.PaquetAction;
 import network.Paquets.PaquetsServeur.*;
 
 import java.io.*;
@@ -39,6 +43,7 @@ public class Server {
     private boolean lancerPartie = false; // quand le host appui sur lancer devient true
     private PaquetInitialisationPartie paquetInitialisationPartie;
     private static final Object notifieurInitialisationPartie = new Object();
+    private Partie partie;
 
     public Server(int port, int maxPlayers) {
         this.port = port;
@@ -137,6 +142,8 @@ public class Server {
 
             }
 
+             this.partie =  new Partie();
+
 
 
 
@@ -144,9 +151,6 @@ public class Server {
 
     }
 
-    public void partie (){
-
-    }
     public int getNbJoueurConnecte() {
         return nbJoueurConnecte;
     }
@@ -162,6 +166,14 @@ public class Server {
     public Map<ClientHandler, Bandit> getMapClientBandit() {
         return mapClientBandit;
     }
+
+    private void broadCastPaquet (Paquet p) throws IOException {
+        for (ClientHandler player : Server.this.players){
+            player.out.writeObject(new PaquetAction());
+        }
+    }
+
+
 
     /**
      * permet aux serveur d'interagir avec les clients
@@ -206,6 +218,41 @@ public class Server {
                             this.out.writeObject(new PaquetBandit(Server.this.getMapClientBandit().get(this), Server.this.paquetInitialisationPartie.getTrain().getBandits().getFirst()));
                         }
 
+                        /*case PaquetListePlanififcation paquetListePlanififcation -> {
+                            for (Action action : paquetListePlanififcation.getListeAction()){
+                                Server.this.mapClientBandit.get(this).ajouterAction(action);
+                            }
+                            if (partie.indiceBanditCourant < partie.nbBandits){
+                                Server.this.broadCastPaquet(new PaquetNextPlanification());
+                                partie.indiceBanditCourant ++;
+                            }else {
+                                partie.indiceBanditCourant = 0;
+                                Server.this.broadCastPaquet(new network.Paquets.PaquetsServeur.PaquetAction());
+                            }
+
+                        }
+
+                        case PaquetAction paquetAction -> {
+                            // !! deplacement du marshall
+                            // La partie doit changer pour les clients
+                            Server.this.mapClientBandit.get(this).executer();
+                            partie.nbActionsExecute ++;
+                            Server.this.broadCastPaquet(new PaquetTrain(partie.train));
+
+                            partie.indiceBanditCourant = partie.nbActionsExecute % partie.nbBandits;
+
+                            if (partie.nbActionsExecute < partie.totaleActionsManche){
+                                Server.this.broadCastPaquet(new PaquetNextAction());
+                            }else {
+                                partie.manche ++;
+                                // soit nouvelle planif soit fin du jeu
+                                if (partie.manche < partie.nbManches){
+                                    Server.this.broadCastPaquet(new PaquetPlanification());
+                                }else {
+                                    Server.this.broadCastPaquet(new PaquetBanditsGagnant(partie.getBanditsGagnant()));
+                                }
+                            }
+                        }*/
 
                         case null, default -> {
                         }
@@ -267,6 +314,41 @@ public class Server {
         public void sendPersoList(ArrayList <Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> infosListe) throws IOException {
             out.writeObject(new PaquetListePersoHost(infosListe));
         }
+
+    }
+
+    private class Partie{
+        int manche = 0;
+        private final int nbManches = Integer.parseInt( Server.this.paquetInitialisationPartie.getNbManches());
+        private ArrayList<ArrayList<Action>> actionsBandits = new ArrayList<>();
+
+        private Train train = Server.this.paquetInitialisationPartie.getTrain();
+
+        private final int nbBandits = train.getBandits().size();
+
+        private final int totaleActionsManche = Integer.parseInt(Server.this.paquetInitialisationPartie.getNbActions())  *  nbBandits;
+
+        private int indiceBanditCourant = 0;
+        private int nbActionsExecute = 0;
+
+        private ArrayList<Bandit> getBanditsGagnant(){
+            ArrayList<Bandit> bandits = this.train.getBandits();
+            int scoreMax = 0;
+            ArrayList<Bandit>  banditsGagnant = new ArrayList<>();
+            for (Bandit b : bandits){
+                if (b.score() > scoreMax){
+                    scoreMax = b.score();
+                }
+            }
+            for (Bandit b : bandits){
+                if (b.score() == scoreMax){
+                    banditsGagnant.add(b);
+                }
+            }
+
+            return banditsGagnant;
+        }
+
 
     }
 
