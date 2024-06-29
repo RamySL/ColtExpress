@@ -11,6 +11,13 @@ import java.io.Serial;
 public class PaquetNextPlanification extends Paquet {
     @Serial
     private static final long serialVersionUID = 174L;
+    private int indice;
 
+    public PaquetNextPlanification(int indice){
+        this.indice = indice;
+    }
 
+    public int getIndice() {
+        return indice;
+    }
 }

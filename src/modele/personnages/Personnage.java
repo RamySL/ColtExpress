@@ -34,6 +34,10 @@ public abstract class Personnage extends Observable implements Serializable {
         this.surnom = surnom;
     }
 
+    public void setSurnom(String surnom) {
+        this.surnom = surnom;
+    }
+
     /**
      * Enlève le personnage de son ancien emplacement et le met dans celui précisé en paramètre
      * @param nouvelleEmplacement la nouvelle position
