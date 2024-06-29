@@ -33,7 +33,7 @@ import java.util.Map;
  */
 public class ControleurJeuOnLine extends ControleurJeu {
     private Client client;
-    private Bandit bandit;
+    private final Bandit bandit;
 
     private int indiceBanditCourant = 0;
     private boolean finPartie = false, planPhase = true, actionPhase = false; // change par serveur
@@ -56,26 +56,10 @@ public class ControleurJeuOnLine extends ControleurJeu {
         this.bandit = this.client.getBandit();
         this.banditCourant = this.client.getBanditCourant();
 
-        if (this.banditCourant != this.bandit){
-            vueJeu.getActionMap().clear();
-        }
-
-        AbstractAction action = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (actionPhase) {
-                    bandit.executer();
-                }
-            }
-        };
-
-        vueJeu.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"), "action");
-        vueJeu.getActionMap().put("action", action);
-
-
     }
 
     public void setActionPhase() {
+        indiceBanditCourant = 0;
         this.actionPhase = true;
         this.planPhase = false;
     }
@@ -89,6 +73,7 @@ public class ControleurJeuOnLine extends ControleurJeu {
     }
 
     public void setPlanPhase() {
+        indiceBanditCourant = 0;
         this.actionPhase = false;
         this.planPhase = true;
     }
@@ -103,6 +88,20 @@ public class ControleurJeuOnLine extends ControleurJeu {
 
     public void actualiserTrain(Train train){
         this.train = train;
+    }
+
+    public void setAppropriatEnterAction(){
+        AbstractAction action = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (actionPhase) {
+                    bandit.executer();
+                }
+            }
+        };
+
+        vueJeu.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"), "action");
+        vueJeu.getActionMap().put("action", action);
     }
 
 
@@ -123,6 +122,10 @@ public class ControleurJeuOnLine extends ControleurJeu {
             }
             this.banditCourant = train.getBandits().get(indiceBanditCourant);
             if (this.banditCourant == this.bandit) {
+
+                this.jeuBindingKeys();
+                this.setAppropriatEnterAction();
+
                 if (planPhase) {
                     while (this.bandit.getActions().size() < this.nbAction) {
                         // affichage des actions à celui qui planfie
@@ -155,10 +158,13 @@ public class ControleurJeuOnLine extends ControleurJeu {
                     }
                 }
             }else {
+
+                if(!(vueJeu.getActionMap().size() == 0)) vueJeu.getActionMap().clear();
+
                 if (planPhase){
                     System.out.println(this.banditCourant + " est entrain de planifier ");
                 }else if (actionPhase){
-                    System.out.println(this.banditCourant + " est entrain de planifier ");
+                    System.out.println(this.banditCourant + " est entrain d'executer ");
                 }
             }
 
