@@ -240,10 +240,11 @@ public class Server {
                         case PaquetAction paquetAction -> {
                             // !! deplacement du marshall
                             // La partie doit changer pour les clients
+                            Action actionAExecuter =  Server.this.mapClientBandit.get(this).getActions().peek();
                             Server.this.mapClientBandit.get(this).executer();
 
                             partie.nbActionsExecute ++;
-                            Server.this.broadCastPaquet(new PaquetExecuteActionServer(partie.indiceBanditCourant));
+                            Server.this.broadCastPaquet(new PaquetExecuteActionServer(partie.indiceBanditCourant,actionAExecuter));
 
                             partie.indiceBanditCourant = partie.nbActionsExecute % partie.nbBandits;
 

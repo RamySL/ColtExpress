@@ -87,12 +87,6 @@ public class ControleurJeuOnLine extends ControleurJeu {
        this.client.sendListePlanififcation (this.bandit.getActions());
     }
 
-    public void actualiserTrain(Train train){
-
-        this.train = train;
-        this.vueJeu.actualiserTrain(this.train);
-    }
-
     public void setAppropriatEnterAction(){
         AbstractAction action = new AbstractAction() {
             @Override
@@ -109,13 +103,39 @@ public class ControleurJeuOnLine extends ControleurJeu {
         vueJeu.getActionMap().put("action", action);
     }
 
-    public void executerCourant(int indice){
-        if (indice == indiceBanditCourant){
+    public void executerCourant(int indice, Action action){
+        if (indice == indiceBanditCourant && this.bandit == this.banditCourant){
             this.train.getBandits().get(indice).executer();
+        }else if (!(this.bandit == this.banditCourant) && indice == indiceBanditCourant){
+            this.banditCourant.ajouterAction(this.getCopieAction(action,this.banditCourant));
+            this.banditCourant.executer();
+
         }else {
             System.out.println("Indice envoyé par le serveur ne correspend pas à celui du client");
         }
 
+    }
+
+    public Action getCopieAction (Action action, Bandit bandit){
+        Action output;
+        switch(action){
+            case SeDeplacer seDeplacer -> {
+                output =  new SeDeplacer(bandit,seDeplacer.getDirection());
+            }
+
+            case Tirer tirer -> {
+                output  = new Tirer(bandit,tirer.getDirection());
+            }
+
+            case Braquer braquer -> {
+                output = new Braquer(bandit);
+            }
+
+            case null,default ->{
+                output = null;
+            }
+        }
+        return output;
     }
 
 

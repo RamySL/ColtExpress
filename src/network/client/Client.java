@@ -193,7 +193,7 @@ public class Client {
                         }
 
                         case PaquetExecuteActionServer paquetExecuteActionServer ->{
-                            Client.this.controleurJeu.executerCourant(paquetExecuteActionServer.getIndiceExecuteur());
+                            Client.this.controleurJeu.executerCourant(paquetExecuteActionServer.getIndiceExecuteur(), paquetExecuteActionServer.getAction());
                         }
 
                         case PaquetBanditsGagnant paquetBanditsGagnant -> {

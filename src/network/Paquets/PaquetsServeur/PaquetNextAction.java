@@ -15,6 +15,7 @@ public class PaquetNextAction extends Paquet {
     public PaquetNextAction(int indice){
         this.indice = indice;
     }
+
     public int getIndice() {
         return indice;
     }
