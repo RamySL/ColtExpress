@@ -105,6 +105,7 @@ public class Client {
     }
 
     public void actionExecute() throws IOException {
+        System.out.println("Client : envoi de actionExecute");
         this.out.writeObject(new network.Paquets.PaquetsClients.PaquetAction());
     }
 
@@ -195,6 +196,11 @@ public class Client {
                         case PaquetTrain paquetTrain ->{
                             System.out.println("Client : reçu train");
                             Client.this.controleurJeu.actualiserTrain(paquetTrain.getTrain());
+                        }
+
+                        case PaquetBanditsGagnant paquetBanditsGagnant -> {
+                            System.out.println("Client : reçu fin de jeu");
+                            Client.this.controleurJeu.versFinJeu(paquetBanditsGagnant.getBandits());
                         }
                         case null, default -> {
                         }

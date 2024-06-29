@@ -117,10 +117,11 @@ public class ControleurJeuOnLine extends ControleurJeu {
 
         while (!finPartie){
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1000); // latence pour attendre des paquets du serveur
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            this.banditCourant = train.getBandits().get(indiceBanditCourant);
             if (this.banditCourant == this.bandit) {
                 if (planPhase) {
                     while (this.bandit.getActions().size() < this.nbAction) {
@@ -139,17 +140,25 @@ public class ControleurJeuOnLine extends ControleurJeu {
 
                 } else if (actionPhase) {
                     int nbActionBandit = this.bandit.getActions().size();
-                    while (true) {
-                        System.out.println("while");
+                    boolean actionExecute = false;
+                    while (!actionExecute) {
+                        System.out.print(""); // sans ça ça déconne
                         if (this.bandit.getActions().size() < nbActionBandit) {
-                            break;
+                            actionExecute = true;
                         }
                     }
+
                     try {
                         this.client.actionExecute();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
+                }
+            }else {
+                if (planPhase){
+                    System.out.println(this.banditCourant + " est entrain de planifier ");
+                }else if (actionPhase){
+                    System.out.println(this.banditCourant + " est entrain de planifier ");
                 }
             }
 
@@ -217,25 +226,11 @@ public class ControleurJeuOnLine extends ControleurJeu {
 
 
     /**
-     * calcule le gagnant (ou les gagnants) de la partie et l'envoi à l'ecran de fin,
-     * change l'affichage vers l'ecran de fin
      */
-    private void versFinJeu(){
-        ArrayList<Bandit> bandits = this.train.getBandits();
-        int scoreMax = 0;
-        ArrayList<Bandit>  banditsGagnant = new ArrayList<>();
-        for (Bandit b : bandits){
-            if (b.score() > scoreMax){
-                scoreMax = b.score();
-            }
-        }
-        for (Bandit b : bandits){
-            if (b.score() == scoreMax){
-                banditsGagnant.add(b);
-            }
-        }
+    public void versFinJeu(ArrayList<Bandit> banditsGagnant){
+
         this.getMapSonsJeu().get("jeuBack").arreter();
-        EcranFin ecranFin = new EcranFin(this.fenetre, banditsGagnant,scoreMax, this.fenetre.getJeuPanel().getMapPersonnageIcone());
+        EcranFin ecranFin = new EcranFin(this.fenetre, banditsGagnant,banditsGagnant.getFirst().score(), this.fenetre.getJeuPanel().getMapPersonnageIcone());
         new ControleurFinJeu(ecranFin);
         this.fenetre.ajouterEcranFin(ecranFin);
         this.fenetre.changerVue(this.fenetre.getEcranFinId());
