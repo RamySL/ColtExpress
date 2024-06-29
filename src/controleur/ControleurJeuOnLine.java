@@ -34,6 +34,7 @@ import java.util.Map;
 public class ControleurJeuOnLine extends ControleurJeu {
     private Client client;
     private final Bandit bandit;
+    private boolean actionExecute = false;
 
     private int indiceBanditCourant = 0;
     private boolean finPartie = false, planPhase = true, actionPhase = false; // change par serveur
@@ -78,8 +79,8 @@ public class ControleurJeuOnLine extends ControleurJeu {
         this.planPhase = true;
     }
 
-    public void nextBandit(){
-        this.indiceBanditCourant++;
+    public void nextBandit(int indice){
+        this.indiceBanditCourant = indice;
     }
 
     public void sendListePlanififcation() throws IOException {
@@ -87,7 +88,9 @@ public class ControleurJeuOnLine extends ControleurJeu {
     }
 
     public void actualiserTrain(Train train){
+
         this.train = train;
+        this.vueJeu.actualiserTrain(this.train);
     }
 
     public void setAppropriatEnterAction(){
@@ -95,13 +98,24 @@ public class ControleurJeuOnLine extends ControleurJeu {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (actionPhase) {
-                    bandit.executer();
+                    //bandit.executer();
+                    actionExecute = true;
+
                 }
             }
         };
 
         vueJeu.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"), "action");
         vueJeu.getActionMap().put("action", action);
+    }
+
+    public void executerCourant(int indice){
+        if (indice == indiceBanditCourant){
+            this.train.getBandits().get(indice).executer();
+        }else {
+            System.out.println("Indice envoyé par le serveur ne correspend pas à celui du client");
+        }
+
     }
 
 
@@ -120,6 +134,7 @@ public class ControleurJeuOnLine extends ControleurJeu {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
             this.banditCourant = train.getBandits().get(indiceBanditCourant);
             if (this.banditCourant == this.bandit) {
 
@@ -142,17 +157,19 @@ public class ControleurJeuOnLine extends ControleurJeu {
                     }
 
                 } else if (actionPhase) {
-                    int nbActionBandit = this.bandit.getActions().size();
-                    boolean actionExecute = false;
-                    while (!actionExecute) {
+                    while (!this.actionExecute) {
                         System.out.print(""); // sans ça ça déconne
-                        if (this.bandit.getActions().size() < nbActionBandit) {
-                            actionExecute = true;
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
+
                     }
 
                     try {
                         this.client.actionExecute();
+                        this.actionExecute = false;
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

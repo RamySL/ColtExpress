@@ -20,10 +20,8 @@ public class Jeu extends JPanel implements Observer {
     private Fenetre fenetre;
     private Train train;
     private Image imageFond;
-
     private CommandePanel cmdPanel;
     private JPanel panelCentrale;
-
     // liaison entre chaque bojet Personngae et son icone
     private Map<Personnage, ImageIcon> mapPersonnageIcone;
 
@@ -62,6 +60,15 @@ public class Jeu extends JPanel implements Observer {
         this.setFocusable(true);
 
 
+    }
+
+    /**
+     * methode coté multijoueur
+     * @param train
+     */
+    public void actualiserTrain(Train train){
+        this.train = train;
+        this.dessineTrain();
     }
 
     public void dessineTrain(){

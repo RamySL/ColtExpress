@@ -13,6 +13,9 @@ package network.server;
 
 import Vue.Accueil;
 import modele.actions.Action;
+import modele.actions.Braquer;
+import modele.actions.SeDeplacer;
+import modele.actions.Tirer;
 import modele.personnages.Bandit;
 import modele.trainEtComposantes.Train;
 import network.Paquets.Paquet;
@@ -221,11 +224,12 @@ public class Server {
                         case PaquetListePlanififcation paquetListePlanififcation -> {
                             System.out.println("Server : reçu liste de planif");
                             for (Action action : paquetListePlanififcation.getListeAction()){
-                                Server.this.mapClientBandit.get(this).ajouterAction(action);
+                                Bandit bandit = Server.this.mapClientBandit.get(this);
+                                bandit.ajouterAction(partie.getCopieAction(action,bandit));
                             }
                             if ((partie.indiceBanditCourant+1) < partie.nbBandits){
-                                Server.this.broadCastPaquet(new PaquetNextPlanification());
                                 partie.indiceBanditCourant ++;
+                                Server.this.broadCastPaquet(new PaquetNextPlanification(partie.indiceBanditCourant));
                             }else {
                                 partie.indiceBanditCourant = 0;
                                 Server.this.broadCastPaquet(new network.Paquets.PaquetsServeur.PaquetAction());
@@ -234,17 +238,17 @@ public class Server {
                         }
 
                         case PaquetAction paquetAction -> {
-                            System.out.println("Server : reçu actionexecute de la part de client");
                             // !! deplacement du marshall
                             // La partie doit changer pour les clients
                             Server.this.mapClientBandit.get(this).executer();
+
                             partie.nbActionsExecute ++;
-                            Server.this.broadCastPaquet(new PaquetTrain(partie.train));
+                            Server.this.broadCastPaquet(new PaquetExecuteActionServer(partie.indiceBanditCourant));
 
                             partie.indiceBanditCourant = partie.nbActionsExecute % partie.nbBandits;
 
                             if (partie.nbActionsExecute < partie.totaleActionsManche){
-                                Server.this.broadCastPaquet(new PaquetNextAction());
+                                Server.this.broadCastPaquet(new PaquetNextAction(partie.indiceBanditCourant));
                             }else {
                                 partie.manche ++;
                                 // soit nouvelle planif soit fin du jeu
@@ -319,6 +323,9 @@ public class Server {
 
     }
 
+    /**
+     * on met tous ce qui concerne et se passe pendant le deroulement de la partie ici
+     */
     private class Partie{
         int manche = 0;
         private final int nbManches = Integer.parseInt( Server.this.paquetInitialisationPartie.getNbManches());
@@ -351,8 +358,35 @@ public class Server {
             return banditsGagnant;
         }
 
+        /**
+         * les actions reçus de la part des client pointent pas vers les bandits que a le serveur (sérialisation)
+         */
+        public Action getCopieAction (Action action, Bandit bandit){
+            Action output;
+            switch(action){
+                case SeDeplacer seDeplacer -> {
+                    output =  new SeDeplacer(bandit,seDeplacer.getDirection());
+                }
+
+                case Tirer tirer -> {
+                    output  = new Tirer(bandit,tirer.getDirection());
+                }
+
+                case Braquer braquer -> {
+                    output = new Braquer(bandit);
+                }
+
+                case null,default ->{
+                    output = null;
+                }
+            }
+            return output;
+        }
+
 
     }
+
+
 
 
 }

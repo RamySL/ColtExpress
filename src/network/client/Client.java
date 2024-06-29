@@ -105,7 +105,7 @@ public class Client {
     }
 
     public void actionExecute() throws IOException {
-        System.out.println("Client : envoi de actionExecute");
+//        System.out.println("Client : envoi de actionExecute");
         this.out.writeObject(new network.Paquets.PaquetsClients.PaquetAction());
     }
 
@@ -184,18 +184,16 @@ public class Client {
                             Client.this.controleurJeu.setActionPhase();
                         }
 
-                        case PaquetNextPlanification paquetNextPlanification ->{
-                            Client.this.controleurJeu.nextBandit();
-
+                        case PaquetNextPlanification paquetNextPlanification -> {
+                            Client.this.controleurJeu.nextBandit(paquetNextPlanification.getIndice());
                         }
+
                         case PaquetNextAction paquetNextAction -> {
-                            Client.this.controleurJeu.nextBandit();
-
+                            Client.this.controleurJeu.nextBandit(paquetNextAction.getIndice());
                         }
 
-                        case PaquetTrain paquetTrain ->{
-                            System.out.println("Client : reçu train");
-                            Client.this.controleurJeu.actualiserTrain(paquetTrain.getTrain());
+                        case PaquetExecuteActionServer paquetExecuteActionServer ->{
+                            Client.this.controleurJeu.executerCourant(paquetExecuteActionServer.getIndiceExecuteur());
                         }
 
                         case PaquetBanditsGagnant paquetBanditsGagnant -> {

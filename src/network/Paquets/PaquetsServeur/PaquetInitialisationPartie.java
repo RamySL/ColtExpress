@@ -56,7 +56,6 @@ public class PaquetInitialisationPartie extends Paquet {
         for (Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation info : infos){
             train.ajouterBandit(info.getSurnom(),Integer.parseInt(this.nbBallesBandits));
         }
-
         this.joueurCourant = this.train.getBandits().getFirst();
 
     }

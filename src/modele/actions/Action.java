@@ -25,6 +25,10 @@ public abstract class Action implements Serializable {
      * @return un feedback sur l'execution de l'action
      */
     public abstract String executer();
+
+    public Personnage getExecuteur() {
+        return executeur;
+    }
 }
 
 

@@ -19,6 +19,10 @@ public class SeDeplacer extends Action {
 
     }
 
+    public Direction getDirection() {
+        return direction;
+    }
+
     /**
      * Déplace le personnage vers laquelle elle pointe vers la direction si c'est possible
      * @return feedback sur le déplacement

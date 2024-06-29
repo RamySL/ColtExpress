@@ -20,6 +20,10 @@ public class Tirer extends Action {
 
     }
 
+    public Direction getDirection() {
+        return direction;
+    }
+
     public String toString(){
         return " Tir en direction " + this.direction;
     }
