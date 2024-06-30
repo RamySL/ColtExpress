@@ -173,8 +173,6 @@ public class Server {
     private void broadCastPaquet (Paquet p) throws IOException {
         for (ClientHandler player : Server.this.players){
             player.out.writeObject(p);
-            player.out.flush();
-            player.out.reset();
         }
     }
 
@@ -221,8 +219,6 @@ public class Server {
                         }
                         case PaquetRequestBandit paquetRequestBandit -> {
                             this.out.writeObject(new PaquetBandit(Server.this.getMapClientBandit().get(this), Server.this.paquetInitialisationPartie.getTrain().getBandits().getFirst()));
-                            this.out.flush();
-                            this.out.reset();
                         }
 
                         case PaquetListePlanififcation paquetListePlanififcation -> {
@@ -290,29 +286,21 @@ public class Server {
         public void updateNbPlayerConnected () throws IOException {
             if (out != null) {
                 out.writeObject(new PaquetNbJoeurConnecte(maxPlayers - nbJoueurConnecte));
-                this.out.flush();
-                this.out.reset();
             }
         }
 
         public void choixPerso () throws IOException {
             if (out != null) {
                 out.writeObject(new PaquetChoixJrClient());
-                this.out.flush();
-                this.out.reset();
             }
         }
 
         public void sendPersoList(ArrayList <Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> infosListe) throws IOException {
             out.writeObject(new PaquetListePersoClient(infosListe));
-            this.out.flush();
-            this.out.reset();
         }
 
         public void sendInitPartie(PaquetInitialisationPartie paquetInitialisationPartie) throws IOException {
             out.writeObject(paquetInitialisationPartie);
-            this.out.flush();
-            this.out.reset();
         }
 
 
@@ -331,16 +319,12 @@ public class Server {
         public void choixPerso() throws IOException {
             if (out != null) {
                 out.writeObject(new PaquetChoixJrHost());
-                this.out.flush();
-                this.out.reset();
             }
         }
 
         @Override
         public void sendPersoList(ArrayList <Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation> infosListe) throws IOException {
             out.writeObject(new PaquetListePersoHost(infosListe));
-            this.out.flush();
-            this.out.reset();
         }
 
     }

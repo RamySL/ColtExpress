@@ -79,18 +79,13 @@ public class Client {
         }else{
             this.out.writeObject(new PaquetLancementClient(infos));
         }
-        this.out.flush();
-        this.out.reset();
 
     }
 
     public void sendParamJeu(String nbBallesBandits,String nbWagons,String nbActions,String nbManches, Double nervositeMarshall) throws IOException {
         if (host){
             this.out.writeObject(new PaquetInitialisationPartie( nbBallesBandits, nbWagons, nbActions, nbManches,  nervositeMarshall));
-            this.out.flush();
-            this.out.reset();
         }
-
 
     }
 
@@ -99,13 +94,10 @@ public class Client {
      */
     public void requestBandit() throws IOException {
         this.out.writeObject(new PaquetRequestBandit());
-        this.out.flush();
-        this.out.reset();
     }
 
     public void setControleurAccueilClient(ControleurAccueilClient controleurAccueilClient) {
         this.controleurAccueilClient = controleurAccueilClient;
-
     }
 
     public void sendListePlanififcation(Queue<Action> actions) throws IOException {
@@ -117,8 +109,6 @@ public class Client {
     public void actionExecute() throws IOException {
 //        System.out.println("Client : envoi de actionExecute");
         this.out.writeObject(new network.Paquets.PaquetsClients.PaquetAction());
-        this.out.flush();
-        this.out.reset();
     }
 
     public Bandit getBandit() {
