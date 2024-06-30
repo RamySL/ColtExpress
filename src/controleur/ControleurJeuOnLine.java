@@ -34,9 +34,11 @@ import java.util.Map;
 public class ControleurJeuOnLine extends ControleurJeu {
     private Client client;
     private final Bandit bandit;
+    private final int indiceBandit;
+
     private boolean actionExecute = false;
 
-    private int indiceBanditCourant = 0;
+    private int indiceBanditCourant;
     private boolean finPartie = false, planPhase = true, actionPhase = false; // change par serveur
 
     private final int totaleActionsManche = this.nbAction * this.nBandits; // le nombre d'actions que planifie tous les joeurs en une manche
@@ -54,8 +56,10 @@ public class ControleurJeuOnLine extends ControleurJeu {
         super(train, fenetre, nbAction);
         this.client = client;
         this.client.setControleurJeu(this);
-        this.bandit = this.client.getBandit();
-        this.banditCourant = this.client.getBanditCourant();
+        this.indiceBandit = this.client.getIndiceBandit();
+        this.indiceBanditCourant = this.client.getIndiceBanditCourant();
+        this.bandit = train.getBandits().get(indiceBandit);
+        this.banditCourant = train.getBandits().get(indiceBanditCourant);
 
     }
 

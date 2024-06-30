@@ -195,6 +195,8 @@ public class Server {
             in = new ObjectInputStream(client.getInputStream());
         }
 
+
+
         @Override
         public void run() {
             try {
@@ -218,7 +220,9 @@ public class Server {
                             }
                         }
                         case PaquetRequestBandit paquetRequestBandit -> {
-                            this.out.writeObject(new PaquetBandit(Server.this.getMapClientBandit().get(this), Server.this.paquetInitialisationPartie.getTrain().getBandits().getFirst()));
+                            ArrayList<Bandit> bandits = Server.this.paquetInitialisationPartie.getTrain().getBandits();
+                            this.out.writeObject(new PaquetBandit(Partie.getIndiceBandit(bandits, Server.this.getMapClientBandit().get(this))
+                                    ,Partie.getIndiceBandit(bandits, bandits.getFirst())));
                         }
 
                         case PaquetListePlanififcation paquetListePlanififcation -> {
@@ -387,6 +391,14 @@ public class Server {
                 }
             }
             return output;
+        }
+
+        public static int getIndiceBandit(ArrayList<Bandit> bandits, Bandit bandit){
+            int i =0;
+            while (bandits.get(i) != bandit){
+                i++;
+            }
+            return i;
         }
 
 

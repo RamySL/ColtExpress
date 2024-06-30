@@ -29,7 +29,7 @@ public class Client {
     private PaquetListePersoClient paquetListePersoClient;
     private PaquetListePersoHost paquetListePersoHost;
     private PaquetInitialisationPartie paquetInitialisationPartie;
-    private Bandit bandit, banditCourant;
+    private int indiceBandit, indiceBanditCourant;
     boolean host = false;
 
     public Client(String serverAddress, int serverPort, ControleurServerClient ctrlServerClient) {
@@ -111,12 +111,12 @@ public class Client {
         this.out.writeObject(new network.Paquets.PaquetsClients.PaquetAction());
     }
 
-    public Bandit getBandit() {
-        return bandit;
+    public int getIndiceBandit() {
+        return indiceBandit;
     }
 
-    public Bandit getBanditCourant() {
-        return banditCourant;
+    public int getIndiceBanditCourant() {
+        return indiceBanditCourant;
     }
 
     private boolean isValidMovement(String movement) {
@@ -167,8 +167,8 @@ public class Client {
                         }
 
                         case PaquetBandit p -> {
-                            Client.this.bandit = p.getBandit();
-                            Client.this.banditCourant = p.getBanditCourant();
+                            Client.this.indiceBandit = p.getIndiceBandit();
+                            Client.this.indiceBanditCourant = p.getIndiceBanditCourant();
 
                             if (!host) {
                                 Client.this.controleurAccueilClient.lancerPartie(paquetListePersoClient,paquetInitialisationPartie ,paquetInitialisationPartie.getTrain());

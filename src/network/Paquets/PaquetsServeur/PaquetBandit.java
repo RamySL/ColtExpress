@@ -7,20 +7,20 @@ import network.Paquets.Paquet;
 import java.io.Serial;
 
 public class PaquetBandit extends Paquet {
-    private Bandit bandit,banditCourant;
+    private int indiceBandit,indiceBanditCourant;
     @Serial
     private static final long serialVersionUID  = 155L;
 
-    public PaquetBandit(Bandit bandit , Bandit infosBanditCourant){
-        this.bandit = bandit;
-        this.banditCourant = infosBanditCourant;
+    public PaquetBandit(int indicebandit , int indiceBanditCourant){
+        this.indiceBandit = indicebandit;
+        this.indiceBanditCourant = indiceBanditCourant;
     }
 
-    public Bandit getBandit() {
-        return bandit;
+    public int getIndiceBandit() {
+        return indiceBandit;
     }
 
-    public Bandit getBanditCourant() {
-        return banditCourant;
+    public int getIndiceBanditCourant() {
+        return indiceBanditCourant;
     }
 }
