@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -67,8 +68,21 @@ public class Jeu extends JPanel implements Observer {
      * @param train
      */
     public void actualiserTrain(Train train){
+
+        ArrayList<Bandit> newBandits = train.getBandits();
+        HashMap<Personnage,ImageIcon> newMap = new HashMap<>();
+
+        ArrayList<Bandit> ancienBandits = this.train.getBandits();
+
+        for (int i = 0; i< this.train.getBandits().size(); i++){
+            newMap.put(newBandits.get(i),this.mapPersonnageIcone.get(ancienBandits.get(i)));
+        }
+        newMap.put(train.getMarshall(),this.mapPersonnageIcone.get(this.train.getMarshall()));
+
+        this.mapPersonnageIcone = newMap;
         this.train = train;
         this.dessineTrain();
+
     }
 
     public void dessineTrain(){

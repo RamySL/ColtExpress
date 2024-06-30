@@ -33,7 +33,7 @@ import java.util.Map;
  */
 public class ControleurJeuOnLine extends ControleurJeu {
     private Client client;
-    private final Bandit bandit;
+    private Bandit bandit;
     private final int indiceBandit;
 
     private boolean actionExecute = false;
@@ -118,6 +118,21 @@ public class ControleurJeuOnLine extends ControleurJeu {
             System.out.println("Indice envoyé par le serveur ne correspend pas à celui du client");
         }
 
+    }
+
+    public void actualiserBanditEtCourant(Train train){
+        this.bandit = train.getBandits().get(this.indiceBandit);
+        this.banditCourant = train.getBandits().get(this.indiceBanditCourant);
+    }
+
+    /**
+     * on envoi l'indice suceptible de provoquer une actualisation d'affichage
+     * @param train
+     */
+    public void actualiserTrain(Train train){
+        this.train = train;
+        this.actualiserBanditEtCourant(train);
+        this.vueJeu.actualiserTrain(this.train);
     }
 
     public Action getCopieAction (Action action, Bandit bandit){

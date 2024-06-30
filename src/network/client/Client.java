@@ -194,10 +194,15 @@ public class Client {
 
                         case PaquetNextAction paquetNextAction -> {
                             Client.this.controleurJeu.nextBandit(paquetNextAction.getIndice());
+//                            System.out.println("Client : reçu next action ");
                         }
 
-                        case PaquetExecuteActionServer paquetExecuteActionServer ->{
-                            Client.this.controleurJeu.executerCourant(paquetExecuteActionServer.getIndiceExecuteur(), paquetExecuteActionServer.getAction());
+//                        case PaquetExecuteActionServer paquetExecuteActionServer ->{
+//                            Client.this.controleurJeu.executerCourant(paquetExecuteActionServer.getIndiceExecuteur(), paquetExecuteActionServer.getAction());
+//                        }
+                        case PaquetTrain paquetTrain ->{
+//                            System.out.println("Client : Train bandits " + paquetTrain.getTrain().getBandits());
+                            Client.this.controleurJeu.actualiserTrain(paquetTrain.getTrain());
                         }
 
                         case PaquetBanditsGagnant paquetBanditsGagnant -> {

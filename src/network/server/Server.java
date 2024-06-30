@@ -173,6 +173,8 @@ public class Server {
     private void broadCastPaquet (Paquet p) throws IOException {
         for (ClientHandler player : Server.this.players){
             player.out.writeObject(p);
+            player.out.flush();
+            player.out.reset();
         }
     }
 
@@ -227,8 +229,8 @@ public class Server {
 
                         case PaquetListePlanififcation paquetListePlanififcation -> {
 //                            System.out.println("Server : reçu liste de planif");
-                            System.out.printf("Server : depuis paquetListePlan : manche : " + partie.manche + "indiceCourant : "
-                            + partie.indiceBanditCourant + "nb Action execute : " + partie.nbActionsExecute);
+//                            System.out.println("Server : depuis paquetListePlan : manche : " + partie.manche + " indiceCourant : "
+//                            + partie.indiceBanditCourant + "nb Action execute : " + partie.nbActionsExecute);
                             for (Action action : paquetListePlanififcation.getListeAction()){
                                 Bandit bandit = Server.this.mapClientBandit.get(this);
                                 bandit.ajouterAction(partie.getCopieAction(action,bandit));
@@ -246,13 +248,15 @@ public class Server {
                         case PaquetAction paquetAction -> {
                             // !! deplacement du marshall
                             // La partie doit changer pour les clients
-                            System.out.printf("Server : depuis paquetListePlan : manche : " + partie.manche + "indiceCourant : "
-                                    + partie.indiceBanditCourant + "nb Action execute : " + partie.nbActionsExecute);
-                            Action actionAExecuter =  Server.this.mapClientBandit.get(this).getActions().peek();
+//                            System.out.println("Server : depuis Action : manche : " + partie.manche + " indiceCourant : "
+//                                    + partie.indiceBanditCourant + "nb Action execute : " + partie.nbActionsExecute);
+//                            Action actionAExecuter =  Server.this.mapClientBandit.get(this).getActions().peek();
                             Server.this.mapClientBandit.get(this).executer();
 
                             partie.nbActionsExecute ++;
-                            Server.this.broadCastPaquet(new PaquetExecuteActionServer(partie.indiceBanditCourant,actionAExecuter));
+//                            Server.this.broadCastPaquet(new PaquetExecuteActionServer(partie.indiceBanditCourant,actionAExecuter));
+                            Server.this.broadCastPaquet(new PaquetTrain(partie.train));
+//                            System.out.println("Server : Train bandits " + partie.train.getBandits());
 
                             partie.indiceBanditCourant = partie.nbActionsExecute % partie.nbBandits;
 
