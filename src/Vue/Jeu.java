@@ -155,7 +155,7 @@ public class Jeu extends JPanel implements Observer {
                 this.phase = new JLabel("Phase de planification");
                 this.phase.setForeground(Color.BLACK);
                 phase.setFont(new Font("MV Boli", Font.BOLD, 17));
-                this.setPreferredSize(new Dimension(500,250));
+                this.setPreferredSize(new Dimension(700,250));
                 this.phase.setHorizontalAlignment(SwingConstants.CENTER);
 
 

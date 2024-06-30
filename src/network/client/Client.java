@@ -176,7 +176,9 @@ public class Client {
                         }
 
                         case PaquetPlanification paquetPlanification -> {
+                            System.out.println("Client : PaquetPlanification");
                             Client.this.controleurJeu.setPlanPhase();
+                            Client.this.controleurJeu.prochaineManche();
                         }
 
                         case PaquetAction paquetAction -> {
@@ -198,6 +200,7 @@ public class Client {
 
                         case PaquetBanditsGagnant paquetBanditsGagnant -> {
                             System.out.println("Client : reçu fin de jeu");
+                            Client.this.controleurJeu.setFinPartie();
                             Client.this.controleurJeu.versFinJeu(paquetBanditsGagnant.getBandits());
                         }
                         case null, default -> {

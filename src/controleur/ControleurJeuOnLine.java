@@ -162,6 +162,10 @@ public class ControleurJeuOnLine extends ControleurJeu {
                 this.setAppropriatEnterAction();
 
                 if (planPhase) {
+                    this.vueJeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase de palinification pour la manche " +
+                            (manche+1) + "/" + nbManches);
+                    this.vueJeu.getCmdPanel().getPhaseFeedPanel().setPlanfication(this.bandit);
+
                     while (this.bandit.getActions().size() < this.nbAction) {
                         // affichage des actions à celui qui planfie
                         try {
@@ -177,6 +181,11 @@ public class ControleurJeuOnLine extends ControleurJeu {
                     }
 
                 } else if (actionPhase) {
+
+                    this.vueJeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase d'action pour la manche " + (manche+1) + "/" + nbManches +
+                            " \ntour de " + this.bandit);
+                    this.vueJeu.getCmdPanel().getPhaseFeedPanel().setAction();
+
                     while (!this.actionExecute) {
                         System.out.print(""); // sans ça ça déconne
                         try {
@@ -199,9 +208,14 @@ public class ControleurJeuOnLine extends ControleurJeu {
                 if(!(vueJeu.getActionMap().size() == 0)) vueJeu.getActionMap().clear();
 
                 if (planPhase){
-                    System.out.println(this.banditCourant + " est entrain de planifier ");
+                    this.vueJeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase de palinification " +
+                            "pour la manche " + (manche+1) + "/" + nbManches);
+                    this.vueJeu.getCmdPanel().getPhaseFeedPanel().setPlanfication(this.bandit);
                 }else if (actionPhase){
-                    System.out.println(this.banditCourant + " est entrain d'executer ");
+                    this.vueJeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase d'action pour la manche " + (manche+1) + "/" + nbManches +
+                            " \ntour de " + this.banditCourant);
+                    this.vueJeu.getCmdPanel().getPhaseFeedPanel().setAction();
+
                 }
             }
 
