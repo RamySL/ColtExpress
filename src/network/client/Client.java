@@ -176,13 +176,13 @@ public class Client {
                         }
 
                         case PaquetPlanification paquetPlanification -> {
-                            System.out.println("Client : PaquetPlanification");
+//                            System.out.println("Client : PaquetPlanification");
                             Client.this.controleurJeu.setPlanPhase();
                             Client.this.controleurJeu.prochaineManche();
                         }
 
                         case PaquetAction paquetAction -> {
-                            System.out.println("Client : reçu action");
+//                            System.out.println("Client : reçu action");
                             Client.this.controleurJeu.setActionPhase();
                         }
 
@@ -199,7 +199,7 @@ public class Client {
                         }
 
                         case PaquetBanditsGagnant paquetBanditsGagnant -> {
-                            System.out.println("Client : reçu fin de jeu");
+//                            System.out.println("Client : reçu fin de jeu");
                             Client.this.controleurJeu.setFinPartie();
                             Client.this.controleurJeu.versFinJeu(paquetBanditsGagnant.getBandits());
                         }

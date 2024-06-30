@@ -222,7 +222,9 @@ public class Server {
                         }
 
                         case PaquetListePlanififcation paquetListePlanififcation -> {
-                            System.out.println("Server : reçu liste de planif");
+//                            System.out.println("Server : reçu liste de planif");
+                            System.out.printf("Server : depuis paquetListePlan : manche : " + partie.manche + "indiceCourant : "
+                            + partie.indiceBanditCourant + "nb Action execute : " + partie.nbActionsExecute);
                             for (Action action : paquetListePlanififcation.getListeAction()){
                                 Bandit bandit = Server.this.mapClientBandit.get(this);
                                 bandit.ajouterAction(partie.getCopieAction(action,bandit));
@@ -240,6 +242,8 @@ public class Server {
                         case PaquetAction paquetAction -> {
                             // !! deplacement du marshall
                             // La partie doit changer pour les clients
+                            System.out.printf("Server : depuis paquetListePlan : manche : " + partie.manche + "indiceCourant : "
+                                    + partie.indiceBanditCourant + "nb Action execute : " + partie.nbActionsExecute);
                             Action actionAExecuter =  Server.this.mapClientBandit.get(this).getActions().peek();
                             Server.this.mapClientBandit.get(this).executer();
 

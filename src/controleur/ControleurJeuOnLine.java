@@ -210,7 +210,7 @@ public class ControleurJeuOnLine extends ControleurJeu {
                 if (planPhase){
                     this.vueJeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase de palinification " +
                             "pour la manche " + (manche+1) + "/" + nbManches);
-                    this.vueJeu.getCmdPanel().getPhaseFeedPanel().setPlanfication(this.bandit);
+                    this.vueJeu.getCmdPanel().getPhaseFeedPanel().setPlanfication(this.banditCourant);
                 }else if (actionPhase){
                     this.vueJeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase d'action pour la manche " + (manche+1) + "/" + nbManches +
                             " \ntour de " + this.banditCourant);
