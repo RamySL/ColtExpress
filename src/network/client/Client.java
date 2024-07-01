@@ -21,7 +21,6 @@ public class Client {
     private Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
-    private BufferedReader userInput;
     private ControleurServerClient cntrlServerClient;
     private ControleurAccueilClient controleurAccueilClient;
     private ControleurAccueilHost controleurAccueilHost;
@@ -49,25 +48,17 @@ public class Client {
             socket = new Socket(serverAddress, serverPort);
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
-            userInput = new BufferedReader(new InputStreamReader(System.in));
 
             // Create a thread to listen for messages from the server
             Thread listenerThread = new Thread(new ServerListener());
             listenerThread.start();
 
-            String movement;
-            while ((movement = userInput.readLine()) != null) {
-                if (isValidMovement(movement)) {
-                    //out.println(movement);
-                } else {
-                    System.out.println("Invalid movement command. Use: up, down, left, right");
-                }
-            }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            closeConnections();
         }
+//        } finally {
+//            closeConnections();
+//        }
     }
 
     /**
@@ -119,19 +110,12 @@ public class Client {
         return indiceBanditCourant;
     }
 
-    private boolean isValidMovement(String movement) {
-        return movement.equalsIgnoreCase("up") ||
-                movement.equalsIgnoreCase("down") ||
-                movement.equalsIgnoreCase("left") ||
-                movement.equalsIgnoreCase("right");
-    }
 
     private void closeConnections() {
         try {
             if (socket != null) socket.close();
             if (in != null) in.close();
             if (out != null) out.close();
-            if (userInput != null) userInput.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -178,13 +162,11 @@ public class Client {
                         }
 
                         case PaquetPlanification paquetPlanification -> {
-//                            System.out.println("Client : PaquetPlanification");
                             Client.this.controleurJeu.setPlanPhase();
                             Client.this.controleurJeu.prochaineManche();
                         }
 
                         case PaquetAction paquetAction -> {
-//                            System.out.println("Client : reçu action");
                             Client.this.controleurJeu.setActionPhase();
                         }
 
@@ -194,19 +176,13 @@ public class Client {
 
                         case PaquetNextAction paquetNextAction -> {
                             Client.this.controleurJeu.nextBandit(paquetNextAction.getIndice());
-//                            System.out.println("Client : reçu next action ");
                         }
 
-//                        case PaquetExecuteActionServer paquetExecuteActionServer ->{
-//                            Client.this.controleurJeu.executerCourant(paquetExecuteActionServer.getIndiceExecuteur(), paquetExecuteActionServer.getAction());
-//                        }
                         case PaquetTrain paquetTrain ->{
-//                            System.out.println("Client : Train bandits " + paquetTrain.getTrain().getBandits());
                             Client.this.controleurJeu.actualiserTrain(paquetTrain.getTrain());
                         }
 
                         case PaquetBanditsGagnant paquetBanditsGagnant -> {
-//                            System.out.println("Client : reçu fin de jeu");
                             Client.this.controleurJeu.setFinPartie();
                             Client.this.controleurJeu.versFinJeu(paquetBanditsGagnant.getBandits());
                         }

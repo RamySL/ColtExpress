@@ -11,29 +11,30 @@ public class Fenetre extends JFrame {
     private JPanel ecranLancement;
     private Accueil accueil;
     private EcranType ecranTpe;
-    private OnLineSettigs olSettings;
     private Jeu jeu;
 
     private AccueilClient accueilClient;
+    private ChoixLancerRejoindre choixLancerRejoindre;
+    private LancerServeur lancerServeur;
     private EcranFin ecranFin;
     private JPanel cards;
-    private String jeuId, lancementId, accueilId, ecranFinId, typeID, olSettingsId, accueilClientId;
+    private String jeuId, lancementId, accueilId, ecranFinId, typeID, accueilClientId,choixLancerRejoindreId,lancerServeurId;
     public Fenetre(){
-
 
         this.ecranLancement = new EcranLancement(this);
         this.accueil = new Accueil( this);
         this.accueilClient = new AccueilClient(this);
         this.ecranTpe = new EcranType(this);
-        this.olSettings = new OnLineSettigs();
+        this.choixLancerRejoindre = new ChoixLancerRejoindre(this); // peut etre optimiser on instancier avec un seter seulement si on va vers le multijoueur
+
 
         this.jeuId = "jeu";
         this.lancementId = "lancement";
         this.accueilId = "accueil";
         this.ecranFinId = "ecranFin";
         this.typeID = "ecranType";
-        this.olSettingsId = "olSettings";
         this.accueilClientId = "accueilClient";
+        this.choixLancerRejoindreId = "choixLancerRejoindre";
 
 
         this.setTitle("ColtExpress");
@@ -48,9 +49,8 @@ public class Fenetre extends JFrame {
         cards.add(this.ecranLancement, this.lancementId);
         cards.add(this.accueil, this.accueilId);
         cards.add(this.ecranTpe, this.typeID);
-        cards.add(this.olSettings, this.olSettingsId);
         cards.add(this.accueilClient, this.accueilClientId);
-
+        cards.add(this.choixLancerRejoindre, this.choixLancerRejoindreId);
 
         cardLayout.show(cards, this.lancementId);
 
@@ -77,6 +77,11 @@ public class Fenetre extends JFrame {
 
     }
 
+    public void setLancerServeur(String lancerServeurId, LancerServeur lancerServeur) {
+        this.lancerServeurId = lancerServeurId;
+        this.lancerServeur = lancerServeur;
+        this.cards.add(this.lancerServeur, this.lancerServeurId);
+    }
 
     public void changerVue(String idVue) {
         cardLayout.show(cards, idVue);
@@ -89,15 +94,10 @@ public class Fenetre extends JFrame {
     public Accueil getAccueil (){return this.accueil;}
     public String getTypeId (){ return this.typeID;}
 
-    public String getOlSettingsId() {
-        return olSettingsId;
-    }
 
     public EcranType getEcranTpe() {
         return ecranTpe;
     }
-
-    public OnLineSettigs getOlSettings(){return  this.olSettings;}
 
     public Jeu getJeuPanel (){return this.jeu;}
 
@@ -107,6 +107,18 @@ public class Fenetre extends JFrame {
 
     public AccueilClient getAccueilClient() {
         return accueilClient;
+    }
+
+    public String getChoixLancerRejoindreId() {
+        return choixLancerRejoindreId;
+    }
+
+    public String getLancerServeurId() {
+        return lancerServeurId;
+    }
+
+    public ChoixLancerRejoindre getChoixLancerRejoindre() {
+        return choixLancerRejoindre;
     }
 }
 
