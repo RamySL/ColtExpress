@@ -24,9 +24,9 @@ public class ControleurAccueilHost extends ControleurAccueil {
         this.accueil = this.fenetre.getAccueil();
         this.ecranType = this.fenetre.getEcranTpe();
         this.accueil.liaisonAvecControleur(this);
-        ControleurTypePartie controleurTypePartie = new ControleurTypePartie(this.fenetre, this.fenetre.getEcranTpe());
-        controleurTypePartie.setControleurAccueilHost(this);
-        this.ecranType.liaisonAvecControleur(controleurTypePartie);
+//        ControleurTypePartie controleurTypePartie = new ControleurTypePartie(this.fenetre, this.fenetre.getEcranTpe());
+//        controleurTypePartie.setControleurAccueilHost(this);
+//        this.ecranType.liaisonAvecControleur(controleurTypePartie);
     }
 
     public void setClient(Client client) {
