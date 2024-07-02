@@ -43,11 +43,31 @@ public class ControleurServerClient {
         this.rejoindreServeur = rejoindreServeur;
     }
 
-    public void vueClient(){
+    /**
+     *
+     * @param attenteLancement en milliseconds
+     */
+    public void vueClient(int attenteLancement){
+        this.rejoindreServeur.displayAttenteLancement(attenteLancement);
+        try {
+            Thread.sleep(attenteLancement);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         this.fenetre.changerVue(this.fenetre.getAccueilClientId());
     }
 
-    public void vueHost (){
+    /**
+     *
+     * @param attenteLancement en milliseconds
+     */
+    public void vueHost (int attenteLancement){
+        this.lancerServeur.displayAttenteLancement(attenteLancement);
+        try {
+            Thread.sleep(attenteLancement);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         this.fenetre.changerVue(this.fenetre.getAccueilId());
     }
 

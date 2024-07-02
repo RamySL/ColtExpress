@@ -30,8 +30,8 @@ public class ControleurRejoindreServeur implements ActionListener {
             }).start();
 
             this.rejoindreServeur.getBouttonRejoindre().setEnabled(false);
-            this.rejoindreServeur.setVueApresLancement(this.rejoindreServeur.getBouttonRejoindre(), this.rejoindreServeur.getPortServer()
-                                                        ,this.rejoindreServeur.getIpServer());
+            this.rejoindreServeur.setVueApresLancement(this.rejoindreServeur.getBouttonRejoindre(), this.rejoindreServeur.getPortPanel()
+                                                        ,this.rejoindreServeur.getNbOuIpPanel());
         }
     }
 }

@@ -45,15 +45,13 @@ public class ControleurAccueilClient extends ControleurAccueil {
     public void actionPerformed(ActionEvent e) {
         JButton bouttonLancement = this.accueil.getOptionsJeu().getLancerJeu();
         if (e.getSource() == this.accueil.getOptionsJeu().getLancerJeu()) {
-
+            this.accueil.getOptionsJeu().getLancerJeu().setEnabled(false);
             try {
                 this.client.sendChoixPerso(this.creationsJouers.get(0));
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-
-
-        }
+                    }
         if (e.getSource() == this.accueil.getOptionsJeu().getSlectionPersoPanel().getBouttonCreationBandit()) {
             bouttonLancement.setEnabled(true);
             ImageIcon iconePerso = this.accueil.getOptionsJeu().getSlectionPersoPanel().getPersoSlectionneIcone();

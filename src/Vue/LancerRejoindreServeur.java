@@ -7,15 +7,35 @@ import controleur.ControleurLancerServeur;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public abstract class LancerRejoindreServeur extends JPanel {
     private Fenetre fenetre;
     private Image imageFond;
+    JPanel northPanel = new JPanel();
+    protected JPanel portPanel, nbOuIpPanel;
+
+    protected JLabel portLabel;
+
     protected AttenteConnexionClients attenteConnexionClients;
+
+    protected JLabel decompteLancement = new JLabel();
 
     public LancerRejoindreServeur(Fenetre fenetre){
         this.fenetre = fenetre;
+        this.decompteLancement.setFont(new Police());
+
+        Police police = new Police();
+        this.portPanel = new JPanel(new BorderLayout());
+        this.portPanel.setBackground(new Color(0xFFE7A1));
+        this.portLabel = new JLabel("   Port   ");
+        portLabel.setFont(police);
+
+        this.nbOuIpPanel = new JPanel(new BorderLayout());
+        this.nbOuIpPanel.setBackground(new Color(0xFFE7A1));
+
 
         this.setBackground(new Color(0xA99100));
         this.imageFond = new ImageIcon("src/assets/images/back_2e_ecran.png").getImage();
@@ -24,7 +44,7 @@ public abstract class LancerRejoindreServeur extends JPanel {
 
     }
 
-    public void dispositionComposants(Bouttons.BouttonHorsJeu bouton, JTextField textField1, JTextField textField2){
+    public void dispositionComposants(Bouttons.BouttonHorsJeu bouton, JPanel panel1, JPanel panel2){
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 5;
         gbc.gridy = 1;
@@ -32,37 +52,44 @@ public abstract class LancerRejoindreServeur extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        this.add(textField1, gbc);
+        this.add(panel1, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
-        this.add(textField2, gbc);
+        this.add(panel2, gbc);
     }
 
-    public void disableConfigServer(Bouttons.BouttonHorsJeu bouton, JTextField textField1, JTextField textField2){
+    public void disableConfigServer(Bouttons.BouttonHorsJeu bouton, JPanel textField1, JPanel textField2){
         bouton.setVisible(false);
         textField1.setVisible(false);
         textField2.setVisible(false);
     }
 
+    public JPanel getNbOuIpPanel() {
+        return nbOuIpPanel;
+    }
+
+    public JPanel getPortPanel() {
+        return portPanel;
+    }
 
     /**
      *
      * @param bouton
-     * @param textField1 le port
-     * @param textField2
+     * @param panel1 le port
+     * @param panel2
      */
-    public void setVueApresLancement(Bouttons.BouttonHorsJeu bouton, JTextField textField1, JTextField textField2){
+    public void setVueApresLancement(Bouttons.BouttonHorsJeu bouton, JPanel panel1, JPanel panel2){
         // après lancement
 
-        this.disableConfigServer(bouton, textField1,textField2);
+        this.disableConfigServer(bouton, panel1,panel2);
 
         this.setLayout(new BorderLayout());
 
         // C'est pour centerer le menu d'option
         JPanel eastPanel = new JPanel();
         JPanel westPanel = new JPanel();
-        JPanel northPanel = new JPanel();
+        this.northPanel = new JPanel();
         JPanel southPanel = new JPanel();
         eastPanel.setPreferredSize(new Dimension(200,100));
         westPanel.setPreferredSize(new Dimension(200,100));
@@ -154,6 +181,7 @@ public abstract class LancerRejoindreServeur extends JPanel {
 
         }
 
+
     }
 
     @Override
@@ -172,6 +200,28 @@ public abstract class LancerRejoindreServeur extends JPanel {
      */
     public void ajoutConnexion (ArrayList<String> ips){
         this.attenteConnexionClients.ajouterConnexion(ips);
+    }
+
+    public void displayAttenteLancement(int attente){
+        final int[] decompte = {attente/1000};
+        decompteLancement.setText("Lancement de la partie dans " + decompte[0]);
+        decompteLancement.setForeground(Color.BLACK);
+        Police police = new Police();
+        police.setPoliceTaille(25);
+        decompteLancement.setFont(police);
+        this.northPanel.add(decompteLancement);
+
+        new Timer(1000,
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // reduire l'affichage des seconds
+                        decompte[0]--;
+                        decompteLancement.setText("Lancement de la partie dans " + decompte[0]);
+                    }
+                }
+
+        ).start();
     }
 
 

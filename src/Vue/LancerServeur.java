@@ -13,16 +13,32 @@ public class LancerServeur extends LancerRejoindreServeur {
 
     public LancerServeur(Fenetre fenetre){
         super(fenetre);
+        Police police = new Police();
+
+        JLabel nbjueurLabel = new JLabel(" Nombre de joueurs ");
+        nbjueurLabel.setFont(police);
 
         this.bouttonLancer = new Bouttons.BouttonHorsJeu(" Lancer ");
         this.bouttonRejoindre = new Bouttons.BouttonHorsJeu(" Rejoindre ");
         this.portServer = new JTextField("12345");
+        this.portServer.setBackground(new Color(0xFDF1D1));
+        this.portServer.setOpaque(true);
+
+
         this.nbJoueur = new JTextField("2");
+        this.nbJoueur.setBackground(new Color(0xFDF1D1));
+        this.nbJoueur.setOpaque(true);
 
         this.portServer.setPreferredSize(new Dimension(50,30));
         this.nbJoueur.setPreferredSize(new Dimension(50,30));
 
-        this.dispositionComposants(this.bouttonLancer,this.portServer, this.nbJoueur);
+        this.portPanel.add(portLabel, BorderLayout.NORTH);
+        this.portPanel.add(this.portServer, BorderLayout.CENTER);
+
+        this.nbOuIpPanel.add(nbjueurLabel, BorderLayout.NORTH);
+        this.nbOuIpPanel.add(this.nbJoueur, BorderLayout.CENTER);
+
+        this.dispositionComposants(this.bouttonLancer,this.portPanel, this.nbOuIpPanel);
 
 
     }

@@ -42,7 +42,7 @@ public class ControleurLancerServeur implements ActionListener {
 
             new Thread(server::start).start(); // c'est une manière plus concise pour les lambda expressions, Server::start est pris comme
             // une implementation de run() de Runnable parceque ça prend aucun param et retourne void
-            this.lancerServeur.setVueApresLancement(this.lancerServeur.getBouttonLancer(), this.lancerServeur.getPortServer(), this.lancerServeur.getNbJoueur());
+            this.lancerServeur.setVueApresLancement(this.lancerServeur.getBouttonLancer(), this.lancerServeur.getPortPanel(), this.lancerServeur.getNbOuIpPanel());
             // enable l'attente
 //            this.lancerServeur.getAttenteJoueurLabel().setText("En attente de la connexion de tous les joueurs ( restant " + (server.getMaxPlayers() - server.getNbJoueurConnecte()) + ")");
         }else if (e.getSource() == this.lancerServeur.getBouttonRejoindre()){

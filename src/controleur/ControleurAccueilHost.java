@@ -49,6 +49,7 @@ public class ControleurAccueilHost extends ControleurAccueil {
     public void actionPerformed(ActionEvent e) {
         JButton bouttonLancement = this.accueil.getOptionsJeu().getLancerJeu();
         if (e.getSource() == this.accueil.getOptionsJeu().getLancerJeu()){
+            this.accueil.getOptionsJeu().getLancerJeu().setEnabled(false);
             String nbBallesBandits = this.accueil.getOptionsJeu().getSaisieNbBalles().getText();
             Double nervositeMarshall = this.accueil.getOptionsJeu().getNervosite();
             String nbWagons = this.accueil.getOptionsJeu().getSaisieNbWagon().getText();
