@@ -1,19 +1,11 @@
-package controleur;
+package multiJoueur;
 
 import Vue.*;
-import modele.personnages.Personnage;
-import modele.trainEtComposantes.*;
-import network.Paquets.PaquetsServeur.PaquetListePersoClient;
-import network.Paquets.PaquetsServeur.PaquetInitialisationPartie;
 import network.client.Client;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Le controleur qui va gerer les événenement qui proviennent de l'initialisation du jeu avec la fenetre d'accueil

@@ -1,6 +1,8 @@
-package controleur;
+package multiJoueur;
 
 import Vue.*;
+import controleur.ControleurFinJeu;
+import controleur.JouerSon;
 import modele.*;
 import modele.actions.Action;
 import modele.actions.Braquer;
@@ -20,15 +22,14 @@ import java.util.Map;
 /**
  * Controle tous les evenements pendant le deroulement de la partie
  */
-public class ControleurJeu implements ActionListener {
+public abstract class ControleurJeu implements ActionListener {
     Train train;
     Jeu vueJeu;
     Fenetre fenetre;
     int nbAction, nBandits;
     boolean actionPhase=false,planPhase=true;
-    Bandit joueurCourant;
+    Bandit banditCourant;
     Map<String, JouerSon> mapSonsJeu = new HashMap<>();
-
     int nbActionExecute;
 
     /**
@@ -60,7 +61,7 @@ public class ControleurJeu implements ActionListener {
      * @param nbManches nombre de manche à jouer avant la fin du jeu
      */
     public void lancerJeu(int nbManches) {
-        this.mapSonsJeu.get("jeuBack").jouer(true);
+        //this.mapSonsJeu.get("jeuBack").jouer(true);
 
         int totaleActionsManche = this.nbAction * this.nBandits; // le nombre d'actions que planifie tous les joeurs en une manche
         int manche = 0;
@@ -75,12 +76,12 @@ public class ControleurJeu implements ActionListener {
             // concurrentmodifError avec for each
             for (int i = 0; i <this.nBandits; i++){
 
-                this.joueurCourant = this.train.getBandits().get(i);
+                this.banditCourant = this.train.getBandits().get(i);
                 if(i != 0){
-                    this.vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualiserPlanificateur(this.joueurCourant);
+                    this.vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualiserPlanificateur(this.banditCourant);
                 }
 
-                while (this.joueurCourant.lenAction() < this.nbAction) {
+                while (this.banditCourant.lenAction() < this.nbAction) {
                     try {
                         Thread.sleep(10);
                     } catch (InterruptedException e) {
@@ -96,7 +97,7 @@ public class ControleurJeu implements ActionListener {
             this.vueJeu.getCmdPanel().getPhaseFeedPanel().setAction();
 
             this.nbActionExecute = 0;
-            this.joueurCourant = this.train.getBandits().get(0);
+            this.banditCourant = this.train.getBandits().get(0);
 
             planPhase = false;
             actionPhase = true;
@@ -145,13 +146,13 @@ public class ControleurJeu implements ActionListener {
         this.mapSonsJeu.get("tir").arreter(); // pour que les sons se lance mm si on spam action
         this.mapSonsJeu.get("braquage").arreter();
 
-        this.joueurCourant = this.train.getBandits().get(this.nbActionExecute % this.nBandits);
-        Action actionAExecuter = this.joueurCourant.getActions().peek();
+        this.banditCourant = this.train.getBandits().get(this.nbActionExecute % this.nBandits);
+        Action actionAExecuter = this.banditCourant.getActions().peek();
 
-        boolean assezDeBalles = this.joueurCourant.getNbBalles() > 0;
-        boolean braquageReussie = !this.joueurCourant.getEmplacement().getButtins().isEmpty();
+        boolean assezDeBalles = this.banditCourant.getNbBalles() > 0;
+        boolean braquageReussie = !this.banditCourant.getEmplacement().getButtins().isEmpty();
 
-        String feed = this.joueurCourant.executer();
+        String feed = this.banditCourant.executer();
         this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
 
         if (actionAExecuter instanceof Tirer && assezDeBalles){
@@ -162,10 +163,10 @@ public class ControleurJeu implements ActionListener {
             }else {
                 if (actionAExecuter instanceof SeDeplacer ) {
                     // si bandit va vers marshall il lui tir dessus
-                    if (this.joueurCourant.getEmplacement().getPersoList().contains(marshall)) {
+                    if (this.banditCourant.getEmplacement().getPersoList().contains(marshall)) {
                         this.mapSonsJeu.get("tir").jouer(false);
-                        this.joueurCourant.fuir();
-                        this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(this.joueurCourant.getSurnom() +
+                        this.banditCourant.fuir();
+                        this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(this.banditCourant.getSurnom() +
                                 " a fuit vers le toit");
                     }
                 }
@@ -229,9 +230,9 @@ public class ControleurJeu implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 if (planPhase) {
                     Action a;
-                    a = new SeDeplacer(joueurCourant, Direction.Droite);
-                    joueurCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+                    a = new SeDeplacer(banditCourant, Direction.Droite);
+                    banditCourant.ajouterAction(a);
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };
@@ -241,9 +242,9 @@ public class ControleurJeu implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 if (planPhase) {
                     Action a;
-                    a = new SeDeplacer(joueurCourant, Direction.Haut);
-                    joueurCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+                    a = new SeDeplacer(banditCourant, Direction.Haut);
+                    banditCourant.ajouterAction(a);
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };
@@ -253,9 +254,9 @@ public class ControleurJeu implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 if (planPhase) {
                     Action a;
-                    a = new SeDeplacer(joueurCourant, Direction.Bas);
-                    joueurCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+                    a = new SeDeplacer(banditCourant, Direction.Bas);
+                    banditCourant.ajouterAction(a);
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };
@@ -265,9 +266,9 @@ public class ControleurJeu implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 if (planPhase) {
                     Action a;
-                    a = new SeDeplacer(joueurCourant, Direction.Gauche);
-                    joueurCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+                    a = new SeDeplacer(banditCourant, Direction.Gauche);
+                    banditCourant.ajouterAction(a);
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };
@@ -277,9 +278,9 @@ public class ControleurJeu implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 if (planPhase) {
                     Action a;
-                    a = new Braquer(joueurCourant);
-                    joueurCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+                    a = new Braquer(banditCourant);
+                    banditCourant.ajouterAction(a);
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };
@@ -289,9 +290,9 @@ public class ControleurJeu implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 if (planPhase) {
                     Action a;
-                    a = new Tirer(joueurCourant, Direction.Droite);
-                    joueurCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+                    a = new Tirer(banditCourant, Direction.Droite);
+                    banditCourant.ajouterAction(a);
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };
@@ -301,9 +302,9 @@ public class ControleurJeu implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 if   (planPhase) {
                     Action a;
-                    a = new Tirer(joueurCourant, Direction.Haut);
-                    joueurCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+                    a = new Tirer(banditCourant, Direction.Haut);
+                    banditCourant.ajouterAction(a);
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };
@@ -313,9 +314,9 @@ public class ControleurJeu implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 if (planPhase) {
                     Action a;
-                    a = new Tirer(joueurCourant, Direction.Bas);
-                    joueurCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+                    a = new Tirer(banditCourant, Direction.Bas);
+                    banditCourant.ajouterAction(a);
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };
@@ -325,9 +326,9 @@ public class ControleurJeu implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 if (planPhase) {
                     Action a;
-                    a = new Tirer(joueurCourant, Direction.Gauche);
-                    joueurCourant.ajouterAction(a);
-                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
+                    a = new Tirer(banditCourant, Direction.Gauche);
+                    banditCourant.ajouterAction(a);
+//                    vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualisePlanfication(a.toString());
                 }
             }
         };

@@ -1,5 +1,5 @@
 import Vue.Fenetre;
-import controleur.ControleurAccueilHost;
+import multiJoueur.ControleurAccueilHost;
 
 public class Main {
     public static void main(String[] args) {
@@ -7,4 +7,6 @@ public class Main {
         ControleurAccueilHost controleuAccueil = new ControleurAccueilHost(fenetre);
         controleuAccueil.lancer();
     }
+
+
 }

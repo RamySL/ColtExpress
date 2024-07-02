@@ -1,8 +1,11 @@
 package network.client;
 
 import Vue.Accueil;
-import controleur.*;
 import modele.actions.Action;
+import multiJoueur.ControleurAccueilClient;
+import multiJoueur.ControleurAccueilHost;
+import multiJoueur.ControleurJeuOnLine;
+import multiJoueur.ControleurServerClient;
 import network.Paquets.PaquetsClients.*;
 import network.Paquets.PaquetsServeur.*;
 import network.Paquets.PaquetsServeur.PaquetAction;

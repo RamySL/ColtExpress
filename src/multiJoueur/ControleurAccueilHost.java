@@ -1,24 +1,16 @@
-package controleur;
+package multiJoueur;
 
 import Vue.Accueil;
 import Vue.EcranType;
 import Vue.Fenetre;
-import Vue.Jeu;
-import modele.personnages.Personnage;
-import modele.trainEtComposantes.Train;
-import network.Paquets.PaquetsServeur.PaquetListePersoClient;
-import network.Paquets.PaquetsServeur.PaquetListePersoHost;
-import network.Paquets.PaquetsServeur.PaquetInitialisationPartie;
+import controleur.ControleurTypePartie;
+import controleur.JouerSon;
 import network.client.Client;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ControleurAccueilHost extends ControleurAccueil {
     protected Accueil accueil;
@@ -32,7 +24,9 @@ public class ControleurAccueilHost extends ControleurAccueil {
         this.accueil = this.fenetre.getAccueil();
         this.ecranType = this.fenetre.getEcranTpe();
         this.accueil.liaisonAvecControleur(this);
-        this.ecranType.liaisonAvecControleur(new ControleurTypePartie(this.fenetre, this.fenetre.getEcranTpe(),this));
+        ControleurTypePartie controleurTypePartie = new ControleurTypePartie(this.fenetre, this.fenetre.getEcranTpe());
+        controleurTypePartie.setControleurAccueilHost(this);
+        this.ecranType.liaisonAvecControleur(controleurTypePartie);
     }
 
     public void setClient(Client client) {

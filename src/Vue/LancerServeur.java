@@ -2,7 +2,7 @@ package Vue;
 
 import Vue.ComposantsPerso.Bouttons;
 import Vue.ComposantsPerso.Police;
-import controleur.ControleurLancerServeur;
+import multiJoueur.ControleurLancerServeur;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +23,6 @@ public class LancerServeur extends LancerRejoindreServeur {
         this.portServer = new JTextField("12345");
         this.portServer.setBackground(new Color(0xFDF1D1));
         this.portServer.setOpaque(true);
-
 
         this.nbJoueur = new JTextField("2");
         this.nbJoueur.setBackground(new Color(0xFDF1D1));

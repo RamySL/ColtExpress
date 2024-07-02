@@ -1,7 +1,9 @@
-package controleur;
+package multiJoueur;
 
 import Vue.EcranFin;
 import Vue.Fenetre;
+import controleur.ControleurFinJeu;
+import controleur.JouerSon;
 import modele.actions.Action;
 import modele.actions.Braquer;
 import modele.actions.SeDeplacer;

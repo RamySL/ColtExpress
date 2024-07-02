@@ -2,8 +2,7 @@ package Vue;
 
 import Vue.ComposantsPerso.Bouttons;
 import Vue.ComposantsPerso.Police;
-import controleur.ControleurLancerServeur;
-import controleur.ControleurRejoindreServeur;
+import multiJoueur.ControleurRejoindreServeur;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,7 +32,6 @@ public class RejoindreServeur extends LancerRejoindreServeur {
         this.portServer.setPreferredSize(new Dimension(50,30));
         this.ipServer.setPreferredSize(new Dimension(50,30));
 
-
         this.portPanel.add(portLabel, BorderLayout.NORTH);
         this.portPanel.add(this.portServer, BorderLayout.CENTER);
 
@@ -44,7 +42,6 @@ public class RejoindreServeur extends LancerRejoindreServeur {
 
 
     }
-
 
     public void liasonControleur(ControleurRejoindreServeur controleurRejoindreServeur) {
             this.bouttonRejoindre.addActionListener(controleurRejoindreServeur);

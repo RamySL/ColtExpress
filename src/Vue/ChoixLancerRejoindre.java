@@ -1,7 +1,7 @@
 package Vue;
 
 import Vue.ComposantsPerso.Bouttons;
-import controleur.ControleurChoixLancerRejoindre;
+import multiJoueur.ControleurChoixLancerRejoindre;
 
 import javax.swing.*;
 import java.awt.*;

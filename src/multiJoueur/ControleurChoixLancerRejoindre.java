@@ -1,4 +1,4 @@
-package controleur;
+package multiJoueur;
 
 import Vue.ChoixLancerRejoindre;
 import Vue.Fenetre;

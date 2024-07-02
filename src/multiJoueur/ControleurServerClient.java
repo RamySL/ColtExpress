@@ -1,13 +1,10 @@
-package controleur;
+package multiJoueur;
 
 import Vue.Fenetre;
 import Vue.LancerServeur;
 import Vue.RejoindreServeur;
 import network.client.Client;
-import network.server.Server;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 
