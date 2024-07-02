@@ -1,7 +1,6 @@
 package controleur;
 
 import Vue.Fenetre;
-import Vue.OnLineSettigs;
 import network.client.Client;
 import network.server.Server;
 
@@ -15,22 +14,20 @@ import java.awt.event.ActionListener;
  * - soit laisser le serveur modifier le gui
  */
 
-public class ControleurServerClient implements ActionListener {
-    private OnLineSettigs olSettings;
+public class ControleurServerClient {
     private Fenetre fenetre;
     private  Client client;
     private ControleurAccueilHost controleurAccueilHost;
+    private ControleurLancerServeur controleurLancerServeur;
+    private ControleurRejoindreServeur controleurRejoindreServeur;
+    private int nbCnxRestantes = 0;
 
-    public ControleurServerClient(OnLineSettigs olSettings, Fenetre fenetre, ControleurAccueilHost controleurAccueilHost){
-
-        this.olSettings = olSettings;
+    public ControleurServerClient(Fenetre fenetre, ControleurAccueilHost controleurAccueilHost,
+                                  ControleurLancerServeur controleurLancerServeur, ControleurRejoindreServeur controleurRejoindreServeur){
         this.fenetre = fenetre;
         this.controleurAccueilHost = controleurAccueilHost;
-    }
-
-    public void updateNbJoueurConnecte (int n){
-        this.olSettings.getAttenteJoueurLabel().setText("En attente de la connexion de tous les joueurs ( restant " + (n) + ")");
-
+        this.controleurLancerServeur = controleurLancerServeur;
+        this.controleurRejoindreServeur = controleurRejoindreServeur;
     }
 
     public void vueClient(){
@@ -41,6 +38,11 @@ public class ControleurServerClient implements ActionListener {
         this.fenetre.changerVue(this.fenetre.getAccueilId());
     }
 
+    public void ajouterConnexion(int nbCnxRestantes, String ip){
+        this.controleurLancerServeur.getLancerServeur().ajoutConnexion(ip);
+        this.nbCnxRestantes = nbCnxRestantes;
+    }
+
     /**
      * le set se fait quand tout le monde est connectés
      */
@@ -49,7 +51,6 @@ public class ControleurServerClient implements ActionListener {
              new ControleurAccueilClient(this.fenetre,this.client);
          }
     }
-
 
     public Client getClient() {
         return client;
@@ -63,34 +64,25 @@ public class ControleurServerClient implements ActionListener {
         return controleurAccueilHost;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Server server;
-        if (e.getSource() == this.olSettings.getLunchButton()){
-
-            int port = Integer.parseInt(this.olSettings.getPortServer()); // Port to listen on
-            int maxPlayers = Integer.parseInt(this.olSettings.getNbJoueur()); // Number of players needed to start the game
-            server = new Server(port, maxPlayers);
-
-            new Thread(server::start).start(); // c'est une manière plus concise pour les lambda expressions, Server::start est pris comme
-                                                // une implementation de run() de Runnable parceque ça prend aucun param et retourne void
-
-            this.olSettings.getLunchButton().setEnabled(false);
-            this.olSettings.getAttenteJoueurLabel().setText("En attente de la connexion de tous les joueurs ( restant " + (server.getMaxPlayers() - server.getNbJoueurConnecte()) + ")");
-        }
-
-        if (e.getSource() == this.olSettings.getJoinButton()){
-            new Thread(() -> {
-                String serverAddress =this.olSettings.getIpServerClient(); // Server address
-                int serverPort = Integer.parseInt(this.olSettings.getPortServerClient()); // Server port
-                this.client = new Client(serverAddress, serverPort, this);
-                this.client.start();
-            }).start();
-            this.olSettings.getJoinButton().setEnabled(false);
-
-
-        }
-
-    }
+//    @Override
+//    public void actionPerformed(ActionEvent e) {
+//        Server server;
+//        if (e.getSource() == this.olSettings.getLunchButton()){
+//
+//        }
+//
+//        if (e.getSource() == this.olSettings.getJoinButton()){
+//            new Thread(() -> {
+//                String serverAddress =this.olSettings.getIpServerClient(); // Server address
+//                int serverPort = Integer.parseInt(this.olSettings.getPortServerClient()); // Server port
+//                this.client = new Client(serverAddress, serverPort, this);
+//                this.client.start();
+//            }).start();
+//            this.olSettings.getJoinButton().setEnabled(false);
+//
+//
+//        }
+//
+//    }
 
 }

@@ -1,6 +1,6 @@
 package Vue;
 
-import Vue.Bouttons.Bouttons;
+import Vue.ComposantsPerso.Bouttons;
 import controleur.ControleurAccueilClient;
 import controleur.ControleurAccueilHost;
 

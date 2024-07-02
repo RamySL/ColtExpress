@@ -15,10 +15,10 @@ public class Fenetre extends JFrame {
 
     private AccueilClient accueilClient;
     private ChoixLancerRejoindre choixLancerRejoindre;
-    private LancerServeur lancerServeur;
+    private LancerRejoindreServeur lancerRejoindreServeur;
     private EcranFin ecranFin;
     private JPanel cards;
-    private String jeuId, lancementId, accueilId, ecranFinId, typeID, accueilClientId,choixLancerRejoindreId,lancerServeurId;
+    private String jeuId, lancementId, accueilId, ecranFinId, typeID, accueilClientId,choixLancerRejoindreId,lancerRejoindreServeurId;
     public Fenetre(){
 
         this.ecranLancement = new EcranLancement(this);
@@ -77,10 +77,10 @@ public class Fenetre extends JFrame {
 
     }
 
-    public void setLancerServeur(String lancerServeurId, LancerServeur lancerServeur) {
-        this.lancerServeurId = lancerServeurId;
-        this.lancerServeur = lancerServeur;
-        this.cards.add(this.lancerServeur, this.lancerServeurId);
+    public void SetLancerRejoindre(String lancerRejoindreServeurId, LancerRejoindreServeur vue) {
+        this.lancerRejoindreServeurId = lancerRejoindreServeurId;
+        this.lancerRejoindreServeur = vue;
+        this.cards.add(vue, this.lancerRejoindreServeurId);
     }
 
     public void changerVue(String idVue) {
@@ -113,8 +113,8 @@ public class Fenetre extends JFrame {
         return choixLancerRejoindreId;
     }
 
-    public String getLancerServeurId() {
-        return lancerServeurId;
+    public String getLancerRejoindreServeurId() {
+        return lancerRejoindreServeurId;
     }
 
     public ChoixLancerRejoindre getChoixLancerRejoindre() {

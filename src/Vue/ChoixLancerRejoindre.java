@@ -1,14 +1,10 @@
 package Vue;
 
-import Vue.Bouttons.Bouttons;
+import Vue.ComposantsPerso.Bouttons;
 import controleur.ControleurChoixLancerRejoindre;
-import controleur.ControleurServerClient;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * Ecran de choix entre lancer ou rejoindre un serveur

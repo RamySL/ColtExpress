@@ -1,6 +1,4 @@
-package Vue.Bouttons;
-
-import modele.Direction;
+package Vue.ComposantsPerso;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -45,12 +43,16 @@ public abstract class Bouttons extends JButton {
             Color originalForeground = this.getForeground();
 
             Color hoverBackground = new Color(0x8A5701);
+            Border HoverBorder = new CompoundBorder(
+                    new LineBorder(new Color(0), 2),
+                    new EmptyBorder(4, 10, 4, 10));
 
             this.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
                     BouttonHorsJeu.this.setBackground(hoverBackground);
                     BouttonHorsJeu.this.setForeground(Color.WHITE);
+                    BouttonHorsJeu.this.setBorder(HoverBorder);
                 }
 
                 @Override

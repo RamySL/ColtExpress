@@ -1,12 +1,8 @@
 package network.client;
 
 import Vue.Accueil;
-import controleur.ControleurAccueilHost;
-import controleur.ControleurAccueilClient;
-import controleur.ControleurJeuOnLine;
-import controleur.ControleurServerClient;
+import controleur.*;
 import modele.actions.Action;
-import modele.personnages.Bandit;
 import network.Paquets.PaquetsClients.*;
 import network.Paquets.PaquetsServeur.*;
 import network.Paquets.PaquetsServeur.PaquetAction;
@@ -129,7 +125,7 @@ public class Client {
                 while ((serverMessage = in.readObject()) != null) {
 
                     switch (serverMessage) {
-                        case PaquetNbJoeurConnecte p -> cntrlServerClient.updateNbJoueurConnecte(p.getNbJoueurRestants());
+                        case PaquetClientConnecte p -> cntrlServerClient.ajouterConnexion(p.getNbJoueurRestants(),p.getIp());
 
                         case PaquetChoixJrClient paquetChoixJrClient -> {
                             // vue sans param

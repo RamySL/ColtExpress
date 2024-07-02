@@ -187,17 +187,21 @@ public class Server {
         protected final Socket client;
         protected ObjectOutputStream out;
         protected ObjectInputStream in;
+        protected String ip;
 
         public ClientHandler(Socket clientSocket) throws IOException {
 
             this.client = clientSocket;
             this.updateNbPlayerConnected();
+            this.ip = String.valueOf(this.client.getInetAddress());
 
             out = new ObjectOutputStream(client.getOutputStream()); // true permet d'envoyer directement sans attendre le remplissage du buffer
             in = new ObjectInputStream(client.getInputStream());
         }
 
-
+        public String getIp() {
+            return ip;
+        }
 
         @Override
         public void run() {
@@ -284,7 +288,7 @@ public class Server {
 
         public void updateNbPlayerConnected () throws IOException {
             if (out != null) {
-                out.writeObject(new PaquetNbJoeurConnecte(maxPlayers - nbJoueurConnecte));
+                out.writeObject(new PaquetClientConnecte(maxPlayers - nbJoueurConnecte, this.ip));
             }
         }
 

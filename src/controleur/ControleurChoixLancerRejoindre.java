@@ -3,6 +3,7 @@ package controleur;
 import Vue.ChoixLancerRejoindre;
 import Vue.Fenetre;
 import Vue.LancerServeur;
+import Vue.RejoindreServeur;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,9 +21,18 @@ public class ControleurChoixLancerRejoindre implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.choixLancerRejoindre.getBouttonLancer()){
-            this.fenetre.setLancerServeur("lancerServeurId", new LancerServeur(this.fenetre));
-            this.fenetre.changerVue(this.fenetre.getLancerServeurId());
+
+            LancerServeur lancerServeur = new LancerServeur(this.fenetre);
+            this.fenetre.SetLancerRejoindre("lancerServeurId",lancerServeur );
+            new ControleurLancerServeur(this.fenetre,lancerServeur);
+            this.fenetre.changerVue(this.fenetre.getLancerRejoindreServeurId());
+
         }else if (e.getSource() == this.choixLancerRejoindre.getBouttonRejoindre()){
+
+            RejoindreServeur rejoindreServeur = new RejoindreServeur(this.fenetre);
+            this.fenetre.SetLancerRejoindre("rejoindreServeurId",rejoindreServeur );
+            new ControleurRejoindreServeur(this.fenetre,rejoindreServeur);
+            this.fenetre.changerVue(this.fenetre.getChoixLancerRejoindreId());
 
         }
     }
