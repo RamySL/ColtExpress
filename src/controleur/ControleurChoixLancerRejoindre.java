@@ -13,26 +13,45 @@ public class ControleurChoixLancerRejoindre implements ActionListener {
     private Fenetre fenetre;
     private ChoixLancerRejoindre choixLancerRejoindre;
 
-    public ControleurChoixLancerRejoindre(ChoixLancerRejoindre choixLancerRejoindre, Fenetre fenetre){
+    private ControleurAccueilHost controleurAccueilHost;
+
+
+    public ControleurChoixLancerRejoindre(ChoixLancerRejoindre choixLancerRejoindre, Fenetre fenetre, ControleurAccueilHost controleurAccueilHost){
         this.fenetre = fenetre;
         this.choixLancerRejoindre = choixLancerRejoindre;
+        this.controleurAccueilHost = controleurAccueilHost;
         this.choixLancerRejoindre.liaisonAvecControleur(this);
+
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == this.choixLancerRejoindre.getBouttonLancer() || e.getSource() == this.choixLancerRejoindre.getBouttonRejoindre() ){
+
+        }
+
         if (e.getSource() == this.choixLancerRejoindre.getBouttonLancer()){
 
             LancerServeur lancerServeur = new LancerServeur(this.fenetre);
+
+            ControleurServerClient controleurServerClient = new ControleurServerClient(this.fenetre,this.controleurAccueilHost);
+            controleurServerClient.setLancerServeur(lancerServeur);
+
             this.fenetre.SetLancerRejoindre("lancerServeurId",lancerServeur );
-            new ControleurLancerServeur(this.fenetre,lancerServeur);
+            new ControleurLancerServeur(this.fenetre,lancerServeur,controleurServerClient);
             this.fenetre.changerVue(this.fenetre.getLancerRejoindreServeurId());
 
         }else if (e.getSource() == this.choixLancerRejoindre.getBouttonRejoindre()){
 
             RejoindreServeur rejoindreServeur = new RejoindreServeur(this.fenetre);
+
+            ControleurServerClient controleurServerClient = new ControleurServerClient(this.fenetre,this.controleurAccueilHost);
+            controleurServerClient.setRejoindreServeur(rejoindreServeur);
+
             this.fenetre.SetLancerRejoindre("rejoindreServeurId",rejoindreServeur );
-            new ControleurRejoindreServeur(this.fenetre,rejoindreServeur);
-            this.fenetre.changerVue(this.fenetre.getChoixLancerRejoindreId());
+            new ControleurRejoindreServeur(this.fenetre,rejoindreServeur, controleurServerClient);
+            (new ControleurServerClient(this.fenetre,this.controleurAccueilHost)).setRejoindreServeur(rejoindreServeur);
+            this.fenetre.changerVue(this.fenetre.getLancerRejoindreServeurId());
 
         }
     }

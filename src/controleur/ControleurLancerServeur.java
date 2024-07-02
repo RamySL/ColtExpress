@@ -13,12 +13,13 @@ public class ControleurLancerServeur implements ActionListener {
     private Fenetre fenetre;
     private int nbCnxRestantes = 0;
     private Client client;
-    private ControleurAccueilHost controleurAccueilHost;
 
-    public ControleurLancerServeur (Fenetre fenetre, LancerServeur lancerServeur){
+    private ControleurServerClient controleurServerClient;
+
+    public ControleurLancerServeur (Fenetre fenetre, LancerServeur lancerServeur,ControleurServerClient controleurServerClient){
         this.lancerServeur = lancerServeur;
         this.fenetre = fenetre;
-        this.controleurAccueilHost = controleurAccueilHost;
+        this.controleurServerClient = controleurServerClient;
         this.lancerServeur.liasonControleur(this);
     }
 
@@ -44,6 +45,15 @@ public class ControleurLancerServeur implements ActionListener {
             this.lancerServeur.setVueApresLancement(this.lancerServeur.getBouttonLancer(), this.lancerServeur.getPortServer(), this.lancerServeur.getNbJoueur());
             // enable l'attente
 //            this.lancerServeur.getAttenteJoueurLabel().setText("En attente de la connexion de tous les joueurs ( restant " + (server.getMaxPlayers() - server.getNbJoueurConnecte()) + ")");
+        }else if (e.getSource() == this.lancerServeur.getBouttonRejoindre()){
+            new Thread(() -> {
+                String serverAddress ="localhost"; // Server address
+                int serverPort = Integer.parseInt(this.lancerServeur.getPortServer().getText()); // Server port
+                Client client = new Client(serverAddress, serverPort, this.controleurServerClient);
+                client.start();
+            }).start();
+            this.lancerServeur.getBouttonRejoindre().setEnabled(false);
+
         }
 
     }

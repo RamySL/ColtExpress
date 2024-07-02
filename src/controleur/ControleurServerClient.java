@@ -1,6 +1,8 @@
 package controleur;
 
 import Vue.Fenetre;
+import Vue.LancerServeur;
+import Vue.RejoindreServeur;
 import network.client.Client;
 import network.server.Server;
 
@@ -18,16 +20,22 @@ public class ControleurServerClient {
     private Fenetre fenetre;
     private  Client client;
     private ControleurAccueilHost controleurAccueilHost;
-    private ControleurLancerServeur controleurLancerServeur;
-    private ControleurRejoindreServeur controleurRejoindreServeur;
+    private LancerServeur lancerServeur;
+    private RejoindreServeur rejoindreServeur;
     private int nbCnxRestantes = 0;
 
-    public ControleurServerClient(Fenetre fenetre, ControleurAccueilHost controleurAccueilHost,
-                                  ControleurLancerServeur controleurLancerServeur, ControleurRejoindreServeur controleurRejoindreServeur){
+    public ControleurServerClient(Fenetre fenetre, ControleurAccueilHost controleurAccueilHost){
         this.fenetre = fenetre;
         this.controleurAccueilHost = controleurAccueilHost;
-        this.controleurLancerServeur = controleurLancerServeur;
-        this.controleurRejoindreServeur = controleurRejoindreServeur;
+
+    }
+
+    public void setLancerServeur(LancerServeur lancerServeur) {
+        this.lancerServeur = lancerServeur;
+    }
+
+    public void setRejoindreServeur(RejoindreServeur rejoindreServeur) {
+        this.rejoindreServeur = rejoindreServeur;
     }
 
     public void vueClient(){
@@ -39,8 +47,13 @@ public class ControleurServerClient {
     }
 
     public void ajouterConnexion(int nbCnxRestantes, String ip){
-        this.controleurLancerServeur.getLancerServeur().ajoutConnexion(ip);
+        if (this.lancerServeur != null) {
+            this.lancerServeur.ajoutConnexion(ip);
+        }else {
+            this.rejoindreServeur.ajoutConnexion(ip);
+        }
         this.nbCnxRestantes = nbCnxRestantes;
+
     }
 
     /**
@@ -64,25 +77,6 @@ public class ControleurServerClient {
         return controleurAccueilHost;
     }
 
-//    @Override
-//    public void actionPerformed(ActionEvent e) {
-//        Server server;
-//        if (e.getSource() == this.olSettings.getLunchButton()){
-//
-//        }
-//
-//        if (e.getSource() == this.olSettings.getJoinButton()){
-//            new Thread(() -> {
-//                String serverAddress =this.olSettings.getIpServerClient(); // Server address
-//                int serverPort = Integer.parseInt(this.olSettings.getPortServerClient()); // Server port
-//                this.client = new Client(serverAddress, serverPort, this);
-//                this.client.start();
-//            }).start();
-//            this.olSettings.getJoinButton().setEnabled(false);
-//
-//
-//        }
-//
-//    }
+
 
 }

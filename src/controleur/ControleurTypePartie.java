@@ -26,7 +26,7 @@ public class ControleurTypePartie implements ActionListener {
         }
 
         if (e.getSource() == this.ecranType.getBouttonMultiJouer()){
-            new ControleurChoixLancerRejoindre(this.fenetre.getChoixLancerRejoindre(),this.fenetre);
+            new ControleurChoixLancerRejoindre(this.fenetre.getChoixLancerRejoindre(),this.fenetre, this.controleurAccueilHost);
             this.fenetre.changerVue(this.fenetre.getChoixLancerRejoindreId());
         }
 

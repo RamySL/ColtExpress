@@ -10,7 +10,7 @@ import java.awt.*;
 public abstract class LancerRejoindreServeur extends JPanel {
     private Fenetre fenetre;
     private Image imageFond;
-    private AttenteConnexionClients attenteConnexionClients;
+    protected AttenteConnexionClients attenteConnexionClients;
 
     public LancerRejoindreServeur(Fenetre fenetre){
         this.fenetre = fenetre;
@@ -36,8 +36,6 @@ public abstract class LancerRejoindreServeur extends JPanel {
         gbc.gridy = 0;
         this.add(textField2, gbc);
     }
-
-    public abstract void liasonControleur(ControleurLancerServeur controleurLancerServeur);
 
     public void disableConfigServer(Bouttons.BouttonHorsJeu bouton, JTextField textField1, JTextField textField2){
         bouton.setVisible(false);
@@ -75,14 +73,19 @@ public abstract class LancerRejoindreServeur extends JPanel {
 
         this.attenteConnexionClients = new AttenteConnexionClients();
 
+        if (LancerRejoindreServeur.this instanceof LancerServeur){
+            southPanel.add(((LancerServeur) LancerRejoindreServeur.this).getBouttonRejoindre()) ;
+        }
+
         this.add(this.attenteConnexionClients,BorderLayout.CENTER);
         this.add(eastPanel,BorderLayout.EAST);
         this.add(westPanel,BorderLayout.WEST);
         this.add(southPanel,BorderLayout.SOUTH);
         this.add(northPanel,BorderLayout.NORTH);
+
     }
 
-    private class AttenteConnexionClients extends JPanel{
+    protected class AttenteConnexionClients extends JPanel{
         public AttenteConnexionClients(){
             JPanel tittreAnimation = new JPanel();
             tittreAnimation.setOpaque(false);
@@ -106,6 +109,14 @@ public abstract class LancerRejoindreServeur extends JPanel {
 
             this.add(tittreAnimation);
 
+
+        }
+
+        public void ajouterConnexion(String ip){
+            JLabel label =  new JLabel("Joueur connecté sur la machine : " + ip);
+            label.setFont(new Police());
+            label.setForeground(Color.WHITE);
+            this.add(label);
         }
 
     }
@@ -125,7 +136,7 @@ public abstract class LancerRejoindreServeur extends JPanel {
      * @param ip
      */
     public void ajoutConnexion (String ip){
-        this.add(new JLabel("Joueur connecté sur la machine : " + ip));
+        this.attenteConnexionClients.ajouterConnexion(ip);
     }
 
 

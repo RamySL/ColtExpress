@@ -2,6 +2,7 @@ package Vue;
 
 import Vue.ComposantsPerso.Bouttons;
 import controleur.ControleurLancerServeur;
+import controleur.ControleurRejoindreServeur;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,9 +27,9 @@ public class RejoindreServeur extends LancerRejoindreServeur {
 
     }
 
-    @Override
-    public void liasonControleur(ControleurLancerServeur controleurLancerServeur) {
 
+    public void liasonControleur(ControleurRejoindreServeur controleurRejoindreServeur) {
+            this.bouttonRejoindre.addActionListener(controleurRejoindreServeur);
     }
 
     public Bouttons.BouttonHorsJeu getBouttonRejoindre() {

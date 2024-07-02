@@ -8,13 +8,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LancerServeur extends LancerRejoindreServeur {
-    private Bouttons.BouttonHorsJeu bouttonLancer;
+    private Bouttons.BouttonHorsJeu bouttonLancer,bouttonRejoindre;
     private JTextField portServer, nbJoueur;
 
     public LancerServeur(Fenetre fenetre){
         super(fenetre);
 
         this.bouttonLancer = new Bouttons.BouttonHorsJeu(" Lancer ");
+        this.bouttonRejoindre = new Bouttons.BouttonHorsJeu(" Rejoindre ");
         this.portServer = new JTextField("12345");
         this.nbJoueur = new JTextField("2");
 
@@ -26,9 +27,10 @@ public class LancerServeur extends LancerRejoindreServeur {
 
     }
 
-    @Override
+
     public void liasonControleur(ControleurLancerServeur controleurLancerServeur) {
         this.bouttonLancer.addActionListener(controleurLancerServeur);
+        this.bouttonRejoindre.addActionListener(controleurLancerServeur);
     }
 
     public Bouttons.BouttonHorsJeu getBouttonLancer() {
@@ -41,5 +43,9 @@ public class LancerServeur extends LancerRejoindreServeur {
 
     public JTextField getNbJoueur() {
         return nbJoueur;
+    }
+
+    public Bouttons.BouttonHorsJeu getBouttonRejoindre() {
+        return bouttonRejoindre;
     }
 }
