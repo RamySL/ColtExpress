@@ -5,6 +5,7 @@ import Vue.ComposantsPerso.Police;
 import controleur.ControleurLancerServeur;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public abstract class LancerRejoindreServeur extends JPanel {
@@ -86,13 +87,12 @@ public abstract class LancerRejoindreServeur extends JPanel {
     }
 
     protected class AttenteConnexionClients extends JPanel{
+        private JPanel connexionsPanel;
         public AttenteConnexionClients(){
-            JPanel tittreAnimation = new JPanel();
-            tittreAnimation.setOpaque(false);
+
             this.setPreferredSize(new Dimension(500,500));
             this.setBackground(new Color(0,0,0, 200));
-
-            this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+            this.setLayout(new BorderLayout());
 
             JLabel titre = new JLabel("En attente de la connexion des joueurs  ");
             titre.setFont(new Police());
@@ -104,19 +104,32 @@ public abstract class LancerRejoindreServeur extends JPanel {
             animationAttente.setPreferredSize(new Dimension(50,20));
             animationAttente.setBackground(new Color(0xFDB531));
 
+            JPanel tittreAnimation = new JPanel();
+            tittreAnimation.setPreferredSize(new Dimension(0,100));
+            tittreAnimation.setOpaque(false);
+
+            this.connexionsPanel = new JPanel();
+            connexionsPanel.setLayout(new BoxLayout(connexionsPanel,BoxLayout.Y_AXIS));
+            connexionsPanel.setOpaque(false);
+
             tittreAnimation.add(titre);
             tittreAnimation.add(animationAttente);
 
-            this.add(tittreAnimation);
+
+            this.add(tittreAnimation,BorderLayout.NORTH);
+            this.add(connexionsPanel,BorderLayout.CENTER);
 
 
         }
 
         public void ajouterConnexion(String ip){
-            JLabel label =  new JLabel("Joueur connecté sur la machine : " + ip);
+            JLabel label =  new JLabel("Joueur connecté sur la machine : " + ip + " ");
             label.setFont(new Police());
             label.setForeground(Color.WHITE);
-            this.add(label);
+            label.setBackground(new Color(0xED000000, true));
+            label.setOpaque(true);
+            label.setAlignmentX(Component.CENTER_ALIGNMENT);
+            this.connexionsPanel.add(label);
         }
 
     }
