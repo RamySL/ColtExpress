@@ -7,6 +7,7 @@ import controleur.ControleurLancerServeur;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.ArrayList;
 
 public abstract class LancerRejoindreServeur extends JPanel {
     private Fenetre fenetre;
@@ -88,6 +89,7 @@ public abstract class LancerRejoindreServeur extends JPanel {
 
     protected class AttenteConnexionClients extends JPanel{
         private JPanel connexionsPanel;
+        private boolean connecte = false;
         public AttenteConnexionClients(){
 
             this.setPreferredSize(new Dimension(500,500));
@@ -122,14 +124,34 @@ public abstract class LancerRejoindreServeur extends JPanel {
 
         }
 
-        public void ajouterConnexion(String ip){
-            JLabel label =  new JLabel("Joueur connecté sur la machine : " + ip + " ");
-            label.setFont(new Police());
-            label.setForeground(Color.WHITE);
-            label.setBackground(new Color(0xED000000, true));
-            label.setOpaque(true);
-            label.setAlignmentX(Component.CENTER_ALIGNMENT);
-            this.connexionsPanel.add(label);
+        /**
+         *
+         * @param ips
+         */
+        public void ajouterConnexion(ArrayList<String> ips){
+            if (!connecte){
+                for (String ip : ips){
+
+                    JLabel label =  new JLabel("Joueur connecté sur la machine : " + ip + " ");
+                    label.setFont(new Police());
+                    label.setForeground(Color.WHITE);
+                    label.setBackground(new Color(0xED000000, true));
+                    label.setOpaque(true);
+                    label.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    this.connexionsPanel.add(label);
+                    connecte = true;
+
+                }
+            }else{
+                JLabel label =  new JLabel("Joueur connecté sur la machine : " + ips.getLast() + " ");
+                label.setFont(new Police());
+                label.setForeground(Color.WHITE);
+                label.setBackground(new Color(0xED000000, true));
+                label.setOpaque(true);
+                label.setAlignmentX(Component.CENTER_ALIGNMENT);
+                this.connexionsPanel.add(label);
+            }
+
         }
 
     }
@@ -146,10 +168,10 @@ public abstract class LancerRejoindreServeur extends JPanel {
 
     /**
      * ajoute un client connecté à la liste
-     * @param ip
+     * @param ips
      */
-    public void ajoutConnexion (String ip){
-        this.attenteConnexionClients.ajouterConnexion(ip);
+    public void ajoutConnexion (ArrayList<String> ips){
+        this.attenteConnexionClients.ajouterConnexion(ips);
     }
 
 

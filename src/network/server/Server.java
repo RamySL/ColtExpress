@@ -27,6 +27,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 /**
  * Classe principale du serveur
@@ -288,7 +289,8 @@ public class Server {
 
         public void updateNbPlayerConnected () throws IOException {
             if (out != null) {
-                out.writeObject(new PaquetClientConnecte(maxPlayers - nbJoueurConnecte, this.ip));
+                out.writeObject(new PaquetClientConnecte(maxPlayers - nbJoueurConnecte,
+                        Server.this.players.stream().map(ClientHandler::getIp).collect(Collectors.toCollection(ArrayList::new))));
             }
         }
 

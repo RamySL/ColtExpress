@@ -3,24 +3,25 @@ package network.Paquets.PaquetsServeur;
 import network.Paquets.Paquet;
 
 import java.io.Serial;
+import java.util.ArrayList;
 
 public class PaquetClientConnecte extends Paquet {
     @Serial
     private static final long serialVersionUID  = 11L; //1.1
     private int nbJoueurRestants;
-    private String ip;
+    private ArrayList<String>  ips;
 
-    public PaquetClientConnecte(int nbJoueurRestants, String ip){
+    public PaquetClientConnecte(int nbJoueurRestants, ArrayList<String> ips){
 
         this.nbJoueurRestants = nbJoueurRestants;
-        this.ip = ip;
+        this.ips = ips;
     }
 
     public int getNbJoueurRestants() {
         return nbJoueurRestants;
     }
 
-    public String getIp() {
-        return ip;
+    public ArrayList<String> getIp() {
+        return ips;
     }
 }

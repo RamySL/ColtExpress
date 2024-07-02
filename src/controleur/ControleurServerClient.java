@@ -8,6 +8,7 @@ import network.server.Server;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 
 /**
@@ -50,11 +51,11 @@ public class ControleurServerClient {
         this.fenetre.changerVue(this.fenetre.getAccueilId());
     }
 
-    public void ajouterConnexion(int nbCnxRestantes, String ip){
+    public void ajouterConnexion(int nbCnxRestantes, ArrayList<String> ips){
         if (this.lancerServeur != null) {
-            this.lancerServeur.ajoutConnexion(ip);
+            this.lancerServeur.ajoutConnexion(ips);
         }else {
-            this.rejoindreServeur.ajoutConnexion(ip);
+            this.rejoindreServeur.ajoutConnexion(ips);
         }
         this.nbCnxRestantes = nbCnxRestantes;
 
