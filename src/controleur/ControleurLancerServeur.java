@@ -49,7 +49,8 @@ public class ControleurLancerServeur implements ActionListener {
             new Thread(() -> {
                 String serverAddress ="localhost"; // Server address
                 int serverPort = Integer.parseInt(this.lancerServeur.getPortServer().getText()); // Server port
-                Client client = new Client(serverAddress, serverPort, this.controleurServerClient);
+                this.client = new Client(serverAddress, serverPort, this.controleurServerClient);
+                this.controleurServerClient.setClient(this.client);
                 client.start();
             }).start();
             this.lancerServeur.getBouttonRejoindre().setEnabled(false);

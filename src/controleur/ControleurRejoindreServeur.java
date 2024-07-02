@@ -25,6 +25,7 @@ public class ControleurRejoindreServeur implements ActionListener {
                 String serverAddress =this.rejoindreServeur.getIpServer().getText(); // Server address
                 int serverPort = Integer.parseInt(this.rejoindreServeur.getPortServer().getText()); // Server port
                 Client client = new Client(serverAddress, serverPort, this.controleurServerClient);
+                this.controleurServerClient.setClient(client);
                 client.start();
             }).start();
 

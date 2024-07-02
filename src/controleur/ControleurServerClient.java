@@ -30,6 +30,10 @@ public class ControleurServerClient {
 
     }
 
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
     public void setLancerServeur(LancerServeur lancerServeur) {
         this.lancerServeur = lancerServeur;
     }

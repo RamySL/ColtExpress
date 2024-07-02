@@ -50,7 +50,6 @@ public class ControleurChoixLancerRejoindre implements ActionListener {
 
             this.fenetre.SetLancerRejoindre("rejoindreServeurId",rejoindreServeur );
             new ControleurRejoindreServeur(this.fenetre,rejoindreServeur, controleurServerClient);
-            (new ControleurServerClient(this.fenetre,this.controleurAccueilHost)).setRejoindreServeur(rejoindreServeur);
             this.fenetre.changerVue(this.fenetre.getLancerRejoindreServeurId());
 
         }
