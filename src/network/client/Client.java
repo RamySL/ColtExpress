@@ -133,11 +133,11 @@ public class Client {
                         case PaquetChoixJrClient paquetChoixJrClient -> {
                             // vue sans param
                             cntrlServerClient.setControleurAccueilClient();
-                            cntrlServerClient.vueClient(5000);
+                            cntrlServerClient.vueClient(0);
                         }
                         case PaquetChoixJrHost paquetChoixJrHost -> {
                             host = true;
-                            cntrlServerClient.vueHost(5000);
+                            cntrlServerClient.vueHost(0);
                         }
                         //les prochains paquets vont arriver après que tout le monde ait appuyé sur lancer Partie
                         case PaquetListePersoClient listePersoClient -> Client.this.paquetListePersoClient = listePersoClient;

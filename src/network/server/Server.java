@@ -17,6 +17,7 @@ import modele.actions.Braquer;
 import modele.actions.SeDeplacer;
 import modele.actions.Tirer;
 import modele.personnages.Bandit;
+import modele.personnages.Marshall;
 import modele.trainEtComposantes.Train;
 import network.Paquets.Paquet;
 import network.Paquets.PaquetsClients.*;
@@ -243,16 +244,74 @@ public class Server {
                             }else {
                                 partie.indiceBanditCourant = 0;
                                 Server.this.broadCastPaquet(new network.Paquets.PaquetsServeur.PaquetAction());
+
+                                Marshall marshall = partie.train.getMarshall();
+                                String feed =  marshall.seDeplacer();
+                                if (!Objects.equals(feed, "") && feed != null ) Server.this.broadCastPaquet(new PaquetTrain(partie.train));
+
+//                                this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
+//
+//                                // fuite des bandits si le marshall vient dans le mm emplacement qu'eux
+                                ArrayList<Bandit> lstBandit = partie.train.getMarshall().getEmplacement().getBanditListSauf(marshall);
+                                while (!lstBandit.isEmpty()) {
+                                    lstBandit.get(0).fuir();
+                                    Server.this.broadCastPaquet(new PaquetTrain(partie.train));
+//                                    this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(lstBandit.get(0).getSurnom() + " Vient de fuir vers le toit ");
+                                    lstBandit.remove(0);
+
+                                }
                             }
 
                         }
 
                         case PaquetAction paquetAction -> {
                             // !! deplacement du marshall
-                            Server.this.mapClientBandit.get(this).executer();
+                            Marshall marshall = partie.train.getMarshall();
+                            Bandit joueurCourant = Server.this.mapClientBandit.get(this);
+                            Action actionAExecuter = joueurCourant.getActions().peek();
+                            String feed = joueurCourant.executer();
+
+                            Server.this.broadCastPaquet(new PaquetTrain(partie.train));
+
+                            boolean assezDeBalles = joueurCourant.getNbBalles() > 0;
+                            boolean braquageReussie = !joueurCourant.getEmplacement().getButtins().isEmpty();
+//
+//                            this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
+//
+                            if (actionAExecuter instanceof Tirer && assezDeBalles){
+//                                this.mapSonsJeu.get("tir").jouer(false);
+                            }else {
+                                if (actionAExecuter instanceof Braquer && braquageReussie){
+//                                    this.mapSonsJeu.get("braquage").jouer(false);
+                                }else {
+                                    if (actionAExecuter instanceof SeDeplacer ) {
+                                        // si bandit va vers marshall il lui tir dessus
+                                        if (joueurCourant.getEmplacement().getPersoList().contains(marshall)) {
+//                                            this.mapSonsJeu.get("tir").jouer(false);
+                                            joueurCourant.fuir();
+                                            Server.this.broadCastPaquet(new PaquetTrain(partie.train));
+//                                            this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(this.joueurCourant.getSurnom() +
+//                                                    " a fuit vers le toit");
+                                        }
+                                    }
+                                }
+                            }
+                            // execution marshall avant prochaine action
+                            feed =  marshall.seDeplacer();
+                            Server.this.broadCastPaquet(new PaquetTrain(partie.train));
+//                            this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
+
+                            // fuite des bandits si le marshall vient dans le mm emplacement qu'eux
+                            ArrayList<Bandit> lstBandit = partie.train.getMarshall().getEmplacement().getBanditListSauf(marshall);
+                            while (!lstBandit.isEmpty()){
+                                lstBandit.get(0).fuir();
+                                Server.this.broadCastPaquet(new PaquetTrain(partie.train));
+//                                this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(lstBandit.get(0).getSurnom() + " Vient de fuir vers le toit ");
+                                lstBandit.remove(0);
+
+                            }
 
                             partie.nbActionsExecute ++;
-                            Server.this.broadCastPaquet(new PaquetTrain(partie.train));
 
                             partie.indiceBanditCourant = partie.nbActionsExecute % partie.nbBandits;
 

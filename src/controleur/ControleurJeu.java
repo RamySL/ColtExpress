@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * Controle tous les evenements pendant le deroulement de la partie
  */
-public class ControleurJeu implements ActionListener {
+public class ControleurJeu {
     Train train;
     Jeu vueJeu;
     Fenetre fenetre;
@@ -127,14 +127,6 @@ public class ControleurJeu implements ActionListener {
         // fin jeu
         this.versFinJeu();
 
-    }
-
-    /**
-     * gerent les evenements qui proviennent des bouttons de jeu selon que ça soit la phase d'action ou de planification
-     * @param e
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
     }
 
     /**
