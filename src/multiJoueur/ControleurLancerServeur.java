@@ -60,5 +60,9 @@ public class ControleurLancerServeur implements ActionListener {
 
         }
 
+        if (e.getSource() == this.lancerServeur.getBouttonRetour()){
+            this.fenetre.changerVue(this.fenetre.getChoixLancerRejoindreId());
+        }
+
     }
 }

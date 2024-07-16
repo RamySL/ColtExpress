@@ -53,5 +53,9 @@ public class ControleurChoixLancerRejoindre implements ActionListener {
             this.fenetre.changerVue(this.fenetre.getLancerRejoindreServeurId());
 
         }
+
+        if (e.getSource() == this.choixLancerRejoindre.getBouttonRetour()){
+            this.fenetre.changerVue(this.fenetre.getTypeId());
+        }
     }
 }

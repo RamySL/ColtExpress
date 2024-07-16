@@ -93,6 +93,10 @@ public class ControleurAccueil implements ActionListener {
             this.creationsJouers.add(new Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation(iconePerso,surnom));  // on recup le perso choisie sur la liste et le nomb saisie
         }
 
+        if(e.getSource() == this.accueil.getBouttonRetour() ){
+            this.fenetre.changerVue(this.fenetre.getTypeId());
+        }
+
     }
 
     /**

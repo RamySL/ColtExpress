@@ -46,6 +46,7 @@ public class ChoixLancerRejoindre extends JPanel {
     public void liaisonAvecControleur(ControleurChoixLancerRejoindre c){
         this.bouttonLancer.addActionListener(c);
         this.bouttonRejoindre.addActionListener(c);
+        this.getBouttonRetour().addActionListener(c);
     }
 
     @Override
@@ -60,5 +61,9 @@ public class ChoixLancerRejoindre extends JPanel {
 
     public Bouttons.BouttonHorsJeu getBouttonRejoindre() {
         return bouttonRejoindre;
+    }
+
+    public Bouttons.BouttonHorsJeu getBouttonRetour() {
+        return bouttonRetour;
     }
 }

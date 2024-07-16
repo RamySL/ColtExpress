@@ -54,6 +54,7 @@ public class Accueil extends JPanel {
     public void liaisonControleurOffline(controleur.ControleurAccueil controleurAccueil){
         this.optionsJeu.lancerJeu.addActionListener(controleurAccueil);
         this.optionsJeu.getSlectionPersoPanel().bouttonCreationBandit.addActionListener(controleurAccueil);
+        this.getBouttonRetour().addActionListener(controleurAccueil);
     }
 
     public void liaisonAvecControleurClient(ControleurAccueilClient controleur){
@@ -67,6 +68,10 @@ public class Accueil extends JPanel {
 
         this.optionsJeu.lancerJeu.addActionListener(controleur);
         this.optionsJeu.getSlectionPersoPanel().bouttonCreationBandit.addActionListener(controleur);
+    }
+
+    public Bouttons.BouttonHorsJeu getBouttonRetour() {
+        return bouttonRetour;
     }
 
     /**

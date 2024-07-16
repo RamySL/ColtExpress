@@ -35,5 +35,9 @@ public class ControleurRejoindreServeur implements ActionListener {
             this.rejoindreServeur.setVueApresLancement(this.rejoindreServeur.getBouttonRejoindre(), this.rejoindreServeur.getPortPanel()
                                                         ,this.rejoindreServeur.getNbOuIpPanel());
         }
+
+        if (e.getSource() == this.rejoindreServeur.getBouttonRetour()){
+            this.fenetre.changerVue(this.fenetre.getChoixLancerRejoindreId());
+        }
     }
 }

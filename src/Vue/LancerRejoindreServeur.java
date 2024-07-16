@@ -69,6 +69,7 @@ public abstract class LancerRejoindreServeur extends JPanel {
         bouton.setVisible(false);
         textField1.setVisible(false);
         textField2.setVisible(false);
+        bouttonRetour.setVisible(false);
     }
 
     public JPanel getNbOuIpPanel() {
@@ -77,6 +78,10 @@ public abstract class LancerRejoindreServeur extends JPanel {
 
     public JPanel getPortPanel() {
         return portPanel;
+    }
+
+    public Bouttons.BouttonHorsJeu getBouttonRetour() {
+        return bouttonRetour;
     }
 
     /**

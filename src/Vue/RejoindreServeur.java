@@ -44,7 +44,8 @@ public class RejoindreServeur extends LancerRejoindreServeur {
     }
 
     public void liasonControleur(ControleurRejoindreServeur controleurRejoindreServeur) {
-            this.bouttonRejoindre.addActionListener(controleurRejoindreServeur);
+        this.bouttonRejoindre.addActionListener(controleurRejoindreServeur);
+        this.bouttonRetour.addActionListener(controleurRejoindreServeur);
     }
 
     public Bouttons.BouttonHorsJeu getBouttonRejoindre() {
