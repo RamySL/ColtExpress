@@ -13,9 +13,11 @@ import java.awt.event.MouseEvent;
  * Regroupe tous les bouttons utilisé dans le jeu
  */
 public abstract class Bouttons extends JButton {
-    Border border = new CompoundBorder(
+    private Border border = new CompoundBorder(
             new LineBorder(new Color(0), 2),
             new EmptyBorder(5, 15, 5, 15));
+
+    protected boolean enabled = true;
     public Bouttons(String txt){
         super(txt);
         this.setBackground(new Color(0xFDB531));
@@ -23,7 +25,12 @@ public abstract class Bouttons extends JButton {
         this.setForeground(Color.BLACK);
         this.setFocusable(false);
         this.setBorder(border);
+    }
 
+    @Override
+    public void setEnabled(boolean bool){
+        this.enabled = bool;
+        super.setEnabled(bool);
     }
 
     /**
@@ -50,9 +57,12 @@ public abstract class Bouttons extends JButton {
             this.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    BouttonHorsJeu.this.setBackground(hoverBackground);
-                    BouttonHorsJeu.this.setForeground(Color.WHITE);
+                    if (BouttonHorsJeu.this.enabled){
+                        BouttonHorsJeu.this.setBackground(hoverBackground);
+                        BouttonHorsJeu.this.setForeground(Color.WHITE);
 //                    BouttonHorsJeu.this.setBorder(HoverBorder);
+                    }
+
                 }
 
                 @Override

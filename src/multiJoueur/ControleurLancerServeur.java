@@ -7,6 +7,7 @@ import network.server.Server;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.ConnectException;
 
 public class ControleurLancerServeur implements ActionListener {
     private LancerServeur lancerServeur;
@@ -52,6 +53,8 @@ public class ControleurLancerServeur implements ActionListener {
                 this.client = new Client(serverAddress, serverPort, this.controleurServerClient);
                 this.controleurServerClient.setClient(this.client);
                 client.start();
+
+
             }).start();
             this.lancerServeur.getBouttonRejoindre().setEnabled(false);
 

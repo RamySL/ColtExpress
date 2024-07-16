@@ -42,7 +42,7 @@ public class Client {
         this.controleurJeu = controleurJeu;
     }
 
-    public void start() {
+    public void start(){
         try {
             socket = new Socket(serverAddress, serverPort);
             out = new ObjectOutputStream(socket.getOutputStream());
@@ -53,6 +53,7 @@ public class Client {
             listenerThread.start();
 
         } catch (IOException e) {
+            // ce catch attrappe aussi ConnectException
             e.printStackTrace();
         }
 //        } finally {

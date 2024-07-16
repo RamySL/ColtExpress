@@ -6,6 +6,7 @@ import network.client.Client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.ConnectException;
 
 public class ControleurRejoindreServeur implements ActionListener {
     private Fenetre fenetre;
@@ -22,11 +23,12 @@ public class ControleurRejoindreServeur implements ActionListener {
         if (e.getSource() == this.rejoindreServeur.getBouttonRejoindre()){
 
             new Thread(() -> {
-                String serverAddress =this.rejoindreServeur.getIpServer().getText(); // Server address
+                String serverAddress = this.rejoindreServeur.getIpServer().getText(); // Server address
                 int serverPort = Integer.parseInt(this.rejoindreServeur.getPortServer().getText()); // Server port
                 Client client = new Client(serverAddress, serverPort, this.controleurServerClient);
                 this.controleurServerClient.setClient(client);
                 client.start();
+
             }).start();
 
             this.rejoindreServeur.getBouttonRejoindre().setEnabled(false);

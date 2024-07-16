@@ -42,7 +42,8 @@ public class ControleurAccueilHost extends ControleurAccueil {
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton bouttonLancement = this.accueil.getOptionsJeu().getLancerJeu();
-        if (e.getSource() == this.accueil.getOptionsJeu().getLancerJeu()){
+        JButton bouttonCreation = this.accueil.getOptionsJeu().getSlectionPersoPanel().getBouttonCreationBandit();
+        if (e.getSource() == bouttonLancement){
             this.accueil.getOptionsJeu().getLancerJeu().setEnabled(false);
             String nbBallesBandits = this.accueil.getOptionsJeu().getSaisieNbBalles().getText();
             Double nervositeMarshall = this.accueil.getOptionsJeu().getNervosite();
@@ -63,7 +64,8 @@ public class ControleurAccueilHost extends ControleurAccueil {
             }
 
         }
-        if (e.getSource() == this.accueil.getOptionsJeu().getSlectionPersoPanel().getBouttonCreationBandit()) {
+        if (e.getSource() == bouttonCreation) {
+            bouttonCreation.setEnabled(false);
             bouttonLancement.setEnabled(true);
             ImageIcon iconePerso = this.accueil.getOptionsJeu().getSlectionPersoPanel().getPersoSlectionneIcone();
             String surnom = this.accueil.getOptionsJeu().getSlectionPersoPanel().getBanditSurnom();

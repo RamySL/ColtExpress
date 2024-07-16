@@ -1,6 +1,7 @@
 package Vue;
 
 import Vue.ComposantsPerso.Bouttons;
+import Vue.ComposantsPerso.CenteredPanel;
 import Vue.ComposantsPerso.Police;
 
 import javax.swing.*;
@@ -13,24 +14,28 @@ public abstract class LancerRejoindreServeur extends JPanel {
     private Fenetre fenetre;
     private Image imageFond;
     JPanel northPanel = new JPanel();
-    protected JPanel portPanel, nbOuIpPanel;
+    protected JPanel portPanel, nbOuIpPanel, panelCentrale;
 
     protected JLabel portLabel;
 
     protected AttenteConnexionClients attenteConnexionClients;
 
     protected JLabel decompteLancement = new JLabel();
+    protected Bouttons.BouttonHorsJeu bouttonRetour;
 
     public LancerRejoindreServeur(Fenetre fenetre){
         this.fenetre = fenetre;
         this.decompteLancement.setFont(new Police());
 
         Police police = new Police();
+        this.panelCentrale = new JPanel(new GridBagLayout());
+        panelCentrale.setOpaque(false);
         this.portPanel = new JPanel(new BorderLayout());
         this.portPanel.setBackground(new Color(0xFFE7A1));
         this.portLabel = new JLabel("   Port   ");
         portLabel.setFont(police);
 
+        this.bouttonRetour = new Bouttons.BouttonHorsJeu("<");
         this.nbOuIpPanel = new JPanel(new BorderLayout());
         this.nbOuIpPanel.setBackground(new Color(0xFFE7A1));
 
@@ -38,7 +43,8 @@ public abstract class LancerRejoindreServeur extends JPanel {
         this.setBackground(new Color(0xA99100));
         this.imageFond = new ImageIcon("src/assets/images/back_2e_ecran.png").getImage();
 
-        this.setLayout(new GridBagLayout());
+        //this.setLayout(new GridBagLayout());
+        CenteredPanel.centerArrangement(this,this.bouttonRetour);
 
     }
 
@@ -46,15 +52,17 @@ public abstract class LancerRejoindreServeur extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 5;
         gbc.gridy = 1;
-        this.add(bouton, gbc);
+        panelCentrale.add(bouton, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        this.add(panel1, gbc);
+        panelCentrale.add(panel1, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
-        this.add(panel2, gbc);
+        panelCentrale.add(panel2, gbc);
+
+        this.add(panelCentrale, BorderLayout.CENTER);
     }
 
     public void disableConfigServer(Bouttons.BouttonHorsJeu bouton, JPanel textField1, JPanel textField2){

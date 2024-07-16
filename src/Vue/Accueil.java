@@ -1,6 +1,7 @@
 package Vue;
 
 import Vue.ComposantsPerso.Bouttons;
+import Vue.ComposantsPerso.CenteredPanel;
 import multiJoueur.ControleurAccueil;
 import multiJoueur.ControleurAccueilClient;
 import multiJoueur.ControleurAccueilHost;
@@ -19,34 +20,20 @@ public class Accueil extends JPanel {
     private Fenetre fenetre;
     private Image imageFond;
 
+    private Bouttons.BouttonHorsJeu bouttonRetour;
     protected OptionsJeu optionsJeu;
 
     public Accueil(Fenetre fenetre){
-        this.setLayout(new BorderLayout());
         this.fenetre = fenetre;
         this.imageFond = new ImageIcon("src/assets/images/colt_accueil.png").getImage();
 
-        // C'est pour centerer le menu d'option
-        JPanel eastPanel = new JPanel();
-        JPanel westPanel = new JPanel();
-        JPanel northPanel = new JPanel();
-        JPanel southPanel = new JPanel();
-        eastPanel.setPreferredSize(new Dimension(200,100));
-        westPanel.setPreferredSize(new Dimension(200,100));
-        northPanel.setPreferredSize(new Dimension(100,70));
-        southPanel.setPreferredSize(new Dimension(100,70));
-        eastPanel.setOpaque(false);
-        westPanel.setOpaque(false);
-        northPanel.setOpaque(false);
-        southPanel.setOpaque(false);
-
+        this.bouttonRetour = new Bouttons.BouttonHorsJeu("<");
         this.optionsJeu = new OptionsJeu();
 
+        CenteredPanel.centerArrangement(this, this.bouttonRetour);
+
         this.add(this.optionsJeu,BorderLayout.CENTER);
-        this.add(eastPanel,BorderLayout.EAST);
-        this.add(westPanel,BorderLayout.WEST);
-        this.add(southPanel,BorderLayout.SOUTH);
-        this.add(northPanel,BorderLayout.NORTH);
+
 
     }
 

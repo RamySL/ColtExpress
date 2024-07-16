@@ -36,7 +36,9 @@ public class ControleurAccueilClient extends ControleurAccueil {
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton bouttonLancement = this.accueil.getOptionsJeu().getLancerJeu();
-        if (e.getSource() == this.accueil.getOptionsJeu().getLancerJeu()) {
+        JButton bouttonCreation = this.accueil.getOptionsJeu().getSlectionPersoPanel().getBouttonCreationBandit();
+
+        if (e.getSource() == bouttonLancement) {
             this.accueil.getOptionsJeu().getLancerJeu().setEnabled(false);
             try {
                 this.client.sendChoixPerso(this.creationsJouers.get(0));
@@ -44,8 +46,9 @@ public class ControleurAccueilClient extends ControleurAccueil {
                 throw new RuntimeException(ex);
             }
                     }
-        if (e.getSource() == this.accueil.getOptionsJeu().getSlectionPersoPanel().getBouttonCreationBandit()) {
+        if (e.getSource() == bouttonCreation) {
             bouttonLancement.setEnabled(true);
+            bouttonCreation.setEnabled(false);
             ImageIcon iconePerso = this.accueil.getOptionsJeu().getSlectionPersoPanel().getPersoSlectionneIcone();
             String surnom = this.accueil.getOptionsJeu().getSlectionPersoPanel().getBanditSurnom();
             this.creationsJouers.add(new Accueil.OptionsJeu.SelectionPersonnages.JoueurInfoCreation(iconePerso, surnom));  // on recup le perso choisie sur la liste et le nomb saisie
