@@ -199,7 +199,7 @@ public class ControleurJeu {
         }
         this.getMapSonsJeu().get("jeuBack").arreter();
         EcranFin ecranFin = new EcranFin(this.fenetre, banditsGagnant,scoreMax, this.fenetre.getJeuPanel().getMapPersonnageIcone());
-        new ControleurFinJeu(ecranFin);
+        new ControleurFinJeu(ecranFin, false);
         this.fenetre.ajouterEcranFin(ecranFin);
         this.fenetre.changerVue(this.fenetre.getEcranFinId());
 

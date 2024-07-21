@@ -14,7 +14,7 @@ public class EcranFin extends JPanel {
     private ArrayList<Bandit>  banditGagnant;
     private int score;
     private Fenetre fenetre;
-    private JButton bouttonRejouer;
+    private Bouttons.BouttonHorsJeu bouttonRejouer,bouttonQuiter;
     private Image imageFond;
     private Map<Personnage, ImageIcon> mapPersonnageIcone;
     public EcranFin(Fenetre fenetre, ArrayList<Bandit> banditGagnant,int score, Map<Personnage, ImageIcon> mapPersonnageIcone){
@@ -37,7 +37,8 @@ public class EcranFin extends JPanel {
         JPanel panelCentrale = new JPanel(new BorderLayout());
         //panelCentrale.setBackground(new Color(0xCF000000, true));
         panelCentrale.setOpaque(false);
-        bouttonRejouer = new Bouttons.BouttonHorsJeu("Rejouer");
+        bouttonRejouer = new Bouttons.BouttonHorsJeu("Relancer la partie");
+        bouttonQuiter = new Bouttons.BouttonHorsJeu("Quitter");
 
 
         JPanel persoPanel;
@@ -62,12 +63,14 @@ public class EcranFin extends JPanel {
         panelCentrale.setBounds(88 ,169 ,270,274);
 
         wantedIconeLabel.setBounds(decalageX,decalageY,wantedIcone.getIconWidth(),wantedIcone.getIconHeight()-10);
-        bouttonRejouer.setBounds(100,this.fenetre.getHeight()/2,130,35);
+        bouttonRejouer.setBounds(100,this.fenetre.getHeight()/2 - 35/2,200,35);
+        bouttonQuiter.setBounds(100,this.fenetre.getHeight()/2 + 40 - 35/2,200,35);
 
         wantedIconeLabel.add(scoreLabel);
         wantedIconeLabel.add(panelCentrale);
         this.add(wantedIconeLabel);
         this.add(bouttonRejouer);
+        this.add(bouttonQuiter);
 
     }
 
@@ -95,6 +98,7 @@ public class EcranFin extends JPanel {
 
     public void liaisonControleur(ControleurFinJeu controleurFinJeu){
         this.bouttonRejouer.addActionListener(controleurFinJeu);
+        this.bouttonQuiter.addActionListener(controleurFinJeu);
     }
 
     @Override

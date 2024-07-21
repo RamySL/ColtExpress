@@ -169,11 +169,6 @@ public class ControleurJeuOnLine extends ControleurJeu {
     public void lancerJeu(int nbManches) {
         //!!!! laisse pas la boucle tourner à l'infini quand le paquet banditGagnant est reçus
         while (!finPartie){
-            try {
-                Thread.sleep(1000); // latence pour attendre des paquets du serveur
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
             this.banditCourant = train.getBandits().get(indiceBanditCourant);
             if (this.banditCourant == this.bandit) {
@@ -267,7 +262,7 @@ public class ControleurJeuOnLine extends ControleurJeu {
 
         this.getMapSonsJeu().get("jeuBack").arreter();
         EcranFin ecranFin = new EcranFin(this.fenetre, banditsGagnants,scoreMax, this.fenetre.getJeuPanel().getMapPersonnageIcone());
-        new ControleurFinJeu(ecranFin);
+        new ControleurFinJeu(ecranFin,true);
         this.fenetre.ajouterEcranFin(ecranFin);
         this.fenetre.changerVue(this.fenetre.getEcranFinId());
 
