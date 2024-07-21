@@ -60,75 +60,7 @@ public abstract class ControleurJeu implements ActionListener {
      * et la phase d'action quand toutes leurs actions ont été executées. quand la boucle est finis elle lance l'ecran de fin.
      * @param nbManches nombre de manche à jouer avant la fin du jeu
      */
-    public void lancerJeu(int nbManches) {
-        //this.mapSonsJeu.get("jeuBack").jouer(true);
-
-        int totaleActionsManche = this.nbAction * this.nBandits; // le nombre d'actions que planifie tous les joeurs en une manche
-        int manche = 0;
-
-        while (manche < nbManches) {
-            //planification
-            planPhase = true;
-            actionPhase = false;
-
-            this.vueJeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase de palinification pour la manche " + (manche+1) + "/" + nbManches);
-            this.vueJeu.getCmdPanel().getPhaseFeedPanel().setPlanfication(this.train.getBandits().get(0));
-            // concurrentmodifError avec for each
-            for (int i = 0; i <this.nBandits; i++){
-
-                this.banditCourant = this.train.getBandits().get(i);
-                if(i != 0){
-                    this.vueJeu.getCmdPanel().getPhaseFeedPanel().getPlanificationPanel().actualiserPlanificateur(this.banditCourant);
-                }
-
-                while (this.banditCourant.lenAction() < this.nbAction) {
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
-
-            }
-            // action
-            this.vueJeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase d'action pour la manche " + (manche+1) + "/" + nbManches);
-            this.vueJeu.getCmdPanel().getPhaseFeedPanel().setAction();
-
-            this.nbActionExecute = 0;
-            this.banditCourant = this.train.getBandits().get(0);
-
-            planPhase = false;
-            actionPhase = true;
-
-            Marshall marshall = this.train.getMarshall();
-            String feed =  marshall.seDeplacer();
-            this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
-
-            // fuite des bandits si le marshall vient dans le mm emplacement qu'eux
-            ArrayList<Bandit> lstBandit = this.train.getMarshall().getEmplacement().getBanditListSauf(marshall);
-            while (!lstBandit.isEmpty()){
-                lstBandit.get(0).fuir();
-                this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(lstBandit.get(0).getSurnom() + " Vient de fuir vers le toit ");
-                lstBandit.remove(0);
-
-            }
-
-            while (this.nbActionExecute < totaleActionsManche) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            manche++;
-        }
-        // fin jeu
-        this.versFinJeu();
-
-    }
+    public abstract void lancerJeu(int nbManches);
 
     /**
      * gerent les evenements qui proviennent des bouttons de jeu selon que ça soit la phase d'action ou de planification
@@ -192,27 +124,8 @@ public abstract class ControleurJeu implements ActionListener {
      * calcule le gagnant (ou les gagnants) de la partie et l'envoi à l'ecran de fin,
      * change l'affichage vers l'ecran de fin
      */
-    private void versFinJeu(){
-        ArrayList<Bandit> bandits = this.train.getBandits();
-        int scoreMax = 0;
-        ArrayList<Bandit>  banditsGagnant = new ArrayList<>();
-        for (Bandit b : bandits){
-            if (b.score() > scoreMax){
-                scoreMax = b.score();
-            }
-        }
-        for (Bandit b : bandits){
-            if (b.score() == scoreMax){
-                banditsGagnant.add(b);
-            }
-        }
-        this.getMapSonsJeu().get("jeuBack").arreter();
-        EcranFin ecranFin = new EcranFin(this.fenetre, banditsGagnant,scoreMax, this.fenetre.getJeuPanel().getMapPersonnageIcone());
-        new ControleurFinJeu(ecranFin);
-        this.fenetre.ajouterEcranFin(ecranFin);
-        this.fenetre.changerVue(this.fenetre.getEcranFinId());
+    //public abstract void versFinJeu();
 
-    }
 
     /**
      *

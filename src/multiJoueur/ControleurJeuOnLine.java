@@ -166,9 +166,8 @@ public class ControleurJeuOnLine extends ControleurJeu {
      * et la phase d'action quand toutes leurs actions ont été executées. quand la boucle est finis elle lance l'ecran de fin.
      * @param nbManches nombre de manche à jouer avant la fin du jeu
      */
-    @Override
     public void lancerJeu(int nbManches) {
-
+        //!!!! laisse pas la boucle tourner à l'infini quand le paquet banditGagnant est reçus
         while (!finPartie){
             try {
                 Thread.sleep(1000); // latence pour attendre des paquets du serveur
@@ -242,7 +241,6 @@ public class ControleurJeuOnLine extends ControleurJeu {
 
         }
 
-
     }
 
     /**
@@ -257,58 +255,18 @@ public class ControleurJeuOnLine extends ControleurJeu {
      *
      * @param marshall
      */
-    private void executionAction(Marshall marshall) {
-        this.mapSonsJeu.get("tir").arreter(); // pour que les sons se lance mm si on spam action
-        this.mapSonsJeu.get("braquage").arreter();
-
-        this.banditCourant = this.train.getBandits().get(this.nbActionExecute % this.nBandits);
-        Action actionAExecuter = this.banditCourant.getActions().peek();
-
-        boolean assezDeBalles = this.banditCourant.getNbBalles() > 0;
-        boolean braquageReussie = !this.banditCourant.getEmplacement().getButtins().isEmpty();
-
-        String feed = this.banditCourant.executer();
-        this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
-
-        if (actionAExecuter instanceof Tirer && assezDeBalles){
-            this.mapSonsJeu.get("tir").jouer(false);
-        }else {
-            if (actionAExecuter instanceof Braquer && braquageReussie){
-                this.mapSonsJeu.get("braquage").jouer(false);
-            }else {
-                if (actionAExecuter instanceof SeDeplacer ) {
-                    // si bandit va vers marshall il lui tir dessus
-                    if (this.banditCourant.getEmplacement().getPersoList().contains(marshall)) {
-                        this.mapSonsJeu.get("tir").jouer(false);
-                        this.banditCourant.fuir();
-                        this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(this.banditCourant.getSurnom() +
-                                " a fuit vers le toit");
-                    }
-                }
-            }
-        }
-        // execution avant prochaine action
-        feed =  marshall.seDeplacer();
-        this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(feed);
-
-        // fuite des bandits si le marshall vient dans le mm emplacement qu'eux
-        ArrayList<Bandit> lstBandit = this.train.getMarshall().getEmplacement().getBanditListSauf(marshall);
-        while (!lstBandit.isEmpty()){
-            lstBandit.get(0).fuir();
-            this.vueJeu.getCmdPanel().getPhaseFeedPanel().getFeedActionPanel().ajoutFeed(lstBandit.get(0).getSurnom() + " Vient de fuir vers le toit ");
-            lstBandit.remove(0);
-
-        }
-        this.nbActionExecute++;
-    }
-
 
     /**
      */
-    public void versFinJeu(ArrayList<Bandit> banditsGagnant){
+    public void versFinJeu(ArrayList<Integer> banditsGagnantIndices, int scoreMax){
+
+        ArrayList<Bandit> banditsGagnants = new ArrayList<>();
+        for (int i : banditsGagnantIndices) {
+            banditsGagnants.add(this.train.getBandits().get(i));
+        }
 
         this.getMapSonsJeu().get("jeuBack").arreter();
-        EcranFin ecranFin = new EcranFin(this.fenetre, banditsGagnant,banditsGagnant.getFirst().score(), this.fenetre.getJeuPanel().getMapPersonnageIcone());
+        EcranFin ecranFin = new EcranFin(this.fenetre, banditsGagnants,scoreMax, this.fenetre.getJeuPanel().getMapPersonnageIcone());
         new ControleurFinJeu(ecranFin);
         this.fenetre.ajouterEcranFin(ecranFin);
         this.fenetre.changerVue(this.fenetre.getEcranFinId());

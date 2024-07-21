@@ -184,7 +184,7 @@ public class Client {
 
                         case PaquetBanditsGagnant paquetBanditsGagnant -> {
                             Client.this.controleurJeu.setFinPartie();
-                            Client.this.controleurJeu.versFinJeu(paquetBanditsGagnant.getBandits());
+                            Client.this.controleurJeu.versFinJeu(paquetBanditsGagnant.getBanditsIndices(), paquetBanditsGagnant.getScoreMax());
                         }
                         case null, default -> {
                         }

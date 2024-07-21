@@ -324,7 +324,8 @@ public class Server {
                                     Server.this.broadCastPaquet(new PaquetPlanification());
                                     partie.nbActionsExecute = 0;
                                 }else {
-                                    Server.this.broadCastPaquet(new PaquetBanditsGagnant(partie.getBanditsGagnant()));
+                                    int scoreMax = partie.train.getBandits().get(partie.getIndiceBanditsGagnants().getFirst()).score();
+                                    Server.this.broadCastPaquet(new PaquetBanditsGagnant(partie.getIndiceBanditsGagnants(),scoreMax));
                                 }
                             }
                         }
@@ -410,22 +411,22 @@ public class Server {
         private int indiceBanditCourant = 0;
         private int nbActionsExecute = 0;
 
-        private ArrayList<Bandit> getBanditsGagnant(){
+        private ArrayList<Integer> getIndiceBanditsGagnants(){
             ArrayList<Bandit> bandits = this.train.getBandits();
             int scoreMax = 0;
-            ArrayList<Bandit>  banditsGagnant = new ArrayList<>();
+            ArrayList<Integer>  banditsGagnantIndices = new ArrayList<>();
             for (Bandit b : bandits){
                 if (b.score() > scoreMax){
                     scoreMax = b.score();
                 }
             }
-            for (Bandit b : bandits){
-                if (b.score() == scoreMax){
-                    banditsGagnant.add(b);
+            for (int i = 0; i<bandits.size();i++){
+                if (bandits.get(i).score() == scoreMax){
+                    banditsGagnantIndices.add(i);
                 }
             }
 
-            return banditsGagnant;
+            return banditsGagnantIndices;
         }
 
         /**

@@ -9,13 +9,20 @@ import java.util.ArrayList;
 public class PaquetBanditsGagnant extends Paquet {
     @Serial
     private static final long serialVersionUID  = 13L;
-    private ArrayList< Bandit> bandits;
+    private ArrayList< Integer> banditsIndices;
+    private int scoreMax;
 
-    public PaquetBanditsGagnant(ArrayList< Bandit> bandits){
-        this.bandits = bandits;
+    public PaquetBanditsGagnant(ArrayList< Integer> banditsIndices, int scoreMax){
+        this.banditsIndices = banditsIndices;
+        this.scoreMax = scoreMax;
+
     }
 
-    public ArrayList< Bandit> getBandits() {
-        return bandits;
+    public ArrayList<Integer> getBanditsIndices() {
+        return banditsIndices;
+    }
+
+    public int getScoreMax() {
+        return scoreMax;
     }
 }

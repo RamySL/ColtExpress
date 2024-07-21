@@ -1,5 +1,6 @@
 package Vue;
 
+import Vue.ComposantsPerso.Bouttons;
 import controleur.ControleurFinJeu;
 import modele.personnages.Bandit;
 import modele.personnages.Personnage;
@@ -36,14 +37,12 @@ public class EcranFin extends JPanel {
         JPanel panelCentrale = new JPanel(new BorderLayout());
         //panelCentrale.setBackground(new Color(0xCF000000, true));
         panelCentrale.setOpaque(false);
-        bouttonRejouer = new JButton("Rejouer");
-        bouttonRejouer.setForeground(Color.WHITE);
-        bouttonRejouer.setBackground(new Color(0xDA523B25, true));
-        bouttonRejouer.setFont(new Font("MV Boli", Font.BOLD, 20));
+        bouttonRejouer = new Bouttons.BouttonHorsJeu("Rejouer");
+
 
         JPanel persoPanel;
         if (banditGagnant.size() == 1){
-            persoPanel = persoPanel(banditGagnant.get(0));
+            persoPanel =  persoPanel(banditGagnant.get(0));
         }else {
             persoPanel = new JPanel(new  GridLayout (2,2));
             for (Bandit b : banditGagnant){
@@ -73,11 +72,13 @@ public class EcranFin extends JPanel {
     }
 
     private JPanel persoPanel(Bandit b) {
+        // !!! La liste qu'il ya dans banditGagnant ne contient pas les mm bandit que dans le map
 
         JPanel persoPanel = new JPanel();
         // affichage pour un seul gagnant
         persoPanel.setOpaque(false);
         persoPanel.setLayout(new BorderLayout());
+
         JLabel iconeBandit = new JLabel(mapPersonnageIcone.get(b));
         JLabel surnomLabel = new JLabel(b.getSurnom());
 
