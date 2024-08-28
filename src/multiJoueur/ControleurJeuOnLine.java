@@ -182,8 +182,9 @@ public class ControleurJeuOnLine extends ControleurJeu {
                 }
                 packetReceived = false; // Reset the flag
             }
-
             this.banditCourant = train.getBandits().get(indiceBanditCourant);
+            System.out.println("ControleurJeu :: Bandit courant : " + this.banditCourant + " et mon bandit : " + this.bandit);
+
             if (this.banditCourant == this.bandit) {
 
                 this.jeuBindingKeys();
