@@ -164,27 +164,33 @@ public class Client {
                         case PaquetPlanification paquetPlanification -> {
                             Client.this.controleurJeu.setPlanPhase();
                             Client.this.controleurJeu.prochaineManche();
+                            Client.this.controleurJeu.notifyGamePacketReceived();
                         }
 
                         case PaquetAction paquetAction -> {
                             Client.this.controleurJeu.setActionPhase();
+                            Client.this.controleurJeu.notifyGamePacketReceived();
                         }
 
                         case PaquetNextPlanification paquetNextPlanification -> {
                             Client.this.controleurJeu.nextBandit(paquetNextPlanification.getIndice());
+                            Client.this.controleurJeu.notifyGamePacketReceived();
                         }
 
                         case PaquetNextAction paquetNextAction -> {
                             Client.this.controleurJeu.nextBandit(paquetNextAction.getIndice());
+                            Client.this.controleurJeu.notifyGamePacketReceived();
                         }
 
                         case PaquetTrain paquetTrain ->{
                             Client.this.controleurJeu.actualiserTrain(paquetTrain.getTrain());
+                            Client.this.controleurJeu.notifyGamePacketReceived();
                         }
 
                         case PaquetBanditsGagnant paquetBanditsGagnant -> {
                             Client.this.controleurJeu.setFinPartie();
                             Client.this.controleurJeu.versFinJeu(paquetBanditsGagnant.getBanditsIndices(), paquetBanditsGagnant.getScoreMax());
+                            Client.this.controleurJeu.notifyGamePacketReceived();
                         }
                         case null, default -> {
                         }

@@ -46,6 +46,9 @@ public class ControleurJeuOnLine extends ControleurJeu {
     private final int totaleActionsManche = this.nbAction * this.nBandits; // le nombre d'actions que planifie tous les joeurs en une manche
     private int manche = 0;
 
+    private Object lock;
+    private boolean packetReceived = true;
+
 
     /**
      * Intialise le controleur et fait la liason avec les bouttons du jeu pour réagir au evenements
@@ -167,8 +170,18 @@ public class ControleurJeuOnLine extends ControleurJeu {
      * @param nbManches nombre de manche à jouer avant la fin du jeu
      */
     public void lancerJeu(int nbManches) {
-        //!!!! laisse pas la boucle tourner à l'infini quand le paquet banditGagnant est reçus
         while (!finPartie){
+            // Wait for server response before proceeding
+            synchronized (lock) {
+                while (!packetReceived) {
+                    try {
+                        lock.wait(); // Wait until notified
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                packetReceived = false; // Reset the flag
+            }
 
             this.banditCourant = train.getBandits().get(indiceBanditCourant);
             if (this.banditCourant == this.bandit) {
@@ -220,7 +233,7 @@ public class ControleurJeuOnLine extends ControleurJeu {
                 }
             }else {
 
-                if(!(vueJeu.getActionMap().size() == 0)) vueJeu.getActionMap().clear();
+                if(!(vueJeu.getActionMap().size() == 0)) vueJeu.getActionMap().clear(); // pour desactiver les touches (pas son tour)
 
                 if (planPhase){
                     this.vueJeu.getCmdPanel().getPhaseFeedPanel().actuPhase("Phase de palinification " +
@@ -236,6 +249,13 @@ public class ControleurJeuOnLine extends ControleurJeu {
 
         }
 
+    }
+
+    public void notifyGamePacketReceived() {
+        synchronized (lock) {
+            this.packetReceived = true;
+            lock.notify(); // Notify the waiting thread to continue execution
+        }
     }
 
     /**
