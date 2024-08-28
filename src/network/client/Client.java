@@ -159,6 +159,7 @@ public class Client {
                             } else {
                                 Client.this.controleurAccueilHost.lancerPartie(paquetListePersoHost, paquetInitialisationPartie, paquetInitialisationPartie.getTrain());
                             }
+                            Client.this.controleurJeu.notifyGamePacketReceived();
                         }
 
                         case PaquetPlanification paquetPlanification -> {

@@ -47,7 +47,7 @@ public class ControleurJeuOnLine extends ControleurJeu {
     private int manche = 0;
 
     private Object lock;
-    private boolean packetReceived = true;
+    private boolean packetReceived = false;
 
 
     /**
