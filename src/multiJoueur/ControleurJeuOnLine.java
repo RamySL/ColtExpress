@@ -46,7 +46,7 @@ public class ControleurJeuOnLine extends ControleurJeu {
     private final int totaleActionsManche = this.nbAction * this.nBandits; // le nombre d'actions que planifie tous les joeurs en une manche
     private int manche = 0;
 
-    private Object lock;
+    private Object lock = new Object();
     private boolean packetReceived = false;
 
 
@@ -173,7 +173,7 @@ public class ControleurJeuOnLine extends ControleurJeu {
         while (!finPartie){
             // Wait for server response before proceeding
             synchronized (lock) {
-                while (!packetReceived) {
+                while (!packetReceived) {// le while est necessaire pcq il se peut que notify() soit declenché d'une autre façon que ce qu'on a prévu (regarde plus de doc sur ça)
                     try {
                         lock.wait(); // Wait until notified
                     } catch (InterruptedException e) {
