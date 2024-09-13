@@ -1,4 +1,4 @@
-package multiJoueur;
+package controleur.multiJoueur;
 
 import Vue.*;
 import network.client.Client;

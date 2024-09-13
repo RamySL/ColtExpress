@@ -2,9 +2,8 @@ package Vue;
 
 import Vue.ComposantsPerso.Bouttons;
 import Vue.ComposantsPerso.CenteredPanel;
-import multiJoueur.ControleurAccueil;
-import multiJoueur.ControleurAccueilClient;
-import multiJoueur.ControleurAccueilHost;
+import controleur.multiJoueur.ControleurAccueilClient;
+import controleur.multiJoueur.ControleurAccueilHost;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;

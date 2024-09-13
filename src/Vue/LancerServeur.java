@@ -2,7 +2,7 @@ package Vue;
 
 import Vue.ComposantsPerso.Bouttons;
 import Vue.ComposantsPerso.Police;
-import multiJoueur.ControleurLancerServeur;
+import controleur.multiJoueur.ControleurLancerServeur;
 
 import javax.swing.*;
 import java.awt.*;

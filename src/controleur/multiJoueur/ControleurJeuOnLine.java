@@ -1,4 +1,4 @@
-package multiJoueur;
+package controleur.multiJoueur;
 
 import Vue.EcranFin;
 import Vue.Fenetre;
@@ -9,7 +9,6 @@ import modele.actions.Braquer;
 import modele.actions.SeDeplacer;
 import modele.actions.Tirer;
 import modele.personnages.Bandit;
-import modele.personnages.Marshall;
 import modele.trainEtComposantes.Train;
 import network.client.Client;
 
@@ -173,7 +172,7 @@ public class ControleurJeuOnLine extends ControleurJeu {
         while (!finPartie){
             // Wait for server response before proceeding
             synchronized (lock) {
-                while (!packetReceived) {// le while est necessaire pcq il se peut que notify() soit declenché d'une autre façon que ce qu'on a prévu (regarde plus de doc sur ça)
+                while (!packetReceived) {// le while est necessaire pcq il se peut que notify() soit déclenchée d'une autre façon que ce qu'on a prévu (regarde plus de doc sur ça)
                     try {
                         lock.wait(); // Wait until notified
                     } catch (InterruptedException e) {
@@ -183,7 +182,6 @@ public class ControleurJeuOnLine extends ControleurJeu {
                 packetReceived = false; // Reset the flag
             }
             this.banditCourant = train.getBandits().get(indiceBanditCourant);
-            System.out.println("ControleurJeu :: Bandit courant : " + this.banditCourant + " et mon bandit : " + this.bandit);
 
             if (this.banditCourant == this.bandit) {
 

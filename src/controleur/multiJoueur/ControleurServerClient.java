@@ -1,4 +1,4 @@
-package multiJoueur;
+package controleur.multiJoueur;
 
 import Vue.Fenetre;
 import Vue.LancerServeur;
@@ -84,6 +84,8 @@ public class ControleurServerClient {
     public void setControleurAccueilClient() {
          if (this.client != null){
              new ControleurAccueilClient(this.fenetre,this.client);
+         }else {
+             System.out.println("Client null");
          }
     }
 

@@ -1,4 +1,4 @@
-package multiJoueur;
+package controleur.multiJoueur;
 
 import Vue.Fenetre;
 import Vue.LancerServeur;
@@ -7,7 +7,6 @@ import network.server.Server;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.ConnectException;
 
 public class ControleurLancerServeur implements ActionListener {
     private LancerServeur lancerServeur;

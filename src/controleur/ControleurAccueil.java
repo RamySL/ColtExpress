@@ -33,7 +33,7 @@ public class ControleurAccueil implements ActionListener {
      */
     public ControleurAccueil(Fenetre fenetre){
         misqueLancement = new JouerSon("src/assets/sons/lancement.wav");
-        misqueLancement.jouer(true);
+        //misqueLancement.jouer(true);
 
         this.fenetre = fenetre;
         this.accueil = this.fenetre.getAccueil();
@@ -94,6 +94,8 @@ public class ControleurAccueil implements ActionListener {
         }
 
         if(e.getSource() == this.accueil.getBouttonRetour() ){
+            bouttonLancement.setEnabled(false);
+            this.creationsJouers.clear();
             this.fenetre.changerVue(this.fenetre.getTypeId());
         }
 

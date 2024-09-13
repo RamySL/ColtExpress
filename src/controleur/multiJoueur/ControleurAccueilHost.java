@@ -1,9 +1,8 @@
-package multiJoueur;
+package controleur.multiJoueur;
 
 import Vue.Accueil;
 import Vue.EcranType;
 import Vue.Fenetre;
-import controleur.ControleurTypePartie;
 import controleur.JouerSon;
 import network.client.Client;
 

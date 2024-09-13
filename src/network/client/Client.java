@@ -2,10 +2,10 @@ package network.client;
 
 import Vue.Accueil;
 import modele.actions.Action;
-import multiJoueur.ControleurAccueilClient;
-import multiJoueur.ControleurAccueilHost;
-import multiJoueur.ControleurJeuOnLine;
-import multiJoueur.ControleurServerClient;
+import controleur.multiJoueur.ControleurAccueilClient;
+import controleur.multiJoueur.ControleurAccueilHost;
+import controleur.multiJoueur.ControleurJeuOnLine;
+import controleur.multiJoueur.ControleurServerClient;
 import network.Paquets.PaquetsClients.*;
 import network.Paquets.PaquetsServeur.*;
 import network.Paquets.PaquetsServeur.PaquetAction;
@@ -134,11 +134,11 @@ public class Client {
                         case PaquetChoixJrClient paquetChoixJrClient -> {
                             // vue sans param
                             cntrlServerClient.setControleurAccueilClient();
-                            cntrlServerClient.vueClient(0);
+                            cntrlServerClient.vueClient(3000);
                         }
                         case PaquetChoixJrHost paquetChoixJrHost -> {
                             host = true;
-                            cntrlServerClient.vueHost(0);
+                            cntrlServerClient.vueHost(3000);
                         }
                         //les prochains paquets vont arriver après que tout le monde ait appuyé sur lancer Partie
                         case PaquetListePersoClient listePersoClient -> Client.this.paquetListePersoClient = listePersoClient;
@@ -160,45 +160,38 @@ public class Client {
                                 Client.this.controleurAccueilHost.lancerPartie(paquetListePersoHost, paquetInitialisationPartie, paquetInitialisationPartie.getTrain());
                             }
                             Client.this.controleurJeu.notifyGamePacketReceived();
-                            System.out.println("Client :: controleurJeu.notifyGamePacketReceived() appelé depuis PaquetBandit ");
                         }
 
                         case PaquetPlanification paquetPlanification -> {
                             Client.this.controleurJeu.setPlanPhase();
                             Client.this.controleurJeu.prochaineManche();
                             Client.this.controleurJeu.notifyGamePacketReceived();
-                            System.out.println("Client :: controleurJeu.notifyGamePacketReceived() appelé depuis PaquetPlanification");
                         }
 
                         case PaquetAction paquetAction -> {
                             Client.this.controleurJeu.setActionPhase();
                             Client.this.controleurJeu.notifyGamePacketReceived();
-                            System.out.println("Client :: controleurJeu.notifyGamePacketReceived() appelé depuis PaquetAction");
                         }
 
                         case PaquetNextPlanification paquetNextPlanification -> {
                             Client.this.controleurJeu.nextBandit(paquetNextPlanification.getIndice());
                             Client.this.controleurJeu.notifyGamePacketReceived();
-                            System.out.println("Client :: controleurJeu.notifyGamePacketReceived() appelé depuis PaquetNextPlanification");
                         }
 
                         case PaquetNextAction paquetNextAction -> {
                             Client.this.controleurJeu.nextBandit(paquetNextAction.getIndice());
                             Client.this.controleurJeu.notifyGamePacketReceived();
-                            System.out.println("Client :: controleurJeu.notifyGamePacketReceived() appelé depuis PaquetNextAction");
                         }
 
                         case PaquetTrain paquetTrain ->{
                             Client.this.controleurJeu.actualiserTrain(paquetTrain.getTrain());
-//                            Client.this.controleurJeu.notifyGamePacketReceived();
-//                            System.out.println("Client :: controleurJeu.notifyGamePacketReceived() appelé depuis paquetTrain");
+
                         }
 
                         case PaquetBanditsGagnant paquetBanditsGagnant -> {
                             Client.this.controleurJeu.setFinPartie();
                             Client.this.controleurJeu.versFinJeu(paquetBanditsGagnant.getBanditsIndices(), paquetBanditsGagnant.getScoreMax());
-//                            Client.this.controleurJeu.notifyGamePacketReceived();
-//                            System.out.println("Client :: controleurJeu.notifyGamePacketReceived() appelé depuis ");
+
                         }
                         case null, default -> {
                         }

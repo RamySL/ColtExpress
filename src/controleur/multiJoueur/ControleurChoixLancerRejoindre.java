@@ -1,4 +1,4 @@
-package multiJoueur;
+package controleur.multiJoueur;
 
 import Vue.ChoixLancerRejoindre;
 import Vue.Fenetre;
@@ -33,11 +33,11 @@ public class ControleurChoixLancerRejoindre implements ActionListener {
         if (e.getSource() == this.choixLancerRejoindre.getBouttonLancer()){
 
             LancerServeur lancerServeur = new LancerServeur(this.fenetre);
+            this.fenetre.SetLancerRejoindre("lancerServeurId",lancerServeur );
 
             ControleurServerClient controleurServerClient = new ControleurServerClient(this.fenetre,this.controleurAccueilHost);
             controleurServerClient.setLancerServeur(lancerServeur);
-
-            this.fenetre.SetLancerRejoindre("lancerServeurId",lancerServeur );
+            // controle le Lancer (après avoir saisie ip et nb joueur) et rejoindre le serveur
             new ControleurLancerServeur(this.fenetre,lancerServeur,controleurServerClient);
             this.fenetre.changerVue(this.fenetre.getLancerRejoindreServeurId());
 

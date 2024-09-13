@@ -2,7 +2,7 @@ package Vue;
 
 import Vue.ComposantsPerso.Bouttons;
 import Vue.ComposantsPerso.Police;
-import multiJoueur.ControleurRejoindreServeur;
+import controleur.multiJoueur.ControleurRejoindreServeur;
 
 import javax.swing.*;
 import java.awt.*;

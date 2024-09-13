@@ -1,4 +1,4 @@
-package multiJoueur;
+package controleur.multiJoueur;
 
 import Vue.Fenetre;
 import Vue.RejoindreServeur;
@@ -6,7 +6,6 @@ import network.client.Client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.ConnectException;
 
 public class ControleurRejoindreServeur implements ActionListener {
     private Fenetre fenetre;
